@@ -356,21 +356,15 @@ function FontShowcase({ fonts, coreColors, candidateName, voiceTone }) {
 /* ------------------------------------------------------------------ */
 /*  COLOR PALETTE                                                     */
 /* ------------------------------------------------------------------ */
-function ColorPaletteImmersive({ colors, isCustom }) {
-  const colorEntries = isCustom
-    ? [
-        { key: 'primary', label: 'Primary', hex: colors.primary },
-        { key: 'secondary', label: 'Secondary', hex: colors.secondary },
-        { key: 'accent', label: 'Accent', hex: colors.accent },
-      ]
-    : [
-        { key: 'primary', label: 'Primary', hex: colors.primary },
-        { key: 'secondary', label: 'Secondary', hex: colors.secondary },
-        { key: 'accent', label: 'Accent', hex: colors.accent },
-        { key: 'background', label: 'Background', hex: colors.background },
-        { key: 'text', label: 'Text', hex: colors.text },
-        ...(colors.highlight && colors.highlight !== colors.secondary ? [{ key: 'highlight', label: 'Highlight', hex: colors.highlight }] : []),
-      ];
+function ColorPaletteImmersive({ colors }) {
+  const colorEntries = [
+    { key: 'primary', label: 'Primary', hex: colors.primary },
+    { key: 'secondary', label: 'Secondary', hex: colors.secondary },
+    { key: 'accent', label: 'Accent', hex: colors.accent },
+    { key: 'background', label: 'Background', hex: colors.background || '#F5F5F5' },
+    { key: 'text', label: 'Text', hex: colors.text || '#333333' },
+    ...(colors.highlight && colors.highlight !== colors.secondary ? [{ key: 'highlight', label: 'Highlight', hex: colors.highlight }] : []),
+  ];
 
   return (
     <motion.div

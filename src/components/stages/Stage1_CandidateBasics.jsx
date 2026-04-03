@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { OFFICES, US_STATES, ELECTION_YEARS, CANDIDATE_TYPES } from '../../data/brandData';
 import StageContainer from '../StageContainer';
-import USMapSVG from '../USMapSVG';
 
 /* ── Design tokens ── */
 const accent = '#8B1A2B';
@@ -340,112 +339,19 @@ export default function Stage1_CandidateBasics() {
         {...sectionVariant(0.45)}
         style={{ marginBottom: '2.5rem' }}
       >
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div style={{ position: 'relative' }}>
         <label
           style={{
             display: 'block',
             fontSize: '0.875rem',
             fontWeight: 600,
             color: '#374151',
-            marginBottom: '0.75rem',
+            marginBottom: '0.5rem',
           }}
         >
-          Select Your State
+          State
         </label>
-
-        {/* Selected state display */}
-        <AnimatePresence>
-          {candidate.state && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              style={{
-                textAlign: 'center',
-                marginBottom: '1rem',
-                padding: '0.6rem 1.25rem',
-                background: `${accent}0A`,
-                border: `1px solid ${accent}25`,
-                borderRadius: '12px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-              }}
-            >
-              <span
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: accent,
-                  display: 'inline-block',
-                  boxShadow: `0 0 6px ${accent}60`,
-                }}
-              />
-              <span
-                style={{
-                  fontSize: '1.1rem',
-                  fontWeight: 700,
-                  color: accent,
-                  fontFamily: "'Georgia', 'Times New Roman', serif",
-                  letterSpacing: '0.03em',
-                }}
-              >
-                {candidate.state}
-              </span>
-              <button
-                onClick={() => { update({ state: '' }); setStateQuery(''); }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#9CA3AF',
-                  cursor: 'pointer',
-                  fontSize: '1.1rem',
-                  lineHeight: 1,
-                  padding: '0 0.25rem',
-                  marginLeft: '0.25rem',
-                }}
-                title="Clear selection"
-              >
-                &times;
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Interactive US Map */}
-        <div
-          style={{
-            background: '#fff',
-            border: `1px solid ${cardBorder}`,
-            borderRadius: '16px',
-            padding: '1rem 0.5rem 0.5rem',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-            overflow: 'hidden',
-          }}
-        >
-          <USMapSVG
-            selectedState={candidate.state}
-            onSelect={(stateName) => {
-              update({ state: stateName });
-              setStateQuery(stateName);
-            }}
-          />
-        </div>
-
-        {/* Secondary text input for state */}
-        <div style={{ marginTop: '1rem', position: 'relative' }}>
-          <label
-            style={{
-              display: 'block',
-              fontSize: '0.8rem',
-              fontWeight: 500,
-              color: '#9CA3AF',
-              marginBottom: '0.4rem',
-            }}
-          >
-            Or type your state:
-          </label>
           <input
             type="text"
             value={showStates ? stateQuery : candidate.state || stateQuery}
@@ -541,8 +447,8 @@ export default function Stage1_CandidateBasics() {
           </AnimatePresence>
         </div>
 
-        {/* District input below the map */}
-        <div style={{ marginTop: '1.25rem' }}>
+        {/* District */}
+        <div>
           <label
             style={{
               display: 'block',
@@ -579,6 +485,7 @@ export default function Stage1_CandidateBasics() {
               e.target.style.borderColor = cardBorder;
             }}
           />
+        </div>
         </div>
       </motion.section>
 
