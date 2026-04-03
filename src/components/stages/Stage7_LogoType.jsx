@@ -20,25 +20,25 @@ const LOGO_TYPES = [
     id: 'emblem',
     name: 'Emblem',
     description: 'Classic seal or badge design — circular, authoritative, and timeless. Ideal for official-feeling campaigns.',
-    image: '/logos/emblem.png',
+    image: '/logos/emblem.webp',
   },
   {
     id: 'symbol-text',
     name: 'Symbol + Text',
     description: 'An iconic symbol paired with the candidate name. Versatile and modern, great for yard signs and digital.',
-    image: '/logos/symbol-text.png',
+    image: '/logos/symbol-text.webp',
   },
   {
     id: 'monogram',
     name: 'Monogram',
     description: 'Stylized initials that create a bold, memorable mark. Clean and contemporary with strong brand recall.',
-    image: '/logos/monogram.png',
+    image: '/logos/monogram.webp',
   },
   {
     id: 'wordmark',
     name: 'Wordmark',
     description: 'Pure typographic treatment of the candidate name. Elegant, direct, and lets the name speak for itself.',
-    image: '/logos/wordmark.png',
+    image: '/logos/wordmark.webp',
   },
 ];
 
