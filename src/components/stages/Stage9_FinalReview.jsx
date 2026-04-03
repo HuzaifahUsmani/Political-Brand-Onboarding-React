@@ -833,7 +833,7 @@ export default function Stage9_FinalReview() {
           )}
         </svg>
 
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-16 md:pt-14 md:pb-24 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 pt-8 pb-10 md:pt-10 md:pb-14 relative z-10">
           <motion.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -902,8 +902,8 @@ export default function Stage9_FinalReview() {
           className="relative"
           style={{ backgroundColor: bgHex }}
         >
-          <div className="max-w-5xl mx-auto px-6 py-14 md:py-20">
-            <TiltCard style={{ borderRadius: 40, background: 'white', padding: 40, position: 'relative', overflow: 'hidden' }}>
+          <div className="max-w-5xl mx-auto px-6 py-6 md:py-8">
+            <TiltCard style={{ borderRadius: 24, background: 'white', padding: 24, position: 'relative', overflow: 'hidden' }}>
               <DotPattern />
               <LinePattern />
 
@@ -978,11 +978,11 @@ export default function Stage9_FinalReview() {
         transition={{ duration: 0.5 }}
         className="bg-white"
       >
-        <div className="max-w-5xl mx-auto px-6 py-14 md:py-20">
-          <TiltCard style={{ borderRadius: 40, background: 'white', padding: 40, position: 'relative', overflow: 'hidden', border: '1px solid #f0f0f0' }}>
+        <div className="max-w-5xl mx-auto px-6 py-6 md:py-8">
+          <TiltCard style={{ borderRadius: 24, background: 'white', padding: 24, position: 'relative', overflow: 'hidden', border: '1px solid #f0f0f0' }}>
             <DotPattern />
 
-            <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32 }}>
+            <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
               Color Palette
             </h3>
 
@@ -1035,12 +1035,12 @@ export default function Stage9_FinalReview() {
           transition={{ duration: 0.5 }}
           style={{ backgroundColor: `${bgHex}` }}
         >
-          <div className="max-w-5xl mx-auto px-6 py-14 md:py-20">
-            <TiltCard style={{ borderRadius: 40, background: 'white', padding: 40, position: 'relative', overflow: 'hidden' }}>
+          <div className="max-w-5xl mx-auto px-6 py-6 md:py-8">
+            <TiltCard style={{ borderRadius: 24, background: 'white', padding: 24, position: 'relative', overflow: 'hidden' }}>
               <DotPattern position="bottomLeft" />
               <LinePattern />
 
-              <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 40 }}>
+              <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 20 }}>
                 Typography
               </h3>
 
@@ -1118,12 +1118,12 @@ export default function Stage9_FinalReview() {
           transition={{ duration: 0.5 }}
           className="bg-white"
         >
-          <div className="max-w-5xl mx-auto px-6 py-14 md:py-20">
-            <TiltCard style={{ borderRadius: 40, background: 'white', padding: 40, position: 'relative', overflow: 'hidden', border: '1px solid #f0f0f0' }}>
+          <div className="max-w-5xl mx-auto px-6 py-6 md:py-8">
+            <TiltCard style={{ borderRadius: 24, background: 'white', padding: 24, position: 'relative', overflow: 'hidden', border: '1px solid #f0f0f0' }}>
               <DotPattern />
               <LinePattern />
 
-              <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32 }}>
+              <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
                 Candidate Profile
               </h3>
 
@@ -1181,12 +1181,12 @@ export default function Stage9_FinalReview() {
         transition={{ duration: 0.5 }}
         style={{ backgroundColor: bgHex }}
       >
-        <div className="max-w-5xl mx-auto px-6 py-14 md:py-20">
-          <TiltCard style={{ borderRadius: 40, background: 'white', padding: 40, position: 'relative', overflow: 'hidden' }}>
+        <div className="max-w-5xl mx-auto px-6 py-6 md:py-8">
+          <TiltCard style={{ borderRadius: 24, background: 'white', padding: 24, position: 'relative', overflow: 'hidden' }}>
             <DotPattern />
             <LinePattern />
 
-            <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 40 }}>
+            <h3 style={{ ...gradientHeadingStyle, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 20 }}>
               Collateral Priority Matrix
             </h3>
 
