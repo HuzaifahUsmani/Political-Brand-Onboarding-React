@@ -721,9 +721,9 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
               className="aspect-square rounded-2xl shadow-2xl overflow-hidden flex flex-col"
               style={{ backgroundColor: colors.background || '#F5F5F5' }}
             >
-              <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-10 text-center">
+              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center min-h-0">
                 <p
-                  className="text-xs font-bold uppercase tracking-[0.3em] mb-4"
+                  className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] mb-2 md:mb-3"
                   style={{
                     fontFamily: `'${bodyFont}', sans-serif`,
                     color: colors.secondary,
@@ -732,7 +732,7 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                   {firstName} for Office
                 </p>
                 <h4
-                  className="text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-5"
+                  className="text-2xl md:text-3xl lg:text-4xl leading-[1.1] mb-3 md:mb-4"
                   style={{
                     fontFamily: `'${headingFont}', sans-serif`,
                     fontWeight: heaviestWeight,
@@ -742,7 +742,7 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                   {headline}
                 </h4>
                 <p
-                  className="text-sm md:text-base leading-relaxed max-w-[85%]"
+                  className="text-xs md:text-sm leading-relaxed max-w-[85%]"
                   style={{
                     fontFamily: `'${bodyFont}', sans-serif`,
                     color: colors.text || '#4A4A4A',
@@ -752,7 +752,7 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                 </p>
               </div>
               <div
-                className="px-6 md:px-8 py-5 flex items-center justify-between"
+                className="px-5 md:px-8 py-3 md:py-4 flex items-center justify-between shrink-0"
                 style={{ backgroundColor: colors.primary }}
               >
                 <span
