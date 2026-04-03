@@ -166,7 +166,7 @@ export default function Stage7_LogoType() {
               {/* Logo reference image */}
               <div
                 style={{
-                  background: '#FAFAFA',
+                  background: '#FFFFFF',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
