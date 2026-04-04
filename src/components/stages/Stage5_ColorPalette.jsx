@@ -8,42 +8,42 @@ const PRESET_PALETTES = [
   {
     id: 'classic-patriot',
     name: 'Classic Patriot',
-    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#FFFFFF', background: '#F5F5F5', text: '#1A1A2E', highlight: '#876A0A' },
+    colors: { primary: '#1B2A4A', secondary: '#BF0A30', accent: '#E8E4DD', background: '#F7F5F0', text: '#1B2A4A', highlight: '#996B00' },
   },
   {
     id: 'modern-navy',
     name: 'Modern Navy',
-    colors: { primary: '#1B2A4A', secondary: '#C8102E', accent: '#E8E8E8', background: '#FAFAFA', text: '#2D2D2D', highlight: '#2E6FBA' },
+    colors: { primary: '#0F1D33', secondary: '#D42B3C', accent: '#C8C3B8', background: '#F0F1F3', text: '#1A1E2A', highlight: '#2563EB' },
   },
   {
     id: 'bold-crimson',
     name: 'Bold Crimson',
-    colors: { primary: '#8B0000', secondary: '#1C1C1C', accent: '#D4AF37', background: '#FFF8F0', text: '#2C2C2C', highlight: '#B5232A' },
+    colors: { primary: '#8B1A2B', secondary: '#2C2C2C', accent: '#C8A951', background: '#FAF8F5', text: '#3A3A3A', highlight: '#BF0A30' },
   },
   {
     id: 'liberty-blue',
     name: 'Liberty Blue',
-    colors: { primary: '#003366', secondary: '#CC0000', accent: '#F0F0F0', background: '#F7F9FC', text: '#333333', highlight: '#0059B3' },
+    colors: { primary: '#1A4B8C', secondary: '#CC2936', accent: '#D8D4CC', background: '#F5F4F1', text: '#1A2744', highlight: '#1A4B8C' },
   },
   {
     id: 'heritage-gold',
     name: 'Heritage Gold',
-    colors: { primary: '#1A2744', secondary: '#8B1A2B', accent: '#D4C5A9', background: '#FAF8F5', text: '#4A3728', highlight: '#7A5700' },
+    colors: { primary: '#0C2340', secondary: '#A67C00', accent: '#F0E4C2', background: '#FAF6EC', text: '#0C2340', highlight: '#8C6D0F' },
   },
   {
-    id: 'grassroots-green',
-    name: 'Grassroots Green',
-    colors: { primary: '#1B4332', secondary: '#2D6A4F', accent: '#D8F3DC', background: '#F0FFF4', text: '#1B1B1B', highlight: '#2B7A4B' },
+    id: 'stars-stripes',
+    name: 'Stars & Stripes',
+    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#F5E6B8', background: '#FFFFFF', text: '#14213D', highlight: '#9A7B0A' },
   },
   {
-    id: 'executive-slate',
-    name: 'Executive Slate',
-    colors: { primary: '#2F3E46', secondary: '#354F52', accent: '#CAD2C5', background: '#F8F9FA', text: '#212529', highlight: '#3D6B5E' },
+    id: 'federal-blue',
+    name: 'Federal Blue',
+    colors: { primary: '#2C3E56', secondary: '#7B2D3B', accent: '#B8C4D0', background: '#EFF1F4', text: '#2C3344', highlight: '#3B6D8C' },
   },
   {
     id: 'sunrise-energy',
     name: 'Sunrise Energy',
-    colors: { primary: '#1C2E5B', secondary: '#E63946', accent: '#F1FAEE', background: '#FFFFFF', text: '#2B2D42', highlight: '#B54A15' },
+    colors: { primary: '#1A2744', secondary: '#CC3D2E', accent: '#E8D9A0', background: '#FBF7ED', text: '#1A2744', highlight: '#B07C12' },
   },
 ];
 
@@ -105,7 +105,7 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
         cursor: 'pointer',
         overflow: 'hidden',
         background: isActive ? '#FDF2F2' : '#FFFFFF',
-        border: isActive ? '2px solid #8B1A2B' : '1px solid #E5E7EB',
+        border: isActive ? '5px solid #8B1A2B' : '5px solid #64748B',
         borderRadius: fullWidth ? 12 : 10,
         boxShadow: isActive
           ? '0 0 0 3px rgba(139,26,43,0.12)'
@@ -164,7 +164,6 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
                   height: fullWidth ? 38 : 28,
                   borderRadius: 5,
                   backgroundColor: color,
-                  border: '5px solid #64748B',
                 }} />
                 <span style={{ fontSize: 7.5, fontWeight: 600, marginTop: 4, color: '#6B7280', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
               </div>
