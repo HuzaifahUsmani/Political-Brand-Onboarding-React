@@ -780,7 +780,7 @@ export default function Stage5_ColorPalette() {
             >
               <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative' }}>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)', margin: '0 0 10px' }}>
+                <p style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#D4A843', margin: '0 0 12px' }}>
                   Your Color Palette
                 </p>
                 <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 0.9, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>

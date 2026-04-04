@@ -204,9 +204,9 @@ export default function Stage3_BrandCore() {
             <div style={{ position: 'relative' }}>
               {/* Descriptor as label */}
               <p style={{
-                fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
-                letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)',
-                margin: '0 0 10px',
+                fontSize: 13, fontWeight: 700, textTransform: 'uppercase',
+                letterSpacing: '0.2em', color: '#D4A843',
+                margin: '0 0 12px',
               }}>
                 {BRAND_CORES[selectedId].descriptor}
               </p>
@@ -230,7 +230,7 @@ export default function Stage3_BrandCore() {
                 marginTop: 14,
                 fontSize: '0.9rem',
                 fontStyle: 'italic',
-                color: 'rgba(255,255,255,0.82)',
+                color: 'rgba(255,255,255,0.92)',
                 margin: '14px 0 0',
               }}>
                 &ldquo;{BRAND_CORES[selectedId].tagline}&rdquo;

@@ -458,7 +458,7 @@ export default function Stage6_FontSelection() {
             >
               <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative' }}>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)', margin: '0 0 10px', fontFamily: `'${previewBody}', sans-serif` }}>
+                <p style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#D4A843', margin: '0 0 12px', fontFamily: `'${previewBody}', sans-serif` }}>
                   Your Typography
                 </p>
                 <h2 style={{
