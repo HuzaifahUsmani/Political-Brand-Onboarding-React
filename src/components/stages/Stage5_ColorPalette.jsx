@@ -164,7 +164,7 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
                   height: fullWidth ? 38 : 28,
                   borderRadius: 5,
                   backgroundColor: color,
-                  border: '1.5px solid #94A3B8',
+                  border: '3.5px solid #94A3B8',
                 }} />
                 <span style={{ fontSize: 7.5, fontWeight: 600, marginTop: 4, color: '#6B7280', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
               </div>
