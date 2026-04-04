@@ -8,7 +8,7 @@ const PRESET_PALETTES = [
   {
     id: 'classic-patriot',
     name: 'Classic Patriot',
-    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#FFFFFF', background: '#F5F5F5', text: '#1A1A2E', highlight: '#9E7C0C' },
+    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#FFFFFF', background: '#F5F5F5', text: '#1A1A2E', highlight: '#876A0A' },
   },
   {
     id: 'modern-navy',
@@ -91,53 +91,8 @@ function isLightColor(hex) {
   return (r * 299 + g * 587 + b * 114) / 1000 > 160;
 }
 
-/* Key contrast pairs to check for AA compliance */
-function getContrastChecks(colors) {
-  return [
-    { label: 'Text on Background', fg: colors.text, bg: colors.background, type: 'normal' },
-    { label: 'Text on Primary', fg: '#FFFFFF', bg: colors.primary, type: 'large' },
-    { label: 'Text on Secondary', fg: '#FFFFFF', bg: colors.secondary, type: 'large' },
-    { label: 'Highlight on Background', fg: colors.highlight, bg: colors.background, type: 'normal' },
-  ];
-}
-
-function passesAA(ratio, type) {
-  return type === 'large' ? ratio >= 3 : ratio >= 4.5;
-}
-
-function palettePassesAA(colors) {
-  const checks = getContrastChecks(colors);
-  return checks.every((c) => passesAA(contrastRatio(c.fg, c.bg), c.type));
-}
-
-/* ── Contrast Badge Component ── */
-function ContrastBadge({ ratio, type }) {
-  const passes = passesAA(ratio, type);
-  return (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 2,
-        fontSize: 8,
-        fontWeight: 700,
-        padding: '1px 4px',
-        borderRadius: 3,
-        backgroundColor: passes ? '#ECFDF5' : '#FEF2F2',
-        color: passes ? '#065F46' : '#991B1B',
-        border: `1px solid ${passes ? '#A7F3D0' : '#FECACA'}`,
-      }}
-    >
-      AA {passes ? '\u2713' : '\u2717'}
-      <span style={{ fontWeight: 500, opacity: 0.7 }}>{ratio.toFixed(1)}:1</span>
-    </span>
-  );
-}
-
 /* ── Palette Card Component ── */
 function PaletteCard({ name, colors, isActive, onClick, badge, description, index }) {
-  const aaPass = palettePassesAA(colors);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -184,15 +139,6 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
         <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
           {name}
         </h3>
-        {aaPass ? (
-          <span style={{ fontSize: 8, fontWeight: 700, padding: '1px 5px', borderRadius: 3, backgroundColor: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0' }}>
-            AA {'\u2713'}
-          </span>
-        ) : (
-          <span style={{ fontSize: 8, fontWeight: 700, padding: '1px 5px', borderRadius: 3, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
-            Contrast Warning
-          </span>
-        )}
       </div>
 
       {description && (
@@ -220,18 +166,6 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
         })}
       </div>
 
-      {/* WCAG contrast badges */}
-      <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
-        {getContrastChecks(colors).map((check) => {
-          const ratio = contrastRatio(check.fg, check.bg);
-          return (
-            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <span style={{ fontSize: 8, color: '#6B7280' }}>{check.label}:</span>
-              <ContrastBadge ratio={ratio} type={check.type} />
-            </div>
-          );
-        })}
-      </div>
     </motion.div>
   );
 }

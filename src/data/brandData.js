@@ -194,7 +194,7 @@ export const BRAND_CORES = {
     positioning: 'For the candidate who leads by listening. The neighbor who stepped forward because they know the names.',
     emotionalFeel: 'Warm, Genuine, Approachable',
     philosophy: 'The Community First pathway is for the candidate who leads by listening. This isn\'t about strength or disruption — it\'s about proximity. The person who shows up.',
-    colors: { primary: '#2C4A7C', secondary: '#C74B50', accent: '#E8DCC8', background: '#FFF9F0', text: '#5A5A5A' },
+    colors: { primary: '#2C4A7C', secondary: '#BE4348', accent: '#E8DCC8', background: '#FFF9F0', text: '#5A5A5A' },
     fonts: { heading: 'Poppins', body: 'Lato' },
     subDirections: [
       { id: 'family-first', name: 'Family First', desc: 'Warm, protective, family values centered.', visual: 'Poppins headlines, soft navy + warm cream, house/heart motifs.', bestFor: 'Parents, school board, family-values candidates' },
