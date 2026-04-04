@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES } from '../../data/brandData';
@@ -629,6 +629,7 @@ export default function Stage5_ColorPalette() {
   const [activeTab, setActiveTab] = useState(state.colorMode || 'theme');
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const bannerRef = useRef(null);
   const coreData = state.brandCore ? BRAND_CORES[state.brandCore] : null;
 
   useEffect(() => {
@@ -674,11 +675,13 @@ export default function Stage5_ColorPalette() {
     if (preset) {
       dispatch({ type: 'SET_CUSTOM_COLORS', payload: preset.colors });
     }
+    setTimeout(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
   };
 
   const handleRecommendedSelect = () => {
     handleTabSwitch('theme');
     setSelectedPreset(null);
+    setTimeout(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
   };
 
   const themeColors = coreData
@@ -756,7 +759,47 @@ export default function Stage5_ColorPalette() {
           })}
         </div>
 
-        {/* 3. Website preview — full width below */}
+        {/* 3. Bold color palette banner */}
+        <AnimatePresence mode="wait">
+          {showPreview && (
+            <motion.div
+              ref={bannerRef}
+              key={`banner-${activeTab}-${selectedPreset}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.35 }}
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: 20,
+                padding: '36px 40px',
+                background: activeColors.primary,
+                marginBottom: 20,
+              }}
+            >
+              <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)', pointerEvents: 'none' }} />
+              <div style={{ position: 'relative' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)', margin: '0 0 10px' }}>
+                  Your Color Palette
+                </p>
+                <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 0.9, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
+                  {activePaletteName}
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, marginTop: 22 }}>
+                  {COLOR_ROLES.map(({ key, label }) => (
+                    <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: activeColors[key], border: '2px solid rgba(255,255,255,0.3)', boxShadow: '0 2px 6px rgba(0,0,0,0.25)' }} />
+                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.75)', textTransform: 'capitalize', letterSpacing: '0.04em' }}>{label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* 4. Website preview — full width below */}
         <AnimatePresence mode="wait">
           {showPreview && (
             <motion.div

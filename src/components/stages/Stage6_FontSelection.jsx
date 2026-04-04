@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES } from '../../data/brandData';
@@ -405,8 +405,11 @@ export default function Stage6_FontSelection() {
     }
   }, [state.brandCore]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const bannerRef = useRef(null);
+
   const handleSelectPreset = useCallback((preset) => {
     dispatch({ type: 'SET_CUSTOM_FONTS', payload: { heading: preset.heading, body: preset.body } });
+    setTimeout(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
   }, [dispatch]);
 
   const candidateName = state.candidate?.fullName || 'John Smith';
@@ -439,6 +442,7 @@ export default function Stage6_FontSelection() {
         <AnimatePresence mode="wait">
           {previewHeading && (
             <motion.div
+              ref={bannerRef}
               key={previewHeading + previewBody}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -447,18 +451,14 @@ export default function Stage6_FontSelection() {
               style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: 16,
-                padding: '32px 36px',
-                background: `linear-gradient(135deg, ${activeColors.primary} 0%, ${activeColors.text || activeColors.primary} 100%)`,
+                borderRadius: 20,
+                padding: '36px 40px',
+                background: activeColors.primary,
               }}
             >
-              <div style={{
-                position: 'absolute', inset: 0, opacity: 0.04,
-                backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
-                pointerEvents: 'none',
-              }} />
+              <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative' }}>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)', margin: '0 0 10px' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)', margin: '0 0 10px', fontFamily: `'${previewBody}', sans-serif` }}>
                   Your Typography
                 </p>
                 <h2 style={{
@@ -473,15 +473,31 @@ export default function Stage6_FontSelection() {
                 }}>
                   {candidateName}
                 </h2>
+                <div style={{ width: 72, height: 3, backgroundColor: activeColors.secondary || '#C93545', marginTop: 18, marginBottom: 18, borderRadius: 2 }} />
                 <p style={{
                   fontFamily: `'${previewBody}', sans-serif`,
                   fontWeight: activePreset?.bodyWeight || 400,
-                  fontSize: '0.9rem',
-                  color: 'rgba(255,255,255,0.82)',
-                  margin: '14px 0 0',
+                  fontSize: '1rem',
+                  color: 'rgba(255,255,255,0.85)',
+                  margin: 0,
+                  fontStyle: 'italic',
                 }}>
-                  {activePreset?.name ? `${activePreset.name} — ` : ''}{previewHeading} &amp; {previewBody}
+                  {activePreset?.description || 'Heading & body font pairing for your campaign.'}
                 </p>
+                <div style={{ display: 'flex', gap: 20, marginTop: 20 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.45)' }} />
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.95)', letterSpacing: '0.04em' }}>
+                      Heading: <strong style={{ fontFamily: `'${previewHeading}', sans-serif` }}>{previewHeading}</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.45)' }} />
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.95)', letterSpacing: '0.04em' }}>
+                      Body: <strong style={{ fontFamily: `'${previewBody}', sans-serif` }}>{previewBody}</strong>
+                    </span>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
@@ -506,83 +522,6 @@ export default function Stage6_FontSelection() {
           </div>
         </div>
 
-        {/* ── Live Preview ── */}
-        <AnimatePresence mode="wait">
-          {previewHeading && previewBody && (
-            <motion.div
-              key={`${previewHeading}-${previewBody}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
-                Live Preview
-              </p>
-              <div className="rounded-xl overflow-hidden border border-gray-200">
-                {/* Preview header */}
-                <div className="px-6 py-5" style={{ backgroundColor: activeColors.primary }}>
-                  <h2
-                    style={{
-                      fontFamily: `'${previewHeading}', serif`,
-                      fontWeight: activePreset?.headingWeight || 700,
-                      fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-                      color: activeColors.accent || '#FFFFFF',
-                      lineHeight: 1.2,
-                      margin: 0,
-                    }}
-                  >
-                    {candidateName.toUpperCase()} FOR {officeLabel.toUpperCase()}
-                  </h2>
-                </div>
-                {/* Preview body */}
-                <div className="px-6 py-5" style={{ backgroundColor: activeColors.background || '#F5F5F5' }}>
-                  <p
-                    style={{
-                      fontFamily: `'${previewBody}', sans-serif`,
-                      fontWeight: activePreset?.bodyWeight || 400,
-                      fontSize: 15,
-                      color: activeColors.text || '#333333',
-                      lineHeight: 1.6,
-                      marginBottom: 16,
-                    }}
-                  >
-                    Fighting for our community's future. Join us in building a stronger tomorrow for every family in our state.
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: `'${previewHeading}', serif`,
-                      fontWeight: activePreset?.headingWeight || 700,
-                      fontSize: 13,
-                      display: 'inline-block',
-                      padding: '10px 20px',
-                      borderRadius: 8,
-                      backgroundColor: activeColors.secondary,
-                      color: textOnColor(activeColors.secondary),
-                    }}
-                  >
-                    Get Involved
-                  </span>
-                </div>
-                {/* Font labels */}
-                <div className="px-6 py-3 bg-white border-t border-gray-200 flex flex-wrap gap-5">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeColors.secondary }} />
-                    <span className="text-xs text-gray-500">
-                      Heading: <strong style={{ fontFamily: `'${previewHeading}', serif` }}>{previewHeading}</strong>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeColors.primary }} />
-                    <span className="text-xs text-gray-500">
-                      Body: <strong style={{ fontFamily: `'${previewBody}', sans-serif` }}>{previewBody}</strong>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
       </div>
     </StageContainer>

@@ -205,7 +205,7 @@ export default function Stage3_BrandCore() {
               {/* Descriptor as label */}
               <p style={{
                 fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
-                letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)',
+                letterSpacing: '0.22em', color: 'rgba(255,255,255,0.95)',
                 margin: '0 0 10px',
               }}>
                 {BRAND_CORES[selectedId].descriptor}
