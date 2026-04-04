@@ -104,10 +104,10 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
       </svg>
 
       {/* Rounded 40px container */}
-      <div className="mx-auto px-3 md:px-6 py-6 md:py-10 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 relative z-10">
         <div
-          className="bg-white/70 backdrop-blur-sm px-6 md:px-10 py-8 md:py-12"
-          style={{ borderRadius: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+          className="bg-white/70 backdrop-blur-sm px-8 md:px-12 py-10 md:py-14"
+          style={{ borderRadius: '40px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
         >
           <div className="mb-10 md:mb-14">
             <motion.div
