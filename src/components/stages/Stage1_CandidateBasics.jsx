@@ -49,7 +49,7 @@ const styles = {
 
 /* ── Interactive Falling Confetti ── */
 const CONFETTI_COLORS = ['#8B1A2B', '#1C2E5B', '#B22234', '#ffffff', '#C8A951', '#3B5998'];
-const PARTICLE_COUNT = 35;
+const PARTICLE_COUNT = 20;
 
 function ConfettiCanvas() {
   const canvasRef = useRef(null);
@@ -62,8 +62,8 @@ function ConfettiCanvas() {
     return {
       x: Math.random() * w,
       y: fromTop ? -size - Math.random() * h : Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: 0.3 + Math.random() * 0.5,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: 0.15 + Math.random() * 0.25,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.08,
       w: size,
@@ -115,9 +115,11 @@ function ConfettiCanvas() {
         }
 
         // Physics
-        p.vy += 0.012; // gravity
-        p.vx *= 0.97; // drag
-        p.vy = Math.min(p.vy, 2); // terminal velocity
+        p.vy += 0.005; // gravity
+        p.vx *= 0.99; // drag
+        p.vy = Math.min(p.vy, 1); // terminal velocity
+        // enforce minimum fall speed so nothing appears static
+        if (p.vy < 0.12) p.vy = 0.12;
         p.x += p.vx;
         p.y += p.vy;
         p.rotation += p.rotSpeed;
