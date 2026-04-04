@@ -103,7 +103,7 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
       style={{
         position: 'relative',
         cursor: 'pointer',
-        padding: '10px 12px',
+        padding: '14px 16px',
         background: isActive ? '#FDF2F2' : '#FFFFFF',
         border: isActive ? '2px solid #8B1A2B' : '1px solid #E5E7EB',
         borderRadius: 8,
@@ -136,7 +136,7 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
             {badge}
           </span>
         )}
-        <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
           {name}
         </h3>
       </div>
@@ -146,21 +146,21 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
       )}
 
       {/* 6 color swatches in a horizontal row */}
-      <div style={{ display: 'flex', gap: 4 }}>
+      <div style={{ display: 'flex', gap: 6 }}>
         {COLOR_ROLES.map(({ key, label }) => {
           const color = colors[key] || colors.secondary;
           return (
             <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0, flex: 1 }}>
               <div
                 style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: 4,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 6,
                   backgroundColor: color,
                   boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.1)' : 'none',
                 }}
               />
-              <span style={{ fontSize: 8, fontWeight: 600, marginTop: 2, color: '#374151', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
+              <span style={{ fontSize: 9, fontWeight: 600, marginTop: 3, color: '#374151', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
             </div>
           );
         })}
@@ -519,17 +519,17 @@ export default function Stage5_ColorPalette() {
         )}
 
         {/* Two-column layout: palette cards on left, preview on right */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
 
-          {/* LEFT: Palette selection cards */}
-          <div style={{ flex: showPreview ? '0 0 340px' : '1', minWidth: 0 }}>
+          {/* LEFT: Palette selection cards — takes 60% */}
+          <div style={{ flex: showPreview ? '0 0 60%' : '1', minWidth: 0 }}>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: showPreview ? '1fr' : 'repeat(2, 1fr)',
-              gap: 8,
-              maxHeight: showPreview ? '60vh' : 'none',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: 10,
+              maxHeight: showPreview ? '70vh' : 'none',
               overflowY: showPreview ? 'auto' : 'visible',
-              paddingRight: showPreview ? 4 : 0,
+              paddingRight: showPreview ? 6 : 0,
             }}>
               {/* Recommended palette card */}
               {themeColors && (
@@ -571,7 +571,7 @@ export default function Stage5_ColorPalette() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4 }}
                 style={{
-                  flex: 1,
+                  flex: '0 0 38%',
                   minWidth: 0,
                   position: 'sticky',
                   top: 120,
