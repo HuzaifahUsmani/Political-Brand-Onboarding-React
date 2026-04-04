@@ -4,8 +4,10 @@ export const STAGES = [
   'Brand Core Selection',
   'Sub-Direction',
   'Color Palette',
+  'Font Selection',
   'Visual Identity',
   'Logo Style',
+  'Website Copy',
   'Collateral Priority',
   'Final Review'
 ];

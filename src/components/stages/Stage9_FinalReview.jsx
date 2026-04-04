@@ -92,7 +92,7 @@ function ThankYouPage({ collateralSelected }) {
           transition={{ delay: 0.35 }}
           className="text-lg text-gray-600 mb-3 leading-relaxed"
         >
-          Your detailed brand kit will be delivered to you within 3 days based on your selections.
+          Your detailed brand kit will be delivered to you within 3 working days based on your selections.
         </motion.p>
 
         <motion.p
@@ -101,7 +101,7 @@ function ThankYouPage({ collateralSelected }) {
           transition={{ delay: 0.45 }}
           className="text-lg text-gray-600 mb-12 leading-relaxed"
         >
-          Your website content will be started and shared for your review.
+          Website content will be started based on your choices.
         </motion.p>
 
         {/* What you'll receive */}
@@ -119,7 +119,7 @@ function ThankYouPage({ collateralSelected }) {
             <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
             <div>
               <p className="text-sm font-semibold text-gray-800">Logo delivery</p>
-              <p className="text-sm text-gray-500">By end of tomorrow</p>
+              <p className="text-sm text-gray-500">Within 2 working days</p>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ function ThankYouPage({ collateralSelected }) {
             <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
             <div>
               <p className="text-sm font-semibold text-gray-800">Brand kit</p>
-              <p className="text-sm text-gray-500">Within 3 days</p>
+              <p className="text-sm text-gray-500">Within 3 working days</p>
             </div>
           </div>
 
@@ -135,7 +135,7 @@ function ThankYouPage({ collateralSelected }) {
             <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
             <div>
               <p className="text-sm font-semibold text-gray-800">Website content</p>
-              <p className="text-sm text-gray-500">Started and shared for your review</p>
+              <p className="text-sm text-gray-500">Started based on your choices</p>
             </div>
           </div>
 
@@ -349,10 +349,10 @@ export default function Stage9_FinalReview() {
         {/* Confirmation callout */}
         <div className="mt-8 rounded-lg bg-[#FDF6F0] border border-[#F0DDD0] p-5">
           <p className="text-sm text-gray-700 font-medium mb-2">
-            We will create your logo and send it to you by end of tomorrow.
+            Your logo will be delivered to you within 2 working days.
           </p>
           <p className="text-sm text-gray-700 font-medium">
-            We will get your website content started.
+            Website content will be started based on your choices.
           </p>
         </div>
 

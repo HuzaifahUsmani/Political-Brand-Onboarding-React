@@ -135,102 +135,372 @@ function ContrastBadge({ ratio, type }) {
   );
 }
 
-/* ── 60/30/10 Website Mockup SVG ── */
-function WebsiteMockup({ colors }) {
+/* ── Palette Card Component ── */
+function PaletteCard({ name, colors, isActive, onClick, badge, description, index }) {
+  const aaPass = palettePassesAA(colors);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.06, duration: 0.4 }}
+      onClick={onClick}
+      whileHover={!isActive ? { y: -2, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' } : {}}
+      style={{
+        position: 'relative',
+        cursor: 'pointer',
+        padding: 20,
+        background: isActive ? '#FDF2F2' : '#FFFFFF',
+        border: isActive ? '2px solid #8B1A2B' : '1px solid #E5E7EB',
+        borderRadius: 10,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+        transition: 'background 0.2s ease, border 0.2s ease',
+      }}
+    >
+      {/* Checkmark in top-right */}
+      <AnimatePresence>
+        {isActive && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.2 }}
+            style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}
+          >
+            <AnimatedCheckmark size={28} color="#8B1A2B" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Header row: name + badges */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        {badge && (
+          <span
+            style={{
+              fontSize: 9,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              padding: '2px 7px',
+              borderRadius: 4,
+              backgroundColor: colors.primary,
+              color: isLightColor(colors.primary) ? colors.text : '#FFFFFF',
+            }}
+          >
+            {badge}
+          </span>
+        )}
+        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
+          {name}
+        </h3>
+        {aaPass ? (
+          <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4, backgroundColor: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0' }}>
+            AA {'\u2713'}
+          </span>
+        ) : (
+          <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
+            Contrast Warning
+          </span>
+        )}
+      </div>
+
+      {description && (
+        <p style={{ fontSize: 12, color: '#6B7280', margin: 0, marginBottom: 12 }}>{description}</p>
+      )}
+
+      {/* 6 color swatches in a horizontal row */}
+      <div style={{ display: 'flex', gap: 8 }}>
+        {COLOR_ROLES.map(({ key, label }) => {
+          const color = colors[key] || colors.secondary;
+          return (
+            <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0, flex: 1 }}>
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 6,
+                  backgroundColor: color,
+                  boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.1)' : 'none',
+                }}
+              />
+              <span style={{ fontSize: 9, fontWeight: 600, marginTop: 4, color: '#374151', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
+              <span style={{ fontSize: 8, fontFamily: 'monospace', marginTop: 1, color: '#9CA3AF', textAlign: 'center' }}>{color}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* WCAG contrast badges */}
+      <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
+        {getContrastChecks(colors).map((check) => {
+          const ratio = contrastRatio(check.fg, check.bg);
+          return (
+            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <span style={{ fontSize: 9, color: '#6B7280' }}>{check.label}:</span>
+              <ContrastBadge ratio={ratio} type={check.type} />
+            </div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Realistic Campaign Website Mockup (HTML/JSX) ── */
+function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candidateState }) {
   const bgColor = colors.background;
   const secColor = colors.secondary;
   const priColor = colors.primary;
   const accColor = colors.highlight || colors.accent;
   const textColor = colors.text;
+  const accentColor = colors.accent;
+
+  const name = candidateName || 'Jane Smith';
+  const office = candidateOffice || 'State Senate';
+  const usState = candidateState || 'Virginia';
+
+  // Derive initials and last name
+  const nameParts = name.split(' ');
+  const initials = nameParts.map(n => n[0]).join('').toUpperCase();
+  const lastName = nameParts[nameParts.length - 1] || 'Smith';
+  const firstName = nameParts[0] || 'Jane';
+
+  const labelStyle = {
+    position: 'absolute',
+    right: -72,
+    fontSize: 9,
+    fontWeight: 700,
+    color: '#9CA3AF',
+    letterSpacing: '0.04em',
+    whiteSpace: 'nowrap',
+    textTransform: 'uppercase',
+  };
 
   return (
     <div style={{ width: '100%' }}>
-      <svg
-        viewBox="0 0 600 520"
-        width="100%"
-        style={{ display: 'block', borderRadius: 8, border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Browser chrome */}
-        <rect x="0" y="0" width="600" height="28" fill="#F3F4F6" rx="8" />
-        <rect x="0" y="14" width="600" height="14" fill="#F3F4F6" />
-        <circle cx="16" cy="14" r="4" fill="#EF4444" />
-        <circle cx="30" cy="14" r="4" fill="#F59E0B" />
-        <circle cx="44" cy="14" r="4" fill="#22C55E" />
-
-        {/* Header — 30% secondary */}
-        <rect x="0" y="28" width="600" height="50" fill={secColor} />
-        <rect x="24" y="42" width="80" height="14" rx="2" fill="#FFFFFF" opacity="0.9" />
-        <rect x="400" y="44" width="40" height="10" rx="2" fill="#FFFFFF" opacity="0.6" />
-        <rect x="450" y="44" width="40" height="10" rx="2" fill="#FFFFFF" opacity="0.6" />
-        <rect x="500" y="44" width="40" height="10" rx="2" fill="#FFFFFF" opacity="0.6" />
-        {/* 30% annotation */}
-        <text x="570" y="58" fontSize="10" fontWeight="700" fill="#FFFFFF" textAnchor="end" opacity="0.8">30%</text>
-
-        {/* Hero — 60% background/primary area */}
-        <rect x="0" y="78" width="600" height="180" fill={bgColor} />
-        {/* Hero headline */}
-        <rect x="60" y="116" width="260" height="18" rx="3" fill={priColor} />
-        <rect x="60" y="142" width="200" height="12" rx="2" fill={textColor} opacity="0.5" />
-        <rect x="60" y="160" width="180" height="12" rx="2" fill={textColor} opacity="0.3" />
-        {/* CTA button — 10% accent */}
-        <rect x="60" y="188" width="120" height="36" rx="6" fill={accColor} />
-        <rect x="80" y="201" width="80" height="10" rx="2" fill={isLightColor(accColor) ? textColor : '#FFFFFF'} opacity="0.9" />
-        {/* 60% annotation */}
-        <text x="540" y="176" fontSize="10" fontWeight="700" fill={textColor} textAnchor="end" opacity="0.5">60%</text>
-        {/* 10% annotation near CTA */}
-        <text x="196" y="210" fontSize="10" fontWeight="700" fill={accColor} textAnchor="start" opacity="0.8">10%</text>
-
-        {/* Cards section — on 60% background */}
-        <rect x="0" y="258" width="600" height="170" fill={bgColor} />
-        {/* Card 1 */}
-        <rect x="30" y="278" width="165" height="120" rx="6" fill="#FFFFFF" />
-        <rect x="30" y="278" width="165" height="120" rx="6" fill={secColor} opacity="0.08" />
-        <rect x="46" y="296" width="100" height="10" rx="2" fill={priColor} opacity="0.85" />
-        <rect x="46" y="314" width="130" height="8" rx="2" fill={textColor} opacity="0.35" />
-        <rect x="46" y="328" width="120" height="8" rx="2" fill={textColor} opacity="0.25" />
-        <rect x="46" y="354" width="80" height="24" rx="4" fill={accColor} />
-        {/* Card 2 */}
-        <rect x="218" y="278" width="165" height="120" rx="6" fill="#FFFFFF" />
-        <rect x="218" y="278" width="165" height="120" rx="6" fill={secColor} opacity="0.08" />
-        <rect x="234" y="296" width="110" height="10" rx="2" fill={priColor} opacity="0.85" />
-        <rect x="234" y="314" width="130" height="8" rx="2" fill={textColor} opacity="0.35" />
-        <rect x="234" y="328" width="120" height="8" rx="2" fill={textColor} opacity="0.25" />
-        <rect x="234" y="354" width="80" height="24" rx="4" fill={accColor} />
-        {/* Card 3 */}
-        <rect x="406" y="278" width="165" height="120" rx="6" fill="#FFFFFF" />
-        <rect x="406" y="278" width="165" height="120" rx="6" fill={secColor} opacity="0.08" />
-        <rect x="422" y="296" width="90" height="10" rx="2" fill={priColor} opacity="0.85" />
-        <rect x="422" y="314" width="130" height="8" rx="2" fill={textColor} opacity="0.35" />
-        <rect x="422" y="328" width="120" height="8" rx="2" fill={textColor} opacity="0.25" />
-        <rect x="422" y="354" width="80" height="24" rx="4" fill={accColor} />
-
-        {/* Footer — 30% secondary */}
-        <rect x="0" y="428" width="600" height="92" fill={secColor} />
-        <rect x="30" y="450" width="120" height="10" rx="2" fill="#FFFFFF" opacity="0.7" />
-        <rect x="30" y="468" width="80" height="8" rx="2" fill="#FFFFFF" opacity="0.4" />
-        <rect x="250" y="450" width="100" height="10" rx="2" fill="#FFFFFF" opacity="0.7" />
-        <rect x="250" y="468" width="70" height="8" rx="2" fill="#FFFFFF" opacity="0.4" />
-        <rect x="470" y="450" width="100" height="10" rx="2" fill="#FFFFFF" opacity="0.7" />
-        <rect x="470" y="468" width="80" height="8" rx="2" fill="#FFFFFF" opacity="0.4" />
-        {/* 30% annotation */}
-        <text x="570" y="505" fontSize="10" fontWeight="700" fill="#FFFFFF" textAnchor="end" opacity="0.8">30%</text>
-      </svg>
-
-      {/* Legend */}
-      <div style={{ display: 'flex', gap: 16, marginTop: 12, flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: bgColor, border: '1px solid #E5E7EB' }} />
-          <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280' }}>60% Primary Surface</span>
+      {/* Browser frame */}
+      <div style={{ border: '1px solid #D1D5DB', borderRadius: 10, overflow: 'hidden', backgroundColor: '#F3F4F6' }}>
+        {/* Browser chrome bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', backgroundColor: '#F3F4F6', borderBottom: '1px solid #E5E7EB' }}>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#EF4444' }} />
+            <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#F59E0B' }} />
+            <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#22C55E' }} />
+          </div>
+          <div style={{
+            flex: 1,
+            backgroundColor: '#FFFFFF',
+            borderRadius: 6,
+            padding: '4px 12px',
+            fontSize: 11,
+            color: '#6B7280',
+            fontFamily: 'monospace',
+            border: '1px solid #E5E7EB',
+          }}>
+            www.{lastName.toLowerCase()}for{office.toLowerCase().replace(/\s+/g, '')}.com
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: secColor }} />
-          <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280' }}>30% Secondary</span>
+
+        {/* Website content - scaled down */}
+        <div style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'relative' }}>
+
+            {/* ===== HEADER / NAV (30% - Secondary) ===== */}
+            <div style={{ position: 'relative', backgroundColor: secColor, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              {/* Logo area */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 6,
+                  backgroundColor: priColor,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 14, fontWeight: 800,
+                  color: isLightColor(priColor) ? textColor : '#FFFFFF',
+                  letterSpacing: '0.05em',
+                }}>
+                  {initials}
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.02em' }}>
+                  {name.toUpperCase()}
+                </span>
+              </div>
+              {/* Nav links */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                {['Home', 'About', 'Issues', 'Contact'].map((link) => (
+                  <span key={link} style={{ fontSize: 11, color: '#FFFFFF', opacity: 0.85, fontWeight: 500 }}>{link}</span>
+                ))}
+                <span style={{
+                  fontSize: 11, fontWeight: 700,
+                  padding: '5px 14px', borderRadius: 5,
+                  backgroundColor: accColor,
+                  color: isLightColor(accColor) ? textColor : '#FFFFFF',
+                }}>
+                  Donate Now
+                </span>
+              </div>
+            </div>
+
+            {/* ===== HERO SECTION (60% - Background) ===== */}
+            <div style={{ position: 'relative', backgroundColor: bgColor, padding: '40px 24px 36px' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: textColor, margin: 0, marginBottom: 8, lineHeight: 1.2 }}>
+                Fighting for {usState}&apos;s Future
+              </h2>
+              <p style={{ fontSize: 12, color: textColor, opacity: 0.65, margin: 0, marginBottom: 20, maxWidth: 420, lineHeight: 1.5 }}>
+                Experienced leadership. Proven results. Ready to serve the people of {usState}.
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <span style={{
+                  fontSize: 11, fontWeight: 700,
+                  padding: '8px 18px', borderRadius: 6,
+                  backgroundColor: accColor,
+                  color: isLightColor(accColor) ? textColor : '#FFFFFF',
+                }}>
+                  Join the Campaign
+                </span>
+                <span style={{
+                  fontSize: 11, fontWeight: 600,
+                  padding: '8px 18px', borderRadius: 6,
+                  backgroundColor: 'transparent',
+                  color: textColor,
+                  border: `1.5px solid ${textColor}`,
+                  opacity: 0.6,
+                }}>
+                  Learn More
+                </span>
+              </div>
+            </div>
+
+            {/* ===== ISSUES SECTION (60% bg with 30% cards) ===== */}
+            <div style={{ backgroundColor: bgColor, padding: '24px 24px 28px' }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: textColor, margin: 0, marginBottom: 16, textAlign: 'center' }}>
+                Key Issues
+              </h3>
+              <div style={{ display: 'flex', gap: 12 }}>
+                {[
+                  { icon: '\uD83D\uDCCA', title: 'Economy', desc: 'Creating jobs and growing our local economy for working families.' },
+                  { icon: '\uD83C\uDF93', title: 'Education', desc: 'Investing in schools and empowering parents with real choices.' },
+                  { icon: '\u2764\uFE0F', title: 'Healthcare', desc: 'Affordable, accessible care for every family in our community.' },
+                ].map((issue) => (
+                  <div key={issue.title} style={{
+                    flex: 1,
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: 8,
+                    padding: 14,
+                    borderTop: `3px solid ${secColor}`,
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                  }}>
+                    <div style={{ fontSize: 18, marginBottom: 6 }}>{issue.icon}</div>
+                    <h4 style={{ fontSize: 12, fontWeight: 700, color: textColor, margin: 0, marginBottom: 4 }}>{issue.title}</h4>
+                    <p style={{ fontSize: 10, color: textColor, opacity: 0.6, margin: 0, lineHeight: 1.4 }}>{issue.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ===== CTA BANNER (30% - Secondary) ===== */}
+            <div style={{
+              backgroundColor: secColor,
+              padding: '20px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FFFFFF', margin: 0, marginBottom: 4 }}>
+                  Support the Campaign
+                </h3>
+                <p style={{ fontSize: 10, color: '#FFFFFF', opacity: 0.7, margin: 0 }}>
+                  Join 2,847 supporters standing with {firstName}
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: 0 }}>
+                <div style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '5px 0 0 5px',
+                  padding: '7px 14px',
+                  fontSize: 10,
+                  color: '#9CA3AF',
+                  minWidth: 140,
+                }}>
+                  Enter your email
+                </div>
+                <span style={{
+                  fontSize: 10, fontWeight: 700,
+                  padding: '7px 14px',
+                  borderRadius: '0 5px 5px 0',
+                  backgroundColor: accColor,
+                  color: isLightColor(accColor) ? textColor : '#FFFFFF',
+                }}>
+                  Sign Up
+                </span>
+              </div>
+            </div>
+
+            {/* ===== FOOTER (Primary) ===== */}
+            <div style={{
+              backgroundColor: priColor,
+              padding: '16px 24px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+            }}>
+              <div>
+                <p style={{ fontSize: 11, fontWeight: 700, color: '#FFFFFF', margin: 0, marginBottom: 4, opacity: 0.9 }}>
+                  {name} for {office}
+                </p>
+                <p style={{ fontSize: 9, color: '#FFFFFF', opacity: 0.5, margin: 0, lineHeight: 1.4 }}>
+                  Paid for by {name} for {office}<br />
+                  {usState} Campaign Committee
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
+                {['About', 'Issues', 'Donate', 'Contact', 'Privacy'].map((link) => (
+                  <span key={link} style={{ fontSize: 9, color: '#FFFFFF', opacity: 0.6, fontWeight: 500 }}>{link}</span>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Side color labels */}
+          <div style={{ position: 'absolute', top: 0, right: 6, height: '100%', pointerEvents: 'none' }}>
+            {/* Header label */}
+            <div style={{ position: 'absolute', top: 18, right: 8, ...labelStyle, right: 8, color: '#FFFFFF', opacity: 0.7 }}>
+              Secondary (30%)
+            </div>
+            {/* Hero label */}
+            <div style={{ position: 'absolute', top: 116, right: 8, ...labelStyle, color: textColor, opacity: 0.35 }}>
+              Background (60%)
+            </div>
+            {/* CTA label */}
+            <div style={{ position: 'absolute', bottom: 80, right: 8, ...labelStyle, color: '#FFFFFF', opacity: 0.7 }}>
+              Secondary (30%)
+            </div>
+            {/* Footer label */}
+            <div style={{ position: 'absolute', bottom: 18, right: 8, ...labelStyle, color: '#FFFFFF', opacity: 0.5 }}>
+              Primary
+            </div>
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: accColor }} />
-          <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280' }}>10% Accent</span>
-        </div>
+      </div>
+
+      {/* Legend below browser frame */}
+      <div style={{ display: 'flex', gap: 16, marginTop: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+        {[
+          { color: bgColor, label: 'Primary Surface (60%)', needsBorder: true },
+          { color: secColor, label: 'Secondary (30%)', needsBorder: false },
+          { color: accColor, label: 'Accent (10%)', needsBorder: false },
+          { color: priColor, label: 'Primary', needsBorder: false },
+          { color: textColor, label: 'Text', needsBorder: false },
+        ].map((item) => (
+          <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{
+              width: 12, height: 12, borderRadius: 3,
+              backgroundColor: item.color,
+              border: item.needsBorder ? '1px solid #D1D5DB' : 'none',
+            }} />
+            <span style={{ fontSize: 10, fontWeight: 600, color: '#6B7280' }}>{item.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -292,6 +562,11 @@ export default function Stage5_ColorPalette() {
 
   const showPreview = activeTab === 'theme' || (activeTab === 'custom' && selectedPreset);
 
+  // Candidate data for the mockup
+  const candidateName = state.candidate?.fullName || '';
+  const candidateOffice = state.candidate?.office || '';
+  const candidateState = state.candidate?.state || '';
+
   return (
     <StageContainer
       title="Color Palette"
@@ -300,243 +575,42 @@ export default function Stage5_ColorPalette() {
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-        {/* RECOMMENDED PALETTE — full-width box like Stage 3 */}
-        {themeColors && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            onClick={handleRecommendedSelect}
-            style={{
-              position: 'relative',
-              cursor: 'pointer',
-              padding: 24,
-              background: activeTab === 'theme' ? '#FEF2F2' : '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderLeft: activeTab === 'theme' ? '4px solid #8B1A2B' : '1px solid #E5E7EB',
-              borderRadius: 8,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-              transition: 'background 0.2s ease, border 0.2s ease',
-            }}
-          >
-            {/* Checkmark */}
-            <AnimatePresence>
-              {activeTab === 'theme' && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}
-                >
-                  <AnimatedCheckmark size={32} color="#8B1A2B" />
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {/* CARD GRID: Recommended + Presets */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 14,
+        }}>
+          {/* Recommended palette card */}
+          {themeColors && (
+            <PaletteCard
+              name={`${coreData?.name} Palette`}
+              colors={themeColors}
+              isActive={activeTab === 'theme'}
+              onClick={handleRecommendedSelect}
+              badge="Recommended"
+              description={`Curated for the ${coreData?.emotionalFeel?.toLowerCase()} quality of your ${coreData?.name} brand core.`}
+              index={0}
+            />
+          )}
 
-            {/* Badge + Title */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
-                  padding: '2px 8px',
-                  borderRadius: 4,
-                  backgroundColor: themeColors.primary,
-                  color: isLightColor(themeColors.primary) ? themeColors.text : '#FFFFFF',
-                }}
-              >
-                Recommended
-              </span>
-              {!palettePassesAA(themeColors) && (
-                <span
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    borderRadius: 4,
-                    backgroundColor: '#FEF2F2',
-                    color: '#991B1B',
-                    border: '1px solid #FECACA',
-                  }}
-                >
-                  Contrast Warning
-                </span>
-              )}
-            </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1C2E5B', margin: 0, marginBottom: 4 }}>
-              {coreData?.name} Palette
-            </h3>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: 0, marginBottom: 16 }}>
-              Curated for the <em>{coreData?.emotionalFeel?.toLowerCase()}</em> quality of your {coreData?.name} brand core.
-            </p>
-
-            {/* Swatches row */}
-            <div style={{ display: 'flex', gap: 12 }}>
-              {COLOR_ROLES.map(({ key, label }) => {
-                const color = themeColors[key] || themeColors.secondary;
-                return (
-                  <div key={key} style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{
-                        width: '100%',
-                        aspectRatio: '4 / 3',
-                        borderRadius: 6,
-                        backgroundColor: color,
-                        boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.08)' : 'none',
-                      }}
-                    />
-                    <p style={{ fontSize: 11, fontWeight: 600, marginTop: 6, marginBottom: 0, color: '#374151' }}>{label}</p>
-                    <p style={{ fontSize: 10, fontFamily: 'monospace', marginTop: 2, marginBottom: 0, color: '#9CA3AF' }}>{color}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* AA Contrast checks */}
-            <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-              {getContrastChecks(themeColors).map((check) => {
-                const ratio = contrastRatio(check.fg, check.bg);
-                return (
-                  <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span style={{ fontSize: 10, color: '#6B7280' }}>{check.label}:</span>
-                    <ContrastBadge ratio={ratio} type={check.type} />
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-
-        {/* DIVIDER */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '8px 0' }}>
-          <div style={{ height: 1, flex: 1, backgroundColor: '#E5E7EB' }} />
-          <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#9CA3AF' }}>
-            or pick a preset
-          </span>
-          <div style={{ height: 1, flex: 1, backgroundColor: '#E5E7EB' }} />
+          {/* Preset palette cards */}
+          {PRESET_PALETTES.map((preset, index) => {
+            const isActive = activeTab === 'custom' && selectedPreset === preset.id;
+            return (
+              <PaletteCard
+                key={preset.id}
+                name={preset.name}
+                colors={preset.colors}
+                isActive={isActive}
+                onClick={() => handlePresetSelect(preset.id)}
+                index={index + 1}
+              />
+            );
+          })}
         </div>
 
-        {/* PRESET PALETTES — full-width stacked boxes like Stage 3 */}
-        {PRESET_PALETTES.map((preset, index) => {
-          const isActive = activeTab === 'custom' && selectedPreset === preset.id;
-          const aaPass = palettePassesAA(preset.colors);
-
-          return (
-            <motion.div
-              key={preset.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.06, duration: 0.4 }}
-              onClick={() => handlePresetSelect(preset.id)}
-              whileHover={!isActive ? {
-                y: -2,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              } : {}}
-              style={{
-                position: 'relative',
-                cursor: 'pointer',
-                padding: 24,
-                background: isActive ? '#FEF2F2' : '#FFFFFF',
-                border: '1px solid #E5E7EB',
-                borderLeft: isActive ? '4px solid #8B1A2B' : '1px solid #E5E7EB',
-                borderRadius: 8,
-                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-                transition: 'background 0.2s ease, border 0.2s ease',
-              }}
-            >
-              {/* Checkmark */}
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}
-                  >
-                    <AnimatedCheckmark size={32} color="#8B1A2B" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Title row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1C2E5B', margin: 0 }}>
-                  {preset.name}
-                </h3>
-                {aaPass ? (
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      backgroundColor: '#ECFDF5',
-                      color: '#065F46',
-                      border: '1px solid #A7F3D0',
-                    }}
-                  >
-                    AA {'\u2713'}
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      backgroundColor: '#FEF2F2',
-                      color: '#991B1B',
-                      border: '1px solid #FECACA',
-                    }}
-                  >
-                    Contrast Warning
-                  </span>
-                )}
-              </div>
-
-              {/* Swatches row */}
-              <div style={{ display: 'flex', gap: 12 }}>
-                {COLOR_ROLES.map(({ key, label }) => {
-                  const color = preset.colors[key] || preset.colors.secondary;
-                  return (
-                    <div key={key} style={{ flex: 1, minWidth: 0 }}>
-                      <div
-                        style={{
-                          width: '100%',
-                          aspectRatio: '4 / 3',
-                          borderRadius: 6,
-                          backgroundColor: color,
-                          boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.08)' : 'none',
-                        }}
-                      />
-                      <p style={{ fontSize: 11, fontWeight: 600, marginTop: 6, marginBottom: 0, color: '#374151' }}>{label}</p>
-                      <p style={{ fontSize: 10, fontFamily: 'monospace', marginTop: 2, marginBottom: 0, color: '#9CA3AF' }}>{color}</p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* AA Contrast checks row */}
-              <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-                {getContrastChecks(preset.colors).map((check) => {
-                  const ratio = contrastRatio(check.fg, check.bg);
-                  return (
-                    <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <span style={{ fontSize: 10, color: '#6B7280' }}>{check.label}:</span>
-                      <ContrastBadge ratio={ratio} type={check.type} />
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          );
-        })}
-
-        {/* 60/30/10 PREVIEW SECTION */}
+        {/* CAMPAIGN WEBSITE MOCKUP PREVIEW */}
         <AnimatePresence mode="wait">
           {showPreview && (
             <motion.div
@@ -546,12 +620,12 @@ export default function Stage5_ColorPalette() {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.4 }}
               style={{
-                marginTop: 16,
+                marginTop: 8,
                 padding: 24,
                 background: '#FFFFFF',
                 border: '1px solid #E5E7EB',
-                borderRadius: 8,
-                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                borderRadius: 10,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
               }}
             >
               <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#9CA3AF', marginTop: 0, marginBottom: 4 }}>
@@ -561,9 +635,15 @@ export default function Stage5_ColorPalette() {
                 {activePaletteName}
               </h3>
               <p style={{ fontSize: 13, color: '#6B7280', margin: 0, marginBottom: 20 }}>
-                See how your selected palette maps to the 60/30/10 color rule in a website layout.
+                See how your selected palette maps to a realistic campaign website using the 60/30/10 color rule.
               </p>
-              <WebsiteMockup colors={activeColors} />
+
+              <CampaignWebsiteMockup
+                colors={activeColors}
+                candidateName={candidateName}
+                candidateOffice={candidateOffice}
+                candidateState={candidateState}
+              />
 
               {/* Detailed color spec */}
               <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>

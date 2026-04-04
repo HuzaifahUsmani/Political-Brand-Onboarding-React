@@ -221,6 +221,7 @@ export default function Stage8_CollateralPriority() {
       title="Campaign Materials"
       subtitle="Select the print and digital materials you need for your campaign."
       stageNumber={7}
+      hideNavigation={effectiveShowMaterials === null}
     >
       {/* Opening question */}
       {effectiveShowMaterials === null && (

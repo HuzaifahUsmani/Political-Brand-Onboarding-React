@@ -47,10 +47,10 @@ function ConfettiBurst({ onDone }) {
   );
 }
 
-export default function StageContainer({ children, title, subtitle, stageNumber }) {
+export default function StageContainer({ children, title, subtitle, stageNumber, hideNavigation = false }) {
   const { prevStage, nextStage, state } = useBrand();
   const isFirst = state.currentStage === 0;
-  const isLast = state.currentStage === 8;
+  const isLast = state.currentStage === 10;
   const [showConfetti, setShowConfetti] = useState(false);
 
   const handleContinue = useCallback(() => {
@@ -152,7 +152,7 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
             {children}
           </motion.div>
 
-          {!isLast && (
+          {!isLast && !hideNavigation && (
             <>
               {/* Wave SVG divider */}
               <div className="mt-16 -mx-8 md:-mx-12 overflow-hidden">

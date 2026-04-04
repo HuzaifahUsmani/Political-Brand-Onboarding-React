@@ -8,6 +8,7 @@ const STAGE_NAMES = [
   'Brand Core',
   'Brand Direction',
   'Color Palette',
+  'Font Selection',
   'Visual Identity',
   'Logo Type',
   'Website Copy',
