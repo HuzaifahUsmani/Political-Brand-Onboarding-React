@@ -242,7 +242,7 @@ export default function Stage4_SubDirection() {
                     {/* Selected checkmark */}
                     {isSelected && (
                       <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 20 }}>
-                        <AnimatedCheckmark size={24} color={isSelected ? styles.selectedTextColor : coreData.colors.secondary} />
+                        <AnimatedCheckmark size={24} color={isSelected ? styles.selectedTextColor : (coreData.colors.secondary || '#8B1A2B')} />
                       </div>
                     )}
                   </div>

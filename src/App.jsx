@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { BrandProvider, useBrand } from './context/BrandContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BRAND_CORES } from './data/brandData';
 import ProgressBar from './components/ProgressBar';
@@ -85,9 +86,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrandProvider>
-      <AppContent />
-      <LiveColorStrip />
-    </BrandProvider>
+    <ErrorBoundary>
+      <BrandProvider>
+        <AppContent />
+        <LiveColorStrip />
+      </BrandProvider>
+    </ErrorBoundary>
   );
 }

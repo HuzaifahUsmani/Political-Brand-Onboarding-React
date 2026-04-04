@@ -497,6 +497,7 @@ export default function Stage7_LogoType() {
                   <img
                     src={logoType.image}
                     alt={`${logoType.name} logo examples`}
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     style={{
                       width: '100%',
                       height: '100%',

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,7 +7,7 @@ import { useBrand } from '../context/BrandContext';
 const CONFETTI_COLORS = ['#8B1A2B', '#1C2E5B', '#B22234', '#FFD700'];
 
 function ConfettiBurst({ onDone }) {
-  const particles = Array.from({ length: 25 }, (_, i) => ({
+  const particles = useMemo(() => Array.from({ length: 25 }, (_, i) => ({
     id: i,
     x: (Math.random() - 0.5) * 300,
     y: -(Math.random() * 200 + 80),
@@ -15,7 +15,7 @@ function ConfettiBurst({ onDone }) {
     color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
     size: Math.random() * 6 + 4,
     isCircle: Math.random() > 0.5,
-  }));
+  })), []);
 
   return (
     <div
@@ -62,32 +62,6 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
 
   return (
     <div className="relative" style={{ paddingTop: '72px' }}>
-      {/* Sticky back button - fixed to left side */}
-      {!isFirst && (
-        <div
-          className="no-print"
-          style={{
-            position: 'fixed',
-            top: 72,
-            left: 8,
-            zIndex: 40,
-          }}
-        >
-          <button
-            onClick={prevStage}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all hover:opacity-90"
-            style={{
-              color: '#FFFFFF',
-              backgroundColor: '#1C2E5B',
-              boxShadow: '0 2px 8px rgba(28,46,91,0.3)',
-            }}
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-            Back
-          </button>
-        </div>
-      )}
-
       {/* Decorative dot grid background */}
       <div className="absolute inset-0 dot-grid pointer-events-none" aria-hidden="true" />
 
@@ -107,6 +81,80 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
 
       {/* Rounded container */}
       <div className="max-w-6xl mx-auto px-2 sm:px-4 py-6 md:py-12 relative z-10">
+
+        {/* ── Sticky nav bar ── */}
+        {(!isFirst || (!isLast && !hideNavigation)) && (
+          <div
+            className="no-print"
+            style={{
+              position: 'sticky',
+              top: 72,
+              zIndex: 40,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 16,
+              padding: '10px 8px',
+              borderRadius: 16,
+              background: 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+            }}
+          >
+            {/* Back button — left */}
+            {!isFirst ? (
+              <button
+                onClick={prevStage}
+                className="flex items-center gap-2 font-semibold transition-all hover:opacity-90 active:scale-95"
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '0.95rem',
+                  color: '#FFFFFF',
+                  backgroundColor: '#374151',
+                  borderRadius: 12,
+                  boxShadow: '0 2px 8px rgba(55,65,81,0.25)',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1F2937')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#374151')}
+              >
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+              </button>
+            ) : <div />}
+
+            {/* Continue button — right */}
+            {!isLast && !hideNavigation && (
+              <button
+                onClick={handleContinue}
+                className="flex items-center gap-2 font-bold transition-all hover:opacity-90 active:scale-95"
+                style={{
+                  padding: '12px 28px',
+                  fontSize: '0.95rem',
+                  color: '#FFFFFF',
+                  backgroundColor: '#8B1A2B',
+                  borderRadius: 12,
+                  boxShadow: '0 2px 10px rgba(139,26,43,0.35)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6E1522')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#8B1A2B')}
+              >
+                Continue
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
+          </div>
+        )}
+
         <div
           className={`px-4 sm:px-8 md:px-12 py-8 md:py-14 ${isMobile ? 'bg-white' : 'bg-white/70 backdrop-blur-sm'}`}
           style={{ borderRadius: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
@@ -152,41 +200,6 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
           >
             {children}
           </motion.div>
-
-          {!isLast && !hideNavigation && (
-            <>
-              {/* Wave SVG divider */}
-              <div className="mt-10 -mx-4 sm:-mx-8 md:-mx-12 overflow-hidden">
-                <svg
-                  viewBox="0 0 1440 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                  className="w-full h-10 text-gray-100"
-                >
-                  <path
-                    d="M0 24C240 4 480 44 720 24C960 4 1200 44 1440 24V48H0Z"
-                    fill="currentColor"
-                    opacity="0.5"
-                  />
-                </svg>
-              </div>
-
-              <div className="flex items-center justify-end pt-6 px-0 no-print">
-                <button
-                  onClick={handleContinue}
-                  className="flex items-center justify-center gap-2 py-4 px-8 text-white rounded-xl font-bold uppercase tracking-wide transition-colors w-full sm:w-auto"
-                  style={{
-                    backgroundColor: '#8B1A2B',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6E1522')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#8B1A2B')}
-                >
-                  Continue to Next Step
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </button>
-              </div>
-            </>
-          )}
         </div>
       </div>
 

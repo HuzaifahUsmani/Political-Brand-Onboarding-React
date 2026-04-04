@@ -145,7 +145,7 @@ export default function Stage3_BrandCore() {
                 lineHeight: 1.5,
               }}>
                 <span style={{ fontWeight: 600, color: '#4B5563' }}>Best for: </span>
-                {brand.subDirections.map((sd) => sd.bestFor).join(' · ')}
+                {(brand.subDirections || []).map((sd) => sd.bestFor).join(' · ')}
               </p>
             </motion.div>
           );

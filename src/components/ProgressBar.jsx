@@ -89,7 +89,7 @@ export default function ProgressBar() {
           {STAGES.map((stage, i) => {
             const isCompleted = completedStages.includes(i);
             const isCurrent = i === currentStage;
-            const isAccessible = isCompleted || i <= Math.max(...completedStages, 0);
+            const isAccessible = isCompleted || i <= Math.max(0, ...(completedStages.length > 0 ? completedStages : [0]));
 
             return (
               <button

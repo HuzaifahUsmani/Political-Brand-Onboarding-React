@@ -71,6 +71,12 @@ function reducer(state, action) {
       return { ...state, logoType: action.payload };
     case 'SET_COLLATERAL_PRIORITIES':
       return { ...state, collateralPriorities: action.payload };
+    case 'NEXT_STAGE':
+      return {
+        ...state,
+        completedStages: [...new Set([...state.completedStages, state.currentStage])],
+        currentStage: state.currentStage + 1,
+      };
     case 'RESET':
       return initialState;
     default:
@@ -91,10 +97,9 @@ export function BrandProvider({ children }) {
   }, []);
 
   const nextStage = useCallback(() => {
-    dispatch({ type: 'COMPLETE_STAGE', payload: state.currentStage });
-    dispatch({ type: 'SET_STAGE', payload: state.currentStage + 1 });
+    dispatch({ type: 'NEXT_STAGE' });
     scrollTop();
-  }, [state.currentStage]);
+  }, []);
 
   const prevStage = useCallback(() => {
     dispatch({ type: 'SET_STAGE', payload: Math.max(0, state.currentStage - 1) });
