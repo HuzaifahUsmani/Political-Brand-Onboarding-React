@@ -59,7 +59,35 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
   }, [nextStage]);
 
   return (
-    <div className="relative">
+    <div className="relative" style={{ paddingTop: '80px' }}>
+      {/* Sticky back button below progress bar */}
+      {!isFirst && (
+        <div
+          className="no-print"
+          style={{
+            position: 'sticky',
+            top: 80,
+            zIndex: 40,
+            padding: '8px 16px',
+          }}
+        >
+          <div className="max-w-6xl mx-auto">
+            <button
+              onClick={prevStage}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+              style={{
+                color: '#1C2E5B',
+                border: '1px solid #1C2E5B',
+                backgroundColor: 'white',
+              }}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              Back
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Decorative dot grid background */}
       <div className="absolute inset-0 dot-grid pointer-events-none" aria-hidden="true" />
 
@@ -80,8 +108,8 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
       {/* Rounded 40px container */}
       <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 relative z-10">
         <div
-          className="bg-white/70 backdrop-blur-sm shadow-xl shadow-navy-800/5 px-8 md:px-12 py-10 md:py-14"
-          style={{ borderRadius: '40px' }}
+          className="bg-white/70 backdrop-blur-sm px-8 md:px-12 py-10 md:py-14"
+          style={{ borderRadius: '40px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
         >
           <div className="mb-10 md:mb-14">
             <motion.div
@@ -93,14 +121,14 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
               <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-navy-800 text-white text-sm font-bold">
                 {stageNumber}
               </span>
-              <div className="h-px flex-1 bg-gradient-to-r from-navy-200 to-transparent" />
+              <div className="h-px flex-1 bg-navy-200" />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-gradient"
-              style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}
+              className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight"
+              style={{ fontFamily: "'Poppins', 'Inter', sans-serif", color: '#1C2E5B' }}
             >
               {title}
             </motion.h1>
@@ -147,7 +175,12 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
                 {!isFirst ? (
                   <button
                     onClick={prevStage}
-                    className="flex items-center gap-2 px-6 py-3 text-gray-500 hover:text-gray-900 transition-colors font-medium"
+                    className="flex items-center gap-2 px-6 py-3 font-medium rounded-lg transition-colors"
+                    style={{
+                      color: '#1C2E5B',
+                      border: '2px solid #1C2E5B',
+                      backgroundColor: 'transparent',
+                    }}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                     Back
@@ -155,10 +188,15 @@ export default function StageContainer({ children, title, subtitle, stageNumber 
                 ) : <div />}
                 <button
                   onClick={handleContinue}
-                  className="flex items-center gap-2 px-8 py-3.5 bg-navy-800 text-white rounded-xl hover:bg-navy-700 transition-all font-semibold glow-navy hover:glow-red hover:-translate-y-0.5"
+                  className="flex items-center justify-center gap-2 py-4 px-8 text-white rounded-xl font-bold uppercase tracking-wide transition-colors w-full sm:w-auto"
+                  style={{
+                    backgroundColor: '#8B1A2B',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6E1522')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#8B1A2B')}
                 >
-                  Continue
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  Continue to Next Step
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                 </button>
               </div>
             </>

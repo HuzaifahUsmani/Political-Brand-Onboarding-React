@@ -37,8 +37,9 @@ const initialState = {
     events: '',
     contact: '',
   },
+  customFonts: { heading: null, body: null },
   logoType: null,
-  collateralPriorities: {},
+  collateralPriorities: [],
 };
 
 function reducer(state, action) {
@@ -64,10 +65,12 @@ function reducer(state, action) {
       return { ...state, customColors: { ...state.customColors, ...action.payload } };
     case 'UPDATE_WEBSITE_COPY':
       return { ...state, websiteCopy: { ...state.websiteCopy, ...action.payload } };
+    case 'SET_CUSTOM_FONTS':
+      return { ...state, customFonts: { ...state.customFonts, ...action.payload } };
     case 'SET_LOGO_TYPE':
       return { ...state, logoType: action.payload };
     case 'SET_COLLATERAL_PRIORITIES':
-      return { ...state, collateralPriorities: { ...state.collateralPriorities, ...action.payload } };
+      return { ...state, collateralPriorities: action.payload };
     case 'RESET':
       return initialState;
     default:

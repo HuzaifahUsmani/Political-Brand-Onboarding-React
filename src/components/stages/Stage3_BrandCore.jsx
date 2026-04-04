@@ -3,143 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES } from '../../data/brandData';
 import StageContainer from '../StageContainer';
-import TiltCard from '../TiltCard';
 import AnimatedCheckmark from '../AnimatedCheckmark';
 
 const BRAND_KEYS = ['commander', 'patriot', 'reformer', 'community', 'executive'];
-
-/* ── Decorative SVG dot pattern ── */
-function DecorativeDots({ style }) {
-  return (
-    <svg
-      width="200" height="200"
-      style={{ position: 'absolute', pointerEvents: 'none', opacity: 0.04, ...style }}
-    >
-      {Array.from({ length: 10 }).map((_, row) =>
-        Array.from({ length: 10 }).map((_, col) => (
-          <circle key={`${row}-${col}`} cx={col * 20 + 10} cy={row * 20 + 10} r={2} fill="#1C2E5B" />
-        ))
-      )}
-    </svg>
-  );
-}
-
-/* ── Gradient heading style helper ── */
-const gradientHeadingStyle = {
-  background: 'linear-gradient(135deg, #1C2E5B, #8B1A2B)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-};
-
-function CommanderSVG({ active }) {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
-      <path d="M60 10L95 40V85L60 110L25 85V40L60 10Z" stroke={active ? '#B22234' : '#CBD5E1'} strokeWidth={2} fill={active ? '#1C2E5B' : '#F1F5F9'} />
-      <path d="M60 30L75 50V75L60 90L45 75V50L60 30Z" fill={active ? '#B22234' : '#E2E8F0'} />
-      <path d="M38 48L60 25L82 48" stroke={active ? '#FFFFFF' : '#94A3B8'} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M43 55L60 35L77 55" stroke={active ? '#FFFFFF' : '#94A3B8'} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" opacity={0.6} />
-      <circle cx="60" cy="65" r="8" fill={active ? '#FFFFFF' : '#CBD5E1'} />
-      <path d="M56 65L59 68L64 62" stroke={active ? '#1C2E5B' : '#94A3B8'} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M35 90H85" stroke={active ? '#B22234' : '#E2E8F0'} strokeWidth={3} strokeLinecap="round" />
-      <path d="M40 96H80" stroke={active ? '#B22234' : '#E2E8F0'} strokeWidth={2} strokeLinecap="round" opacity={0.5} />
-    </svg>
-  );
-}
-
-function PatriotSVG({ active }) {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
-      <circle cx="60" cy="60" r="45" stroke={active ? '#8B1A2B' : '#CBD5E1'} strokeWidth={2} fill={active ? '#1A2744' : '#F1F5F9'} />
-      <circle cx="60" cy="60" r="35" stroke={active ? '#D4C5A9' : '#E2E8F0'} strokeWidth={1.5} fill="none" />
-      <path d="M60 25V38" stroke={active ? '#D4C5A9' : '#CBD5E1'} strokeWidth={2.5} strokeLinecap="round" />
-      <path d="M30 55H20" stroke={active ? '#D4C5A9' : '#CBD5E1'} strokeWidth={2} strokeLinecap="round" />
-      <path d="M100 55H90" stroke={active ? '#D4C5A9' : '#CBD5E1'} strokeWidth={2} strokeLinecap="round" />
-      <rect x="50" y="42" width="20" height="30" rx="2" fill={active ? '#8B1A2B' : '#E2E8F0'} />
-      <path d="M55 42V36C55 34 57 33 60 33C63 33 65 34 65 36V42" stroke={active ? '#D4C5A9' : '#CBD5E1'} strokeWidth={1.5} />
-      <rect x="53" y="47" width="14" height="2" rx="1" fill={active ? '#D4C5A9' : '#CBD5E1'} />
-      <rect x="53" y="52" width="14" height="2" rx="1" fill={active ? '#D4C5A9' : '#CBD5E1'} />
-      <rect x="53" y="57" width="14" height="2" rx="1" fill={active ? '#D4C5A9' : '#CBD5E1'} />
-      {[0, 1, 2, 3, 4].map((i) => {
-        const angle = (i * 72 - 90) * (Math.PI / 180);
-        const x = 60 + 40 * Math.cos(angle);
-        const y = 60 + 40 * Math.sin(angle);
-        return <circle key={i} cx={x} cy={y} r={3} fill={active ? '#D4C5A9' : '#E2E8F0'} />;
-      })}
-      <path d="M35 85L60 95L85 85" stroke={active ? '#8B1A2B' : '#E2E8F0'} strokeWidth={2} strokeLinecap="round" opacity={0.6} />
-    </svg>
-  );
-}
-
-function ReformerSVG({ active }) {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
-      <rect x="15" y="15" rx="8" width="90" height="90" fill={active ? '#0D0D0D' : '#F1F5F9'} stroke={active ? '#CC2029' : '#CBD5E1'} strokeWidth={2} />
-      <path d="M35 80L55 45L65 60L85 25" stroke={active ? '#CC2029' : '#CBD5E1'} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="85" cy="25" r="5" fill={active ? '#CC2029' : '#E2E8F0'} />
-      <path d="M78 25H85V32" stroke={active ? '#FFFFFF' : '#94A3B8'} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M25 90L40 75" stroke={active ? '#CC2029' : '#E2E8F0'} strokeWidth={2.5} strokeLinecap="round" />
-      <path d="M40 90L55 75" stroke={active ? '#CC2029' : '#E2E8F0'} strokeWidth={2.5} strokeLinecap="round" opacity={0.7} />
-      <path d="M55 90L70 75" stroke={active ? '#CC2029' : '#E2E8F0'} strokeWidth={2.5} strokeLinecap="round" opacity={0.4} />
-      <path d="M50 50L60 35L70 50" stroke={active ? '#FFFFFF' : '#94A3B8'} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" fill="none" opacity={0.5} />
-      <circle cx="60" cy="100" r="3" fill={active ? '#CC2029' : '#E2E8F0'} />
-    </svg>
-  );
-}
-
-function CommunitySVG({ active }) {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
-      <circle cx="60" cy="60" r="48" fill={active ? '#FFF9F0' : '#F1F5F9'} stroke={active ? '#2C4A7C' : '#CBD5E1'} strokeWidth={1.5} />
-      <circle cx="42" cy="42" r="10" fill={active ? '#2C4A7C' : '#E2E8F0'} />
-      <circle cx="42" cy="35" r="6" fill={active ? '#E8DCC8' : '#CBD5E1'} />
-      <circle cx="78" cy="42" r="10" fill={active ? '#2C4A7C' : '#E2E8F0'} />
-      <circle cx="78" cy="35" r="6" fill={active ? '#E8DCC8' : '#CBD5E1'} />
-      <circle cx="60" cy="55" r="12" fill={active ? '#C74B50' : '#E2E8F0'} />
-      <circle cx="60" cy="47" r="7" fill={active ? '#E8DCC8' : '#CBD5E1'} />
-      <path d="M38 58C44 54 50 52 60 52C70 52 76 54 82 58" stroke={active ? '#2C4A7C' : '#CBD5E1'} strokeWidth={1.5} strokeLinecap="round" fill="none" />
-      <path d="M52 78C52 74 55 71 60 71C65 71 68 74 68 78" stroke={active ? '#C74B50' : '#E2E8F0'} strokeWidth={2} strokeLinecap="round" fill="none" />
-      <path d="M60 82L54 76C52 74 52 71 54 69C56 67 59 67 60 69V69C61 67 64 67 66 69C68 71 68 74 66 76L60 82Z" fill={active ? '#C74B50' : '#E2E8F0'} />
-      <path d="M30 75C35 72 42 70 60 70C78 70 85 72 90 75" stroke={active ? '#2C4A7C' : '#E2E8F0'} strokeWidth={1.5} strokeLinecap="round" fill="none" opacity={0.4} />
-      {[0, 1, 2, 3, 4, 5].map((i) => {
-        const angle = (i * 60 - 90) * (Math.PI / 180);
-        const x = 60 + 42 * Math.cos(angle);
-        const y = 60 + 42 * Math.sin(angle);
-        return <circle key={i} cx={x} cy={y} r={2} fill={active ? '#C74B50' : '#E2E8F0'} opacity={0.6} />;
-      })}
-    </svg>
-  );
-}
-
-function ExecutiveSVG({ active }) {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
-      <rect x="15" y="20" rx="6" width="90" height="80" fill={active ? '#F7F7F7' : '#F1F5F9'} stroke={active ? '#1C2E5B' : '#CBD5E1'} strokeWidth={2} />
-      <rect x="25" y="28" width="8" height="50" rx="2" fill={active ? '#1C2E5B' : '#E2E8F0'} opacity={0.3} />
-      <rect x="25" y="48" width="8" height="30" rx="2" fill={active ? '#1C2E5B' : '#CBD5E1'} />
-      <rect x="39" y="28" width="8" height="50" rx="2" fill={active ? '#1C2E5B' : '#E2E8F0'} opacity={0.3} />
-      <rect x="39" y="38" width="8" height="40" rx="2" fill={active ? '#9B1B30' : '#CBD5E1'} />
-      <rect x="53" y="28" width="8" height="50" rx="2" fill={active ? '#1C2E5B' : '#E2E8F0'} opacity={0.3} />
-      <rect x="53" y="33" width="8" height="45" rx="2" fill={active ? '#1C2E5B' : '#CBD5E1'} />
-      <rect x="67" y="28" width="8" height="50" rx="2" fill={active ? '#1C2E5B' : '#E2E8F0'} opacity={0.3} />
-      <rect x="67" y="43" width="8" height="35" rx="2" fill={active ? '#9B1B30' : '#CBD5E1'} />
-      <rect x="81" y="28" width="8" height="50" rx="2" fill={active ? '#1C2E5B' : '#E2E8F0'} opacity={0.3} />
-      <rect x="81" y="30" width="8" height="48" rx="2" fill={active ? '#1C2E5B' : '#CBD5E1'} />
-      <line x1="22" y1="78" x2="98" y2="78" stroke={active ? '#1C2E5B' : '#CBD5E1'} strokeWidth={1.5} />
-      <path d="M25 25L50 18L75 22L98 15" stroke={active ? '#B8860B' : '#E2E8F0'} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="98" cy="15" r="3" fill={active ? '#B8860B' : '#E2E8F0'} />
-      <rect x="30" y="85" width="60" height="10" rx="3" fill={active ? '#1C2E5B' : '#E2E8F0'} />
-      <rect x="42" y="88" width="36" height="4" rx="2" fill={active ? '#B8860B' : '#CBD5E1'} />
-    </svg>
-  );
-}
-
-const BRAND_SVGS = {
-  commander: CommanderSVG,
-  patriot: PatriotSVG,
-  reformer: ReformerSVG,
-  community: CommunitySVG,
-  executive: ExecutiveSVG,
-};
 
 export default function Stage3_BrandCore() {
   const { state, dispatch } = useBrand();
@@ -156,180 +22,114 @@ export default function Stage3_BrandCore() {
       title="Choose Your Brand Core"
       subtitle="This is the defining moment. Select the brand archetype that best represents the candidate's identity and campaign."
     >
-      {/* Section container with rounded 40px corners and decorative bg */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        style={{ borderRadius: 40, background: 'white', padding: 40, marginBottom: 32, position: 'relative', overflow: 'hidden' }}
-      >
-        {/* Decorative SVG background patterns */}
-        <DecorativeDots style={{ top: -20, right: -20 }} />
-        <DecorativeDots style={{ bottom: -20, left: -20 }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {BRAND_KEYS.map((key, index) => {
+          const brand = BRAND_CORES[key];
+          const isSelected = selectedId === key;
+          const isHovered = hoveredId === key;
 
-        {/* Section heading with gradient */}
-        <h2 style={{ ...gradientHeadingStyle, fontSize: '1.75rem', fontWeight: 800, marginBottom: 24, display: 'inline-block' }}>
-          Select Your Archetype
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ position: 'relative', zIndex: 1 }}>
-          {BRAND_KEYS.map((key, index) => {
-            const brand = BRAND_CORES[key];
-            const SvgComponent = BRAND_SVGS[key];
-            const isSelected = selectedId === key;
-            const isHovered = hoveredId === key;
-
-            return (
-              <TiltCard
-                key={key}
-                onClick={() => selectBrand(key)}
-                className="relative cursor-pointer group"
-                style={{}}
-              >
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                onMouseEnter={() => setHoveredId(key)}
-                onMouseLeave={() => setHoveredId(null)}
-                className="relative"
-              >
-                <motion.div
-                  animate={{
-                    scale: isSelected ? 1.02 : 1,
-                    borderColor: isSelected ? brand.colors.secondary : isHovered ? brand.colors.primary : '#e5e7eb',
-                  }}
-                  whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0,0,0,0.08)' }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                  className="relative overflow-hidden rounded-2xl border-2 bg-white shadow-sm transition-shadow"
-                  style={
-                    isSelected
-                      ? {
-                          boxShadow: '0 0 20px rgba(139,26,43,0.3), 0 0 40px rgba(139,26,43,0.1)',
-                        }
-                      : {}
-                  }
-                >
-                  {/* Colored top bar */}
+          return (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08, duration: 0.4 }}
+              onClick={() => selectBrand(key)}
+              onMouseEnter={() => setHoveredId(key)}
+              onMouseLeave={() => setHoveredId(null)}
+              whileHover={!isSelected ? {
+                y: -2,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              } : {}}
+              style={{
+                position: 'relative',
+                cursor: 'pointer',
+                padding: 24,
+                background: isSelected ? '#FEF2F2' : '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderLeft: isSelected ? '4px solid #8B1A2B' : '1px solid #E5E7EB',
+                borderRadius: 8,
+                boxShadow: isSelected
+                  ? '0 1px 3px rgba(0,0,0,0.08)'
+                  : '0 1px 3px rgba(0,0,0,0.08)',
+                transition: 'background 0.2s ease, border 0.2s ease',
+              }}
+            >
+              {/* Checkmark indicator top-right */}
+              <AnimatePresence>
+                {isSelected && (
                   <motion.div
-                    animate={{
-                      height: isSelected ? 6 : 3,
-                      backgroundColor: isSelected ? brand.colors.secondary : isHovered ? brand.colors.primary : '#e5e7eb',
-                    }}
-                    className="w-full"
-                  />
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}
+                  >
+                    <AnimatedCheckmark size={32} color="#8B1A2B" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                  {/* SVG Illustration */}
-                  <div className="px-8 pt-6 pb-2 flex justify-center">
-                    <div className="w-28 h-28">
-                      <SvgComponent active={isSelected || isHovered} />
-                    </div>
-                  </div>
+              {/* Title */}
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: '#1C2E5B',
+                margin: 0,
+                marginBottom: 4,
+              }}>
+                {brand.name}
+              </h3>
 
-                  {/* Brand Name & Descriptor */}
-                  <div className="px-8 pb-4 text-center">
-                    <motion.h3
-                      animate={{
-                        color: isSelected ? brand.colors.primary : '#1f2937',
-                      }}
-                      className="text-xl font-bold tracking-wide mb-1"
-                    >
-                      {brand.name}
-                    </motion.h3>
-                    <p className="text-sm font-medium" style={{ opacity: 0.6 }}>{brand.descriptor}</p>
-                  </div>
+              {/* Descriptor */}
+              <p style={{
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: '#6B7280',
+                margin: 0,
+                marginBottom: 8,
+              }}>
+                {brand.descriptor}
+              </p>
 
-                  {/* Tagline always visible */}
-                  <div className="px-8 pb-4 text-center">
-                    <p
-                      className="text-sm italic"
-                      style={{ color: isSelected ? brand.colors.secondary : '#9ca3af', opacity: 0.7 }}
-                    >
-                      "{brand.tagline}"
-                    </p>
-                  </div>
+              {/* Tagline */}
+              <p style={{
+                fontSize: '0.95rem',
+                fontStyle: 'italic',
+                color: '#4B5563',
+                margin: 0,
+                marginBottom: 12,
+              }}>
+                &ldquo;{brand.tagline}&rdquo;
+              </p>
 
-                  {/* Expanded details on hover */}
-                  <AnimatePresence>
-                    {(isHovered || isSelected) && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-8 pb-6 space-y-3 border-t border-gray-100 pt-4 mx-4">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ opacity: 0.7 }}>
-                              Positioning
-                            </p>
-                            <p className="text-sm leading-relaxed" style={{ opacity: 0.6 }}>{brand.positioning}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ opacity: 0.7 }}>
-                              Emotional Feel
-                            </p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {brand.emotionalFeel.split(', ').map((feel) => (
-                                <span
-                                  key={feel}
-                                  className="px-2.5 py-1 rounded-full text-xs font-semibold"
-                                  style={{
-                                    backgroundColor: `${brand.colors.primary}15`,
-                                    color: brand.colors.primary,
-                                  }}
-                                >
-                                  {feel}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ opacity: 0.7 }}>
-                              Sample Tagline
-                            </p>
-                            <p
-                              className="text-sm font-bold italic"
-                              style={{ color: brand.colors.secondary }}
-                            >
-                              "{brand.voiceTone.headlineExamples[0]}"
-                            </p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+              {/* Positioning statement */}
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: 400,
+                color: '#374151',
+                margin: 0,
+                marginBottom: 12,
+                lineHeight: 1.6,
+              }}>
+                {brand.positioning}
+              </p>
 
-                  {/* Selection indicator */}
-                  {isSelected && (
-                    <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 20 }}>
-                      <AnimatedCheckmark size={28} color={brand.colors.secondary} />
-                    </div>
-                  )}
-
-                  {/* Color bar at bottom when selected */}
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        exit={{ scaleX: 0 }}
-                        className="h-1.5 w-full origin-left"
-                        style={{
-                          background: `linear-gradient(to right, ${brand.colors.primary}, ${brand.colors.secondary}, ${brand.colors.accent === '#FFFFFF' ? brand.colors.primary : brand.colors.accent})`,
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </motion.div>
-              </TiltCard>
-            );
-          })}
-        </div>
-      </motion.div>
+              {/* Best-for text from subDirections */}
+              <p style={{
+                fontSize: '0.85rem',
+                fontWeight: 400,
+                color: '#6B7280',
+                margin: 0,
+                lineHeight: 1.5,
+              }}>
+                <span style={{ fontWeight: 600, color: '#4B5563' }}>Best for: </span>
+                {brand.subDirections.map((sd) => sd.bestFor).join(' · ')}
+              </p>
+            </motion.div>
+          );
+        })}
+      </div>
 
       {/* Selected brand summary */}
       <AnimatePresence>
@@ -338,58 +138,40 @@ export default function Stage3_BrandCore() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             style={{
-              borderRadius: 40,
-              background: 'white',
-              padding: 40,
-              marginBottom: 32,
-              position: 'relative',
-              overflow: 'hidden',
-              border: `2px solid ${BRAND_CORES[selectedId].colors.primary}`,
-              backgroundColor: `${BRAND_CORES[selectedId].colors.primary}08`,
+              marginTop: 24,
+              padding: 24,
+              background: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderLeft: '4px solid #1C2E5B',
+              borderRadius: 8,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
             }}
           >
-            {/* Decorative line pattern */}
-            <svg
-              width="300" height="300"
-              style={{ position: 'absolute', top: -60, right: -60, pointerEvents: 'none', opacity: 0.03 }}
-            >
-              {Array.from({ length: 15 }).map((_, i) => (
-                <line key={i} x1={0} y1={i * 20} x2={300} y2={i * 20} stroke="#1C2E5B" strokeWidth={1} />
-              ))}
-            </svg>
-
-            <div className="flex items-start gap-6" style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: BRAND_CORES[selectedId].colors.primary }}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 8,
+                  backgroundColor: '#1C2E5B',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
               >
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <div>
-                <h3 style={{ ...gradientHeadingStyle, fontSize: '1.125rem', fontWeight: 700, marginBottom: 4, display: 'inline-block' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1C2E5B', margin: 0, marginBottom: 4 }}>
                   {BRAND_CORES[selectedId].name} Selected
                 </h3>
-                <p className="leading-relaxed" style={{ opacity: 0.6 }}>
+                <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: 0, lineHeight: 1.6 }}>
                   {BRAND_CORES[selectedId].philosophy}
                 </p>
-                <div className="flex gap-2 mt-4">
-                  {Object.entries(BRAND_CORES[selectedId].colors)
-                    .filter(([k]) => ['primary', 'secondary', 'accent'].includes(k))
-                    .map(([key, hex]) => (
-                      <div key={key} className="flex items-center gap-1.5">
-                        <div
-                          className="w-5 h-5 rounded-full border border-gray-200 shadow-sm"
-                          style={{ backgroundColor: hex }}
-                        />
-                        <span className="text-xs capitalize" style={{ opacity: 0.7 }}>{key}</span>
-                      </div>
-                    ))}
-                </div>
               </div>
             </div>
           </motion.div>

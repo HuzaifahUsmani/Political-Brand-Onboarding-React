@@ -25,8 +25,7 @@ function AppContent() {
   const StageComponent = stages[state.currentStage];
 
   return (
-    <div className="min-h-screen bg-gray-50 noise-overlay">
-      {/* Noise texture is applied via the noise-overlay class pseudo-element */}
+    <div className="min-h-screen bg-gray-50">
       <ProgressBar />
       <AnimatePresence mode="wait">
         <motion.div
