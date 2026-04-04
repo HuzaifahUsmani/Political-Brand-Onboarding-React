@@ -9,6 +9,7 @@ const initialState = {
   candidate: {
     fullName: '',
     office: '',
+    officeCustom: '',
     state: '',
     district: '',
     electionYear: '',

@@ -494,6 +494,46 @@ export default function Stage1_CandidateBasics() {
             );
           })}
         </div>
+
+        {/* "Other" custom office name input */}
+        <AnimatePresence>
+          {candidate.office === 'other' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+              animate={{ opacity: 1, height: 'auto', marginTop: '0.75rem' }}
+              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+              transition={{ duration: 0.3, ease }}
+              style={{ overflow: 'hidden' }}
+            >
+              <input
+                type="text"
+                autoFocus
+                value={candidate.officeCustom || ''}
+                onChange={(e) => update({ officeCustom: e.target.value.slice(0, 80) })}
+                placeholder="Enter office name (e.g. School Board, Water District...)"
+                style={{
+                  width: '100%',
+                  padding: '0.85rem 1rem',
+                  fontSize: '0.95rem',
+                  fontFamily: "'Plus Jakarta Sans', 'Onest', sans-serif",
+                  border: `1px solid ${accent}`,
+                  borderRadius: '12px',
+                  outline: 'none',
+                  background: '#fff',
+                  color: navy,
+                  boxShadow: `0 0 0 3px ${accent}20`,
+                  transition: 'all 0.2s ease',
+                }}
+                onFocus={(e) => {
+                  e.target.style.boxShadow = `0 0 0 3px ${accent}30`;
+                }}
+                onBlur={(e) => {
+                  e.target.style.boxShadow = `0 0 0 3px ${accent}20`;
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.section>
 
       {/* ──────────────────────────────────────────
@@ -503,17 +543,14 @@ export default function Stage1_CandidateBasics() {
         {...sectionVariant(0.45)}
         style={{ marginBottom: '2.5rem' }}
       >
-        <label
-          style={{
-            display: 'block',
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            color: '#374151',
-            marginBottom: '0.75rem',
-          }}
-        >
-          Select Your State
-        </label>
+        <div style={{ marginBottom: '0.75rem' }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151' }}>
+            Select Your State{' '}
+          </span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: accent }}>
+            (Select one)
+          </span>
+        </div>
 
         {/* Selected state badge */}
         <AnimatePresence>

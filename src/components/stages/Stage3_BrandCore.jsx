@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES } from '../../data/brandData';
@@ -28,9 +28,16 @@ export default function Stage3_BrandCore() {
   const { state, dispatch } = useBrand();
   const [hoveredId, setHoveredId] = useState(null);
   const selectedId = state.brandCore;
+  const previewRef = useRef(null);
 
   const selectBrand = (id) => {
-    dispatch({ type: 'SET_BRAND_CORE', payload: id === selectedId ? null : id });
+    const newId = id === selectedId ? null : id;
+    dispatch({ type: 'SET_BRAND_CORE', payload: newId });
+    if (newId) {
+      setTimeout(() => {
+        previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+    }
   };
 
   return (
@@ -156,6 +163,7 @@ export default function Stage3_BrandCore() {
       <AnimatePresence mode="wait">
         {selectedId && (
           <motion.div
+            ref={previewRef}
             key={selectedId}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
