@@ -3,48 +3,47 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES } from '../../data/brandData';
 import StageContainer from '../StageContainer';
-import AnimatedCheckmark from '../AnimatedCheckmark';
 
 const PRESET_PALETTES = [
   {
     id: 'classic-patriot',
     name: 'Classic Patriot',
-    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#FFFFFF', background: '#F5F5F5', text: '#1A1A2E', highlight: '#FFD700' },
+    colors: { primary: '#002868', secondary: '#BF0A30', accent: '#FFFFFF', background: '#F5F5F5', text: '#1A1A2E', highlight: '#9E7C0C' },
   },
   {
     id: 'modern-navy',
     name: 'Modern Navy',
-    colors: { primary: '#1B2A4A', secondary: '#C8102E', accent: '#E8E8E8', background: '#FAFAFA', text: '#2D2D2D', highlight: '#4A90D9' },
+    colors: { primary: '#1B2A4A', secondary: '#C8102E', accent: '#E8E8E8', background: '#FAFAFA', text: '#2D2D2D', highlight: '#2E6FBA' },
   },
   {
     id: 'bold-crimson',
     name: 'Bold Crimson',
-    colors: { primary: '#8B0000', secondary: '#1C1C1C', accent: '#D4AF37', background: '#FFF8F0', text: '#2C2C2C', highlight: '#C41E3A' },
+    colors: { primary: '#8B0000', secondary: '#1C1C1C', accent: '#D4AF37', background: '#FFF8F0', text: '#2C2C2C', highlight: '#B5232A' },
   },
   {
     id: 'liberty-blue',
     name: 'Liberty Blue',
-    colors: { primary: '#003366', secondary: '#CC0000', accent: '#F0F0F0', background: '#F7F9FC', text: '#333333', highlight: '#0066CC' },
+    colors: { primary: '#003366', secondary: '#CC0000', accent: '#F0F0F0', background: '#F7F9FC', text: '#333333', highlight: '#0059B3' },
   },
   {
     id: 'heritage-gold',
     name: 'Heritage Gold',
-    colors: { primary: '#1A2744', secondary: '#8B1A2B', accent: '#D4C5A9', background: '#FAF8F5', text: '#4A3728', highlight: '#B8860B' },
+    colors: { primary: '#1A2744', secondary: '#8B1A2B', accent: '#D4C5A9', background: '#FAF8F5', text: '#4A3728', highlight: '#7A5700' },
   },
   {
     id: 'grassroots-green',
     name: 'Grassroots Green',
-    colors: { primary: '#1B4332', secondary: '#2D6A4F', accent: '#D8F3DC', background: '#F0FFF4', text: '#1B1B1B', highlight: '#40916C' },
+    colors: { primary: '#1B4332', secondary: '#2D6A4F', accent: '#D8F3DC', background: '#F0FFF4', text: '#1B1B1B', highlight: '#2B7A4B' },
   },
   {
     id: 'executive-slate',
     name: 'Executive Slate',
-    colors: { primary: '#2F3E46', secondary: '#354F52', accent: '#CAD2C5', background: '#F8F9FA', text: '#212529', highlight: '#52796F' },
+    colors: { primary: '#2F3E46', secondary: '#354F52', accent: '#CAD2C5', background: '#F8F9FA', text: '#212529', highlight: '#3D6B5E' },
   },
   {
     id: 'sunrise-energy',
     name: 'Sunrise Energy',
-    colors: { primary: '#1C2E5B', secondary: '#E63946', accent: '#F1FAEE', background: '#FFFFFF', text: '#2B2D42', highlight: '#FF6B35' },
+    colors: { primary: '#1C2E5B', secondary: '#E63946', accent: '#F1FAEE', background: '#FFFFFF', text: '#2B2D42', highlight: '#B54A15' },
   },
 ];
 
@@ -119,11 +118,11 @@ function ContrastBadge({ ratio, type }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 3,
-        fontSize: 10,
+        gap: 2,
+        fontSize: 8,
         fontWeight: 700,
-        padding: '2px 6px',
-        borderRadius: 4,
+        padding: '1px 4px',
+        borderRadius: 3,
         backgroundColor: passes ? '#ECFDF5' : '#FEF2F2',
         color: passes ? '#065F46' : '#991B1B',
         border: `1px solid ${passes ? '#A7F3D0' : '#FECACA'}`,
@@ -145,44 +144,36 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
       onClick={onClick}
-      whileHover={!isActive ? { y: -2, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' } : {}}
+      whileHover={!isActive ? { y: -1, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' } : {}}
       style={{
         position: 'relative',
         cursor: 'pointer',
-        padding: 20,
+        padding: '10px 12px',
         background: isActive ? '#FDF2F2' : '#FFFFFF',
         border: isActive ? '2px solid #8B1A2B' : '1px solid #E5E7EB',
-        borderRadius: 10,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-        transition: 'background 0.2s ease, border 0.2s ease',
+        borderRadius: 8,
+        boxShadow: isActive ? '0 0 0 3px rgba(139,26,43,0.12)' : '0 1px 3px rgba(0,0,0,0.06)',
+        transition: 'background 0.2s ease, border 0.2s ease, box-shadow 0.2s ease',
       }}
     >
-      {/* Checkmark in top-right */}
-      <AnimatePresence>
-        {isActive && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ duration: 0.2 }}
-            style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}
-          >
-            <AnimatedCheckmark size={28} color="#8B1A2B" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Header row: name + badges */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        {isActive && (
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 16, height: 16, borderRadius: '50%', backgroundColor: '#8B1A2B',
+            fontSize: 10, color: '#FFFFFF', fontWeight: 700, flexShrink: 0, lineHeight: 1,
+          }}>{'\u2713'}</span>
+        )}
         {badge && (
           <span
             style={{
-              fontSize: 9,
+              fontSize: 8,
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
-              padding: '2px 7px',
-              borderRadius: 4,
+              padding: '1px 5px',
+              borderRadius: 3,
               backgroundColor: colors.primary,
               color: isLightColor(colors.primary) ? colors.text : '#FFFFFF',
             }}
@@ -190,53 +181,52 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
             {badge}
           </span>
         )}
-        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
+        <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
           {name}
         </h3>
         {aaPass ? (
-          <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4, backgroundColor: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0' }}>
+          <span style={{ fontSize: 8, fontWeight: 700, padding: '1px 5px', borderRadius: 3, backgroundColor: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0' }}>
             AA {'\u2713'}
           </span>
         ) : (
-          <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
+          <span style={{ fontSize: 8, fontWeight: 700, padding: '1px 5px', borderRadius: 3, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
             Contrast Warning
           </span>
         )}
       </div>
 
       {description && (
-        <p style={{ fontSize: 12, color: '#6B7280', margin: 0, marginBottom: 12 }}>{description}</p>
+        <p style={{ fontSize: 10, color: '#6B7280', margin: 0, marginBottom: 6, lineHeight: 1.3 }}>{description}</p>
       )}
 
       {/* 6 color swatches in a horizontal row */}
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 4 }}>
         {COLOR_ROLES.map(({ key, label }) => {
           const color = colors[key] || colors.secondary;
           return (
             <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0, flex: 1 }}>
               <div
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 6,
+                  width: 24,
+                  height: 24,
+                  borderRadius: 4,
                   backgroundColor: color,
                   boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.1)' : 'none',
                 }}
               />
-              <span style={{ fontSize: 9, fontWeight: 600, marginTop: 4, color: '#374151', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
-              <span style={{ fontSize: 8, fontFamily: 'monospace', marginTop: 1, color: '#9CA3AF', textAlign: 'center' }}>{color}</span>
+              <span style={{ fontSize: 8, fontWeight: 600, marginTop: 2, color: '#374151', textAlign: 'center', lineHeight: 1.2 }}>{label}</span>
             </div>
           );
         })}
       </div>
 
       {/* WCAG contrast badges */}
-      <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
         {getContrastChecks(colors).map((check) => {
           const ratio = contrastRatio(check.fg, check.bg);
           return (
-            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <span style={{ fontSize: 9, color: '#6B7280' }}>{check.label}:</span>
+            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <span style={{ fontSize: 8, color: '#6B7280' }}>{check.label}:</span>
               <ContrastBadge ratio={ratio} type={check.type} />
             </div>
           );
@@ -340,11 +330,11 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
             </div>
 
             {/* ===== HERO SECTION (60% - Background) ===== */}
-            <div style={{ position: 'relative', backgroundColor: bgColor, padding: '40px 24px 36px' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, color: textColor, margin: 0, marginBottom: 8, lineHeight: 1.2 }}>
+            <div style={{ position: 'relative', backgroundColor: bgColor, padding: '20px 24px 18px' }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: textColor, margin: 0, marginBottom: 4, lineHeight: 1.2 }}>
                 Fighting for {usState}&apos;s Future
               </h2>
-              <p style={{ fontSize: 12, color: textColor, opacity: 0.65, margin: 0, marginBottom: 20, maxWidth: 420, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 11, color: textColor, opacity: 0.65, margin: 0, marginBottom: 12, maxWidth: 420, lineHeight: 1.4 }}>
                 Experienced leadership. Proven results. Ready to serve the people of {usState}.
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
@@ -370,27 +360,27 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
             </div>
 
             {/* ===== ISSUES SECTION (60% bg with 30% cards) ===== */}
-            <div style={{ backgroundColor: bgColor, padding: '24px 24px 28px' }}>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: textColor, margin: 0, marginBottom: 16, textAlign: 'center' }}>
+            <div style={{ backgroundColor: bgColor, padding: '14px 24px 16px' }}>
+              <h3 style={{ fontSize: 13, fontWeight: 700, color: textColor, margin: 0, marginBottom: 8, textAlign: 'center' }}>
                 Key Issues
               </h3>
-              <div style={{ display: 'flex', gap: 12 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
                 {[
-                  { icon: '\uD83D\uDCCA', title: 'Economy', desc: 'Creating jobs and growing our local economy for working families.' },
-                  { icon: '\uD83C\uDF93', title: 'Education', desc: 'Investing in schools and empowering parents with real choices.' },
-                  { icon: '\u2764\uFE0F', title: 'Healthcare', desc: 'Affordable, accessible care for every family in our community.' },
+                  { icon: '\uD83D\uDCCA', title: 'Economy', desc: 'Creating jobs and growing our local economy.' },
+                  { icon: '\uD83C\uDF93', title: 'Education', desc: 'Investing in schools and empowering parents.' },
+                  { icon: '\u2764\uFE0F', title: 'Healthcare', desc: 'Affordable care for every family.' },
                 ].map((issue) => (
                   <div key={issue.title} style={{
                     flex: 1,
                     backgroundColor: '#FFFFFF',
-                    borderRadius: 8,
-                    padding: 14,
-                    borderTop: `3px solid ${secColor}`,
+                    borderRadius: 6,
+                    padding: 10,
+                    borderTop: `2px solid ${secColor}`,
                     boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                   }}>
-                    <div style={{ fontSize: 18, marginBottom: 6 }}>{issue.icon}</div>
-                    <h4 style={{ fontSize: 12, fontWeight: 700, color: textColor, margin: 0, marginBottom: 4 }}>{issue.title}</h4>
-                    <p style={{ fontSize: 10, color: textColor, opacity: 0.6, margin: 0, lineHeight: 1.4 }}>{issue.desc}</p>
+                    <div style={{ fontSize: 14, marginBottom: 3 }}>{issue.icon}</div>
+                    <h4 style={{ fontSize: 10, fontWeight: 700, color: textColor, margin: 0, marginBottom: 2 }}>{issue.title}</h4>
+                    <p style={{ fontSize: 9, color: textColor, opacity: 0.6, margin: 0, lineHeight: 1.3 }}>{issue.desc}</p>
                   </div>
                 ))}
               </div>
@@ -399,16 +389,16 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
             {/* ===== CTA BANNER (30% - Secondary) ===== */}
             <div style={{
               backgroundColor: secColor,
-              padding: '20px 24px',
+              padding: '12px 24px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
               <div>
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FFFFFF', margin: 0, marginBottom: 4 }}>
+                <h3 style={{ fontSize: 12, fontWeight: 700, color: '#FFFFFF', margin: 0, marginBottom: 2 }}>
                   Support the Campaign
                 </h3>
-                <p style={{ fontSize: 10, color: '#FFFFFF', opacity: 0.7, margin: 0 }}>
+                <p style={{ fontSize: 9, color: '#FFFFFF', opacity: 0.7, margin: 0 }}>
                   Join 2,847 supporters standing with {firstName}
                 </p>
               </div>
@@ -438,7 +428,7 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
             {/* ===== FOOTER (Primary) ===== */}
             <div style={{
               backgroundColor: priColor,
-              padding: '16px 24px',
+              padding: '10px 24px',
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'space-between',
@@ -484,7 +474,7 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
       </div>
 
       {/* Legend below browser frame */}
-      <div style={{ display: 'flex', gap: 16, marginTop: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: 10, marginTop: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
         {[
           { color: bgColor, label: 'Primary Surface (60%)', needsBorder: true },
           { color: secColor, label: 'Secondary (30%)', needsBorder: false },
@@ -528,7 +518,7 @@ export default function Stage5_ColorPalette() {
     if (coreData) {
       return { ...coreData.colors, highlight: coreData.colors.secondary };
     }
-    return { primary: '#1C2E5B', secondary: '#B22234', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', highlight: '#4A90D9' };
+    return { primary: '#1C2E5B', secondary: '#C93545', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', highlight: '#2E6FBA' };
   }, [activeTab, selectedPreset, coreData]);
 
   const activePaletteName = useMemo(() => {
@@ -573,13 +563,13 @@ export default function Stage5_ColorPalette() {
       subtitle="Choose the colors that will define your campaign's visual identity."
       stageNumber={5}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 
         {/* CARD GRID: Recommended + Presets */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 14,
+          gap: 8,
         }}>
           {/* Recommended palette card */}
           {themeColors && (
@@ -620,22 +610,22 @@ export default function Stage5_ColorPalette() {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.4 }}
               style={{
-                marginTop: 8,
-                padding: 24,
+                marginTop: 4,
+                padding: 14,
                 background: '#FFFFFF',
                 border: '1px solid #E5E7EB',
-                borderRadius: 10,
+                borderRadius: 8,
                 boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
               }}
             >
-              <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#9CA3AF', marginTop: 0, marginBottom: 4 }}>
+              <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#9CA3AF', marginTop: 0, marginBottom: 2 }}>
                 60 / 30 / 10 Preview
               </p>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1C2E5B', margin: 0, marginBottom: 6 }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1C2E5B', margin: 0, marginBottom: 4 }}>
                 {activePaletteName}
               </h3>
-              <p style={{ fontSize: 13, color: '#6B7280', margin: 0, marginBottom: 20 }}>
-                See how your selected palette maps to a realistic campaign website using the 60/30/10 color rule.
+              <p style={{ fontSize: 11, color: '#6B7280', margin: 0, marginBottom: 10 }}>
+                See how your palette maps to a campaign website using the 60/30/10 color rule.
               </p>
 
               <CampaignWebsiteMockup
@@ -645,28 +635,27 @@ export default function Stage5_ColorPalette() {
                 candidateState={candidateState}
               />
 
-              {/* Detailed color spec */}
-              <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {/* Detailed color spec - compact grid */}
+              <div style={{ marginTop: 14, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {COLOR_ROLES.map(({ key, label, desc }) => {
                   const color = activeColors[key];
                   return (
-                    <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div
                         style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: 6,
+                          width: 28,
+                          height: 28,
+                          borderRadius: 4,
                           backgroundColor: color,
                           flexShrink: 0,
                           boxShadow: isLightColor(color) ? 'inset 0 0 0 1px rgba(0,0,0,0.08)' : '0 1px 4px rgba(0,0,0,0.12)',
                         }}
                       />
                       <div style={{ minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: '#374151' }}>{label}</span>
-                          <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#9CA3AF' }}>{color}</span>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: '#374151' }}>{label}</span>
+                          <span style={{ fontSize: 9, fontFamily: 'monospace', color: '#9CA3AF' }}>{color}</span>
                         </div>
-                        <p style={{ fontSize: 12, color: '#9CA3AF', margin: 0 }}>{desc}</p>
                       </div>
                     </div>
                   );
@@ -674,8 +663,8 @@ export default function Stage5_ColorPalette() {
               </div>
 
               {/* Full palette bar */}
-              <div style={{ marginTop: 20 }}>
-                <div style={{ height: 8, borderRadius: 999, overflow: 'hidden', display: 'flex' }}>
+              <div style={{ marginTop: 10 }}>
+                <div style={{ height: 6, borderRadius: 999, overflow: 'hidden', display: 'flex' }}>
                   {COLOR_ROLES.map(({ key }) => (
                     <div
                       key={key}
@@ -683,9 +672,6 @@ export default function Stage5_ColorPalette() {
                     />
                   ))}
                 </div>
-                <p style={{ fontSize: 10, fontFamily: 'monospace', textAlign: 'right', color: '#9CA3AF', marginTop: 6, marginBottom: 0 }}>
-                  {COLOR_ROLES.map(({ key }) => activeColors[key]).join(' / ')}
-                </p>
               </div>
             </motion.div>
           )}

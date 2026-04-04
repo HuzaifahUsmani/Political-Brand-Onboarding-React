@@ -11,17 +11,20 @@ const STAGE_NAMES = [
   'Font Selection',
   'Visual Identity',
   'Logo Type',
-  'Website Copy',
   'Collateral',
   'Review',
 ];
 
 export default function ProgressBar() {
-  const { state, goToStage } = useBrand();
+  const { state, goToStage, getActiveColors } = useBrand();
   const { currentStage, completedStages } = state;
   const totalStages = STAGES.length;
   const progress = ((currentStage + 1) / totalStages) * 100;
   const displayNames = STAGE_NAMES.slice(0, totalStages);
+
+  // Dynamic color based on user's selected palette
+  const activeColors = getActiveColors();
+  const barColor = (state.colorMode || state.brandCore) ? activeColors.primary : '#8B1A2B';
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 no-print bg-white" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
@@ -32,7 +35,7 @@ export default function ProgressBar() {
           initial={false}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-          style={{ backgroundColor: '#8B1A2B' }}
+          style={{ backgroundColor: barColor }}
         />
         {/* Animated shimmer effect on the bar */}
         <motion.div
@@ -56,7 +59,7 @@ export default function ProgressBar() {
               style={{
                 width: 28,
                 height: 28,
-                backgroundColor: '#8B1A2B',
+                backgroundColor: barColor,
               }}
             >
               {currentStage + 1}
@@ -72,7 +75,7 @@ export default function ProgressBar() {
           </div>
 
           {/* Percentage indicator */}
-          <span className="text-sm font-semibold" style={{ color: '#8B1A2B' }}>
+          <span className="text-sm font-semibold" style={{ color: barColor }}>
             {Math.round(progress)}%
           </span>
         </div>
@@ -97,9 +100,9 @@ export default function ProgressBar() {
                   className="h-1.5 rounded-full transition-all duration-500"
                   style={{
                     backgroundColor: isCompleted
-                      ? '#8B1A2B'
+                      ? barColor
                       : isCurrent
-                      ? '#8B1A2B'
+                      ? barColor
                       : '#E5E7EB',
                     opacity: isCurrent ? 1 : isCompleted ? 0.7 : 1,
                   }}
@@ -112,19 +115,6 @@ export default function ProgressBar() {
                   {displayNames[i]}
                 </div>
 
-                {/* Active pulse dot */}
-                {isCurrent && (
-                  <motion.div
-                    className="absolute -top-1 left-1/2 -translate-x-1/2 rounded-full"
-                    style={{
-                      width: 8,
-                      height: 8,
-                      backgroundColor: '#8B1A2B',
-                    }}
-                    animate={{ scale: [1, 1.4, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                  />
-                )}
               </button>
             );
           })}

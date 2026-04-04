@@ -10,11 +10,10 @@ import Stage5 from './components/stages/Stage5_ColorPalette';
 import Stage6 from './components/stages/Stage6_FontSelection';
 import Stage7 from './components/stages/Stage6_VisualIdentity';
 import Stage8 from './components/stages/Stage7_LogoType';
-import Stage9 from './components/stages/Stage7_WebsiteCopy';
-import Stage10 from './components/stages/Stage8_CollateralPriority';
-import Stage11 from './components/stages/Stage9_FinalReview';
+import Stage9 from './components/stages/Stage8_CollateralPriority';
+import Stage10 from './components/stages/Stage9_FinalReview';
 
-const stages = [Stage1, Stage2, Stage3, Stage4, Stage5, Stage6, Stage7, Stage8, Stage9, Stage10, Stage11];
+const stages = [Stage1, Stage2, Stage3, Stage4, Stage5, Stage6, Stage7, Stage8, Stage9, Stage10];
 
 const stageVariants = {
   initial: { opacity: 0, x: 60 },

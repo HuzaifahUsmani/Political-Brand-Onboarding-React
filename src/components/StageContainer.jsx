@@ -50,7 +50,7 @@ function ConfettiBurst({ onDone }) {
 export default function StageContainer({ children, title, subtitle, stageNumber, hideNavigation = false }) {
   const { prevStage, nextStage, state } = useBrand();
   const isFirst = state.currentStage === 0;
-  const isLast = state.currentStage === 10;
+  const isLast = state.currentStage === 9;
   const [showConfetti, setShowConfetti] = useState(false);
 
   const handleContinue = useCallback(() => {

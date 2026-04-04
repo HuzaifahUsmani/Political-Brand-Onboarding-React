@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES, FONT_LIBRARY } from '../../data/brandData';
 import StageContainer from '../StageContainer';
-import AnimatedCheckmark from '../AnimatedCheckmark';
 
 /* ── Font Options ── */
 const HEADING_FONT_OPTIONS = [
@@ -12,6 +11,9 @@ const HEADING_FONT_OPTIONS = [
   { name: 'Oswald', category: 'Sans-Serif Condensed' },
   { name: 'Montserrat', category: 'Sans-Serif' },
   { name: 'Libre Baskerville', category: 'Serif' },
+  { name: 'Lora', category: 'Serif' },
+  { name: 'Raleway', category: 'Sans-Serif' },
+  { name: 'Poppins', category: 'Sans-Serif' },
 ];
 
 const BODY_FONT_OPTIONS = [
@@ -20,14 +22,17 @@ const BODY_FONT_OPTIONS = [
   { name: 'Source Sans Pro', category: 'Sans-Serif' },
   { name: 'Roboto', category: 'Sans-Serif' },
   { name: 'Nunito', category: 'Sans-Serif' },
+  { name: 'Inter', category: 'Sans-Serif' },
+  { name: 'Work Sans', category: 'Sans-Serif' },
+  { name: 'PT Sans', category: 'Sans-Serif' },
 ];
 
 const ALL_SELECTION_FONTS = [
-  ...HEADING_FONT_OPTIONS.map((f) => f.name),
-  ...BODY_FONT_OPTIONS.map((f) => f.name),
+  ...new Set([
+    ...HEADING_FONT_OPTIONS.map((f) => f.name),
+    ...BODY_FONT_OPTIONS.map((f) => f.name),
+  ]),
 ];
-
-const SAMPLE_SENTENCE = 'The quick brown fox jumps over the lazy dog';
 
 function luminance(hex) {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -44,8 +49,11 @@ export default function Stage6_FontSelection() {
   const { state, dispatch } = useBrand();
   const coreData = state.brandCore ? BRAND_CORES[state.brandCore] : null;
 
-  const selectedHeading = state.customFonts?.heading || null;
-  const selectedBody = state.customFonts?.body || null;
+  const selectedHeading = state.customFonts?.heading || '';
+  const selectedBody = state.customFonts?.body || '';
+
+  const recommendedHeading = coreData?.fonts?.heading || '';
+  const recommendedBody = coreData?.fonts?.body || '';
 
   const activeColors = useMemo(() => {
     if (state.colorMode === 'custom' && state.customColors.primary) {
@@ -61,6 +69,9 @@ export default function Stage6_FontSelection() {
   }, [state.colorMode, state.customColors, coreData]);
 
   const candidateName = state.candidate?.fullName || 'John Smith';
+  const candidateNameUpper = candidateName.toUpperCase();
+  const office = state.candidate?.office || 'Senate';
+  const officeLabel = office.charAt(0).toUpperCase() + office.slice(1).replace(/-/g, ' ');
 
   /* Load Google Fonts via style tag with @import */
   useEffect(() => {
@@ -68,7 +79,10 @@ export default function Stage6_FontSelection() {
     const existing = document.getElementById(id);
     if (existing) existing.remove();
 
-    const families = ALL_SELECTION_FONTS.map((f) => {
+    // Also include recommended fonts from brandCore if not already in the list
+    const allFonts = [...new Set([...ALL_SELECTION_FONTS, recommendedHeading, recommendedBody].filter(Boolean))];
+
+    const families = allFonts.map((f) => {
       const meta = FONT_LIBRARY[f];
       const weights = meta?.weights?.join(';') || '400;700';
       return `family=${f.replace(/\s/g, '+')}:wght@${weights}`;
@@ -83,7 +97,7 @@ export default function Stage6_FontSelection() {
       const el = document.getElementById(id);
       if (el) el.remove();
     };
-  }, []);
+  }, [recommendedHeading, recommendedBody]);
 
   const handleSelectHeading = (fontName) => {
     dispatch({ type: 'SET_CUSTOM_FONTS', payload: { heading: fontName } });
@@ -92,6 +106,16 @@ export default function Stage6_FontSelection() {
   const handleSelectBody = (fontName) => {
     dispatch({ type: 'SET_CUSTOM_FONTS', payload: { body: fontName } });
   };
+
+  const handleUseRecommended = () => {
+    dispatch({ type: 'SET_CUSTOM_FONTS', payload: { heading: recommendedHeading, body: recommendedBody } });
+  };
+
+  const isRecommendedActive = selectedHeading === recommendedHeading && selectedBody === recommendedBody;
+
+  // For preview, use selected or fall back to recommended
+  const previewHeading = selectedHeading || recommendedHeading;
+  const previewBody = selectedBody || recommendedBody;
 
   if (!coreData) {
     return (
@@ -109,222 +133,187 @@ export default function Stage6_FontSelection() {
       subtitle="Select a heading font and a body font for your campaign brand."
       stageNumber={6}
     >
-      <div className="space-y-12">
-        {/* Heading Font Section */}
-        <div>
-          <h3
-            className="text-lg font-bold mb-4"
-            style={{ color: '#1C2E5B' }}
-          >
-            Heading Font
-          </h3>
-          <div className="space-y-3">
-            {HEADING_FONT_OPTIONS.map((font) => {
-              const isSelected = selectedHeading === font.name;
-              return (
-                <motion.button
-                  key={font.name}
-                  onClick={() => handleSelectHeading(font.name)}
-                  whileTap={{ scale: 0.995 }}
-                  className="w-full text-left rounded-xl px-6 py-5 transition-colors duration-150"
-                  style={{
-                    backgroundColor: isSelected ? '#FEF2F2' : '#F9FAFB',
-                    border: '1px solid',
-                    borderColor: isSelected ? '#FEF2F2' : '#E5E7EB',
-                    borderLeftWidth: '4px',
-                    borderLeftColor: isSelected ? '#8B1A2B' : 'transparent',
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="text-base font-bold"
-                        style={{
-                          fontFamily: `'${font.name}', serif`,
-                          color: '#1C2E5B',
-                        }}
-                      >
-                        {font.name}
-                      </span>
-                      <span className="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-500">
-                        {font.category}
-                      </span>
-                    </div>
-                    {isSelected && (
-                      <AnimatedCheckmark color="#8B1A2B" size={22} />
-                    )}
-                  </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{
-                      fontFamily: `'${font.name}', serif`,
-                      color: '#6B7280',
-                    }}
-                  >
-                    {SAMPLE_SENTENCE}
-                  </p>
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
+      <div className="space-y-8">
 
-        {/* Body Font Section */}
-        <div>
-          <h3
-            className="text-lg font-bold mb-4"
-            style={{ color: '#1C2E5B' }}
+        {/* ── Recommended Font Pair ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
+            Recommended for {coreData.name}
+          </p>
+          <div
+            className="rounded-xl border px-6 py-5"
+            style={{
+              borderColor: isRecommendedActive ? activeColors.primary : '#E5E7EB',
+              backgroundColor: isRecommendedActive ? `${activeColors.primary}08` : '#FAFAFA',
+            }}
           >
-            Body Font
-          </h3>
-          <div className="space-y-3">
-            {BODY_FONT_OPTIONS.map((font) => {
-              const isSelected = selectedBody === font.name;
-              return (
-                <motion.button
-                  key={font.name}
-                  onClick={() => handleSelectBody(font.name)}
-                  whileTap={{ scale: 0.995 }}
-                  className="w-full text-left rounded-xl px-6 py-5 transition-colors duration-150"
-                  style={{
-                    backgroundColor: isSelected ? '#FEF2F2' : '#F9FAFB',
-                    border: '1px solid',
-                    borderColor: isSelected ? '#FEF2F2' : '#E5E7EB',
-                    borderLeftWidth: '4px',
-                    borderLeftColor: isSelected ? '#8B1A2B' : 'transparent',
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="text-base font-bold"
-                        style={{
-                          fontFamily: `'${font.name}', sans-serif`,
-                          color: '#1C2E5B',
-                        }}
-                      >
-                        {font.name}
-                      </span>
-                      <span className="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-500">
-                        {font.category}
-                      </span>
-                    </div>
-                    {isSelected && (
-                      <AnimatedCheckmark color="#8B1A2B" size={22} />
-                    )}
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-4 mb-3">
+                  <div>
+                    <span className="text-xs text-gray-400 block">Heading</span>
+                    <span
+                      className="text-lg font-bold"
+                      style={{ fontFamily: `'${recommendedHeading}', serif`, color: '#1C2E5B' }}
+                    >
+                      {recommendedHeading}
+                    </span>
                   </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{
-                      fontFamily: `'${font.name}', sans-serif`,
-                      color: '#6B7280',
-                    }}
-                  >
-                    {SAMPLE_SENTENCE}
-                  </p>
-                </motion.button>
-              );
-            })}
+                  <span className="text-gray-300">+</span>
+                  <div>
+                    <span className="text-xs text-gray-400 block">Body</span>
+                    <span
+                      className="text-base"
+                      style={{ fontFamily: `'${recommendedBody}', sans-serif`, color: '#1C2E5B' }}
+                    >
+                      {recommendedBody}
+                    </span>
+                  </div>
+                </div>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ fontFamily: `'${recommendedBody}', sans-serif`, color: '#6B7280' }}
+                >
+                  <span style={{ fontFamily: `'${recommendedHeading}', serif`, fontWeight: 700, fontSize: '1rem' }}>
+                    Bold leadership starts here.
+                  </span>{' '}
+                  This pairing was chosen to match the tone and personality of your brand direction.
+                </p>
+              </div>
+              <button
+                onClick={handleUseRecommended}
+                className="shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                style={{
+                  backgroundColor: isRecommendedActive ? activeColors.primary : '#F3F4F6',
+                  color: isRecommendedActive ? textOnColor(activeColors.primary) : '#374151',
+                  border: isRecommendedActive ? 'none' : '1px solid #D1D5DB',
+                }}
+              >
+                {isRecommendedActive ? 'Selected' : 'Use Recommended'}
+              </button>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Live Preview */}
-        {selectedHeading && selectedBody && (
+        {/* ── Or Choose Your Own ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
+            Or choose your own
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Heading Font Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1.5" style={{ color: '#374151' }}>
+                Heading Font
+              </label>
+              <select
+                value={selectedHeading}
+                onChange={(e) => handleSelectHeading(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-offset-1"
+                style={{
+                  fontFamily: selectedHeading ? `'${selectedHeading}', serif` : 'inherit',
+                  focusRingColor: activeColors.primary,
+                }}
+              >
+                <option value="">Select a heading font...</option>
+                {HEADING_FONT_OPTIONS.map((font) => (
+                  <option key={font.name} value={font.name} style={{ fontFamily: `'${font.name}', serif` }}>
+                    {font.name} ({font.category})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Body Font Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1.5" style={{ color: '#374151' }}>
+                Body Font
+              </label>
+              <select
+                value={selectedBody}
+                onChange={(e) => handleSelectBody(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-offset-1"
+                style={{
+                  fontFamily: selectedBody ? `'${selectedBody}', sans-serif` : 'inherit',
+                }}
+              >
+                <option value="">Select a body font...</option>
+                {BODY_FONT_OPTIONS.map((font) => (
+                  <option key={font.name} value={font.name} style={{ fontFamily: `'${font.name}', sans-serif` }}>
+                    {font.name} ({font.category})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── Live Preview ── */}
+        {previewHeading && previewBody && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3, delay: 0.15 }}
           >
-            <p className="text-xs font-bold uppercase tracking-[0.25em] mb-4" style={{ color: '#1C2E5B', opacity: 0.7 }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
               Live Preview
             </p>
-            <div className="rounded-2xl overflow-hidden border border-gray-200">
-              {/* Preview header bar */}
-              <div
-                className="px-8 py-6"
-                style={{ backgroundColor: activeColors.primary }}
-              >
-                <p
-                  className="text-xs font-bold uppercase tracking-[0.2em] mb-3"
-                  style={{
-                    fontFamily: `'${selectedBody}', sans-serif`,
-                    color: activeColors.secondary,
-                  }}
-                >
-                  Paid for by Friends of {candidateName}
-                </p>
+            <div className="rounded-xl overflow-hidden border border-gray-200">
+              {/* Preview header */}
+              <div className="px-6 py-5" style={{ backgroundColor: activeColors.primary }}>
                 <h2
-                  className="text-3xl md:text-4xl leading-tight"
+                  className="text-2xl md:text-3xl leading-tight"
                   style={{
-                    fontFamily: `'${selectedHeading}', serif`,
+                    fontFamily: `'${previewHeading}', serif`,
                     fontWeight: 700,
                     color: activeColors.accent || '#FFFFFF',
                   }}
                 >
-                  Fighting for Our Community's Future
+                  {candidateNameUpper} FOR {officeLabel.toUpperCase()}
                 </h2>
               </div>
               {/* Preview body */}
-              <div
-                className="px-8 py-6"
-                style={{ backgroundColor: activeColors.background || '#F5F5F5' }}
-              >
+              <div className="px-6 py-5" style={{ backgroundColor: activeColors.background || '#F5F5F5' }}>
                 <p
-                  className="text-base md:text-lg leading-relaxed mb-4"
+                  className="text-base leading-relaxed mb-4"
                   style={{
-                    fontFamily: `'${selectedBody}', sans-serif`,
+                    fontFamily: `'${previewBody}', sans-serif`,
                     color: activeColors.text || '#333333',
                   }}
                 >
-                  Every family in our district deserves leadership that listens, acts, and delivers real results.
-                  Together we can build a stronger, safer, and more prosperous community for our children and grandchildren.
+                  Fighting for our community's future. Join us in building a stronger tomorrow for every family in our state.
                 </p>
-                <p
-                  className="text-sm leading-relaxed"
+                <span
+                  className="inline-block px-5 py-2.5 rounded-lg text-sm font-bold"
                   style={{
-                    fontFamily: `'${selectedBody}', sans-serif`,
-                    color: activeColors.text || '#333333',
-                    opacity: 0.7,
+                    fontFamily: `'${previewHeading}', serif`,
+                    backgroundColor: activeColors.secondary,
+                    color: textOnColor(activeColors.secondary),
                   }}
                 >
-                  Join us at the town hall this Saturday to hear the plan and ask questions.
-                  Your voice matters, and this campaign is built on neighbors helping neighbors.
-                </p>
-                <div className="mt-6 flex gap-3">
-                  <span
-                    className="inline-block px-5 py-2.5 rounded-lg text-sm font-bold"
-                    style={{
-                      fontFamily: `'${selectedHeading}', serif`,
-                      backgroundColor: activeColors.secondary,
-                      color: textOnColor(activeColors.secondary),
-                    }}
-                  >
-                    Get Involved
-                  </span>
-                  <span
-                    className="inline-block px-5 py-2.5 rounded-lg text-sm font-bold"
-                    style={{
-                      fontFamily: `'${selectedHeading}', serif`,
-                      backgroundColor: activeColors.primary,
-                      color: textOnColor(activeColors.primary),
-                    }}
-                  >
-                    Donate
-                  </span>
-                </div>
+                  Get Involved
+                </span>
               </div>
-              {/* Preview footer with font labels */}
-              <div className="px-8 py-4 bg-white border-t border-gray-200 flex flex-wrap gap-6">
+              {/* Font labels */}
+              <div className="px-6 py-3 bg-white border-t border-gray-200 flex flex-wrap gap-5">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#8B1A2B' }} />
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeColors.secondary }} />
                   <span className="text-xs text-gray-500">
-                    Heading: <strong style={{ fontFamily: `'${selectedHeading}', serif` }}>{selectedHeading}</strong>
+                    Heading: <strong style={{ fontFamily: `'${previewHeading}', serif` }}>{previewHeading}</strong>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#1C2E5B' }} />
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeColors.primary }} />
                   <span className="text-xs text-gray-500">
-                    Body: <strong style={{ fontFamily: `'${selectedBody}', sans-serif` }}>{selectedBody}</strong>
+                    Body: <strong style={{ fontFamily: `'${previewBody}', sans-serif` }}>{previewBody}</strong>
                   </span>
                 </div>
               </div>
