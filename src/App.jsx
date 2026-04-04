@@ -19,14 +19,20 @@ const stages = [Stage1, Stage2, Stage3, Stage4, Stage5, Stage6, Stage7, Stage8, 
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-const stageVariants = {
-  initial: { opacity: 0, x: isMobile ? 20 : 60 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: isMobile ? -20 : -60 },
-};
+const stageVariants = isMobile
+  ? {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+    }
+  : {
+      initial: { opacity: 0, x: 60 },
+      animate: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: -60 },
+    };
 
 const transitionConfig = isMobile
-  ? { duration: 0.2, ease: 'easeOut' }
+  ? { duration: 0.15, ease: 'easeOut' }
   : { duration: 0.4, ease: [0.22, 1, 0.36, 1] };
 
 function AppContent() {

@@ -568,9 +568,9 @@ export default function Stage5_ColorPalette() {
             </div>
           </div>
 
-          {/* RIGHT: Live website mockup preview — hidden on mobile */}
+          {/* RIGHT: Live website mockup preview */}
           <AnimatePresence mode="wait">
-            {showPreview && !isMobile && (
+            {showPreview && (
               <motion.div
                 key={activeTab + selectedPreset}
                 initial={{ opacity: 0, x: 20 }}
@@ -578,10 +578,10 @@ export default function Stage5_ColorPalette() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4 }}
                 style={{
-                  flex: '0 0 38%',
+                  flex: isMobile ? '1 1 100%' : '0 0 38%',
                   minWidth: 0,
-                  position: 'sticky',
-                  top: 120,
+                  position: isMobile ? 'static' : 'sticky',
+                  top: isMobile ? 'auto' : 120,
                 }}
               >
                 <div style={{
