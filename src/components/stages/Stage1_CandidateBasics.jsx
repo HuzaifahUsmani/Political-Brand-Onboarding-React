@@ -49,7 +49,7 @@ const styles = {
 
 /* ── Interactive Falling Confetti ── */
 const CONFETTI_COLORS = ['#8B1A2B', '#1C2E5B', '#B22234', '#ffffff', '#C8A951', '#3B5998'];
-const PARTICLE_COUNT = 80;
+const PARTICLE_COUNT = 35;
 
 function ConfettiCanvas() {
   const canvasRef = useRef(null);
