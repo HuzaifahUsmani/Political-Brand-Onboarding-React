@@ -24,11 +24,27 @@ const BRAND_ICONS = {
   executive: <Crown size={28} />,
 };
 
+/* ── Google Font Loader ── */
+const loadedFonts = new Set();
+function loadBrandFont(fontName) {
+  if (!fontName || loadedFonts.has(fontName)) return;
+  loadedFonts.add(fontName);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@700;900&display=swap`;
+  document.head.appendChild(link);
+}
+
 export default function Stage3_BrandCore() {
   const { state, dispatch } = useBrand();
   const [hoveredId, setHoveredId] = useState(null);
   const selectedId = state.brandCore;
   const previewRef = useRef(null);
+
+  // Pre-load all brand fonts on mount
+  useEffect(() => {
+    Object.values(BRAND_CORES).forEach(core => loadBrandFont(core.fonts?.heading));
+  }, []);
 
   const selectBrand = (id) => {
     const newId = id === selectedId ? null : id;
@@ -169,41 +185,70 @@ export default function Stage3_BrandCore() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
             transition={{ duration: 0.35 }}
-            className="relative overflow-hidden mt-6 p-6 md:p-8"
-            style={{ background: CORE_GRADIENTS[selectedId], borderRadius: 20 }}
+            style={{
+              position: 'relative',
+              overflow: 'hidden',
+              marginTop: 24,
+              padding: '36px 40px',
+              background: CORE_GRADIENTS[selectedId],
+              borderRadius: 20,
+            }}
           >
             {/* Subtle diagonal line texture */}
-            <div className="absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
-              }}
-            />
-            <div className="relative flex items-center justify-between flex-wrap gap-4">
-              <div>
-                <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>
-                  Your Brand Core
-                </p>
-                <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 1.1 }}>
-                  {BRAND_CORES[selectedId].name}
-                </h2>
-                <p style={{ marginTop: 6, fontSize: '0.875rem', color: 'rgba(255,255,255,0.65)', margin: '6px 0 0' }}>
-                  {BRAND_CORES[selectedId].descriptor} &mdash; {BRAND_CORES[selectedId].tagline}
-                </p>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              position: 'absolute', inset: 0, opacity: 0.04,
+              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
+              pointerEvents: 'none',
+            }} />
+
+            <div style={{ position: 'relative' }}>
+              {/* Descriptor as label */}
+              <p style={{
+                fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+                letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)',
+                margin: '0 0 10px',
+              }}>
+                {BRAND_CORES[selectedId].descriptor}
+              </p>
+
+              {/* Giant brand name using brand font */}
+              <h2 style={{
+                fontFamily: `'${BRAND_CORES[selectedId].fonts?.heading}', sans-serif`,
+                fontSize: 'clamp(3rem, 12vw, 6rem)',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                margin: 0,
+                lineHeight: 0.9,
+                letterSpacing: '-0.01em',
+                textTransform: 'uppercase',
+              }}>
+                {BRAND_CORES[selectedId].name}
+              </h2>
+
+              {/* Tagline */}
+              <p style={{
+                marginTop: 14,
+                fontSize: '0.9rem',
+                fontStyle: 'italic',
+                color: 'rgba(255,255,255,0.82)',
+                margin: '14px 0 0',
+              }}>
+                &ldquo;{BRAND_CORES[selectedId].tagline}&rdquo;
+              </p>
+
+              {/* Color dots row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 20 }}>
                 {[
                   BRAND_CORES[selectedId].colors.primary,
                   BRAND_CORES[selectedId].colors.secondary,
                   BRAND_CORES[selectedId].colors.accent,
                 ].map((c, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: 32, height: 32, borderRadius: '50%',
-                      backgroundColor: c,
-                      border: '2px solid rgba(255,255,255,0.25)',
-                    }}
-                  />
+                  <div key={i} style={{
+                    width: 28, height: 28, borderRadius: '50%',
+                    backgroundColor: c,
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+                  }} />
                 ))}
               </div>
             </div>

@@ -433,7 +433,59 @@ export default function Stage6_FontSelection() {
       subtitle={`Select the font pairing that best fits your ${coreData.name} brand.`}
       stageNumber={6}
     >
-      <div className="space-y-10">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+
+        {/* ── Bold typography banner ── */}
+        <AnimatePresence mode="wait">
+          {previewHeading && (
+            <motion.div
+              key={previewHeading + previewBody}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.35 }}
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: 16,
+                padding: '32px 36px',
+                background: `linear-gradient(135deg, ${activeColors.primary} 0%, ${activeColors.text || activeColors.primary} 100%)`,
+              }}
+            >
+              <div style={{
+                position: 'absolute', inset: 0, opacity: 0.04,
+                backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
+                pointerEvents: 'none',
+              }} />
+              <div style={{ position: 'relative' }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)', margin: '0 0 10px' }}>
+                  Your Typography
+                </p>
+                <h2 style={{
+                  fontFamily: `'${previewHeading}', sans-serif`,
+                  fontWeight: activePreset?.headingWeight || 700,
+                  fontSize: 'clamp(2.5rem, 10vw, 5rem)',
+                  color: '#FFFFFF',
+                  margin: 0,
+                  lineHeight: 0.95,
+                  textTransform: 'uppercase',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {candidateName}
+                </h2>
+                <p style={{
+                  fontFamily: `'${previewBody}', sans-serif`,
+                  fontWeight: activePreset?.bodyWeight || 400,
+                  fontSize: '0.9rem',
+                  color: 'rgba(255,255,255,0.82)',
+                  margin: '14px 0 0',
+                }}>
+                  {activePreset?.name ? `${activePreset.name} — ` : ''}{previewHeading} &amp; {previewBody}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ── Preset Grid ── */}
         <div>
