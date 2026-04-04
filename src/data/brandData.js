@@ -308,20 +308,48 @@ export const COLOR_OPTIONS = {
 };
 
 export const FONT_LIBRARY = {
-  'Oswald': { category: 'Sans-Serif Condensed', weights: ['700', '900'], assignedTo: 'COMMANDER', personality: 'Strong, commanding, high-impact' },
-  'Montserrat': { category: 'Sans-Serif', weights: ['600', '700'], assignedTo: 'COMMANDER', personality: 'Modern, structured, professional' },
-  'Libre Baskerville': { category: 'Serif', weights: ['400', '700'], assignedTo: 'PATRIOT', personality: 'Classic, trustworthy, institutional' },
-  'Merriweather': { category: 'Serif', weights: ['400', '700'], assignedTo: 'PATRIOT', personality: 'Warm, readable, traditional' },
-  'Source Serif Pro': { category: 'Serif', weights: ['400', '600'], assignedTo: 'PATRIOT', personality: 'Elegant, editorial, heritage' },
-  'Bebas Neue': { category: 'Display', weights: ['400'], assignedTo: 'REFORMER', personality: 'Bold, aggressive, rally-ready' },
-  'Anton': { category: 'Display', weights: ['400'], assignedTo: 'REFORMER', personality: 'Impact-style, confrontational' },
-  'Barlow Condensed': { category: 'Sans-Serif Condensed', weights: ['600', '700'], assignedTo: 'REFORMER', personality: 'Modern condensed, efficient' },
-  'Poppins': { category: 'Sans-Serif', weights: ['500', '600'], assignedTo: 'COMMUNITY', personality: 'Friendly, approachable' },
-  'Lato': { category: 'Sans-Serif', weights: ['400', '700'], assignedTo: 'COMMUNITY', personality: 'Clean, neutral, trustworthy' },
-  'Open Sans': { category: 'Sans-Serif', weights: ['400', '600'], assignedTo: 'COMMUNITY', personality: 'Universal, readable' },
-  'Inter': { category: 'Sans-Serif', weights: ['400', '700', '300'], assignedTo: 'EXECUTIVE', personality: 'Premium, clean, tech-forward' },
-  'Roboto': { category: 'Sans-Serif', weights: ['400', '700'], assignedTo: 'EXECUTIVE', personality: 'Modern, Google-standard' },
-  'Playfair Display': { category: 'Serif Display', weights: ['700', '400italic'], assignedTo: 'EXECUTIVE Elite', personality: 'Luxury, editorial, prestige' },
+  // COMMANDER
+  'Oswald':            { category: 'Sans-Serif Condensed', weights: ['400','600','700'], assignedTo: 'COMMANDER' },
+  'Montserrat':        { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'COMMANDER' },
+  'Source Sans 3':     { category: 'Sans-Serif',           weights: ['400','600'],       assignedTo: 'COMMANDER' },
+  'Archivo':           { category: 'Sans-Serif',           weights: ['400','500','700'], assignedTo: 'COMMANDER' },
+  'Fjalla One':        { category: 'Sans-Serif Condensed', weights: ['400'],             assignedTo: 'COMMANDER' },
+  'Teko':              { category: 'Sans-Serif Condensed', weights: ['400','500','600'], assignedTo: 'COMMANDER' },
+  'Domine':            { category: 'Serif',                weights: ['400','700'],       assignedTo: 'COMMANDER' },
+  // PATRIOT
+  'Libre Baskerville': { category: 'Serif',                weights: ['400','700'],       assignedTo: 'PATRIOT' },
+  'Merriweather':      { category: 'Serif',                weights: ['400','700'],       assignedTo: 'PATRIOT' },
+  'Source Serif Pro':  { category: 'Serif',                weights: ['400','600'],       assignedTo: 'PATRIOT' },
+  'EB Garamond':       { category: 'Serif',                weights: ['400','700'],       assignedTo: 'PATRIOT' },
+  'Cormorant Garamond':{ category: 'Serif Display',        weights: ['400','600','700'], assignedTo: 'PATRIOT' },
+  'Lora':              { category: 'Serif',                weights: ['400','600','700'], assignedTo: 'PATRIOT' },
+  'Vollkorn':          { category: 'Serif',                weights: ['400','700'],       assignedTo: 'PATRIOT' },
+  'Crimson Pro':       { category: 'Serif',                weights: ['400','600'],       assignedTo: 'PATRIOT' },
+  // REFORMER
+  'Bebas Neue':        { category: 'Display',              weights: ['400'],             assignedTo: 'REFORMER' },
+  'Anton':             { category: 'Display',              weights: ['400'],             assignedTo: 'REFORMER' },
+  'Barlow Condensed':  { category: 'Sans-Serif Condensed', weights: ['400','500','700'], assignedTo: 'REFORMER' },
+  'DM Sans':           { category: 'Sans-Serif',           weights: ['400','500'],       assignedTo: 'REFORMER' },
+  'Space Grotesk':     { category: 'Sans-Serif',           weights: ['400','500','700'], assignedTo: 'REFORMER' },
+  'Sora':              { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'REFORMER' },
+  'Outfit':            { category: 'Sans-Serif',           weights: ['400','500'],       assignedTo: 'REFORMER' },
+  // COMMUNITY
+  'Poppins':           { category: 'Sans-Serif',           weights: ['400','500','600'], assignedTo: 'COMMUNITY' },
+  'Lato':              { category: 'Sans-Serif',           weights: ['400','700'],       assignedTo: 'COMMUNITY' },
+  'Open Sans':         { category: 'Sans-Serif',           weights: ['400','600'],       assignedTo: 'COMMUNITY' },
+  'Nunito':            { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'COMMUNITY' },
+  'Cabin':             { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'COMMUNITY' },
+  'Karla':             { category: 'Sans-Serif',           weights: ['400','500'],       assignedTo: 'COMMUNITY' },
+  'Quicksand':         { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'COMMUNITY' },
+  'Figtree':           { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'COMMUNITY' },
+  // EXECUTIVE
+  'Inter':             { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'EXECUTIVE' },
+  'Roboto':            { category: 'Sans-Serif',           weights: ['400','700'],       assignedTo: 'EXECUTIVE' },
+  'Playfair Display':  { category: 'Serif Display',        weights: ['400','700'],       assignedTo: 'EXECUTIVE' },
+  'Raleway':           { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'EXECUTIVE' },
+  'Plus Jakarta Sans': { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'EXECUTIVE' },
+  'Work Sans':         { category: 'Sans-Serif',           weights: ['400','500','600'], assignedTo: 'EXECUTIVE' },
+  'Manrope':           { category: 'Sans-Serif',           weights: ['400','600','700'], assignedTo: 'EXECUTIVE' },
 };
 
 export const US_STATES = [
