@@ -8,6 +8,14 @@ import { ShieldAlert, Flag, Flame, Users, Crown } from 'lucide-react';
 
 const BRAND_KEYS = ['commander', 'patriot', 'reformer', 'community', 'executive'];
 
+const CORE_GRADIENTS = {
+  commander: 'linear-gradient(135deg, #1C2E5B 0%, #2a4178 50%, #1C2E5B 100%)',
+  patriot:   'linear-gradient(135deg, #1A2744 0%, #2d3f5e 50%, #1A2744 100%)',
+  reformer:  'linear-gradient(135deg, #0D0D0D 0%, #2a2a2a 50%, #0D0D0D 100%)',
+  community: 'linear-gradient(135deg, #2C4A7C 0%, #4a6fa0 50%, #2C4A7C 100%)',
+  executive: 'linear-gradient(135deg, #1C2E5B 0%, #2a4178 50%, #1C2E5B 100%)',
+};
+
 const BRAND_ICONS = {
   commander: <ShieldAlert size={28} />,
   patriot:   <Flag size={28} />,
@@ -144,47 +152,51 @@ export default function Stage3_BrandCore() {
         })}
       </div>
 
-      {/* Selected brand summary */}
-      <AnimatePresence>
+      {/* Selected brand core banner */}
+      <AnimatePresence mode="wait">
         {selectedId && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            key={selectedId}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            style={{
-              marginTop: 24,
-              padding: 24,
-              background: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderLeft: '4px solid #1C2E5B',
-              borderRadius: 8,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-            }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.35 }}
+            className="relative overflow-hidden mt-6 p-6 md:p-8"
+            style={{ background: CORE_GRADIENTS[selectedId], borderRadius: 20 }}
           >
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 8,
-                  backgroundColor: '#1C2E5B',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
+            {/* Subtle diagonal line texture */}
+            <div className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
+              }}
+            />
+            <div className="relative flex items-center justify-between flex-wrap gap-4">
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1C2E5B', margin: 0, marginBottom: 4 }}>
-                  {BRAND_CORES[selectedId].name} Selected
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: 0, lineHeight: 1.6 }}>
-                  {BRAND_CORES[selectedId].philosophy}
+                <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>
+                  Your Brand Core
                 </p>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 1.1 }}>
+                  {BRAND_CORES[selectedId].name}
+                </h2>
+                <p style={{ marginTop: 6, fontSize: '0.875rem', color: 'rgba(255,255,255,0.65)', margin: '6px 0 0' }}>
+                  {BRAND_CORES[selectedId].descriptor} &mdash; {BRAND_CORES[selectedId].tagline}
+                </p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {[
+                  BRAND_CORES[selectedId].colors.primary,
+                  BRAND_CORES[selectedId].colors.secondary,
+                  BRAND_CORES[selectedId].colors.accent,
+                ].map((c, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: 32, height: 32, borderRadius: '50%',
+                      backgroundColor: c,
+                      border: '2px solid rgba(255,255,255,0.25)',
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </motion.div>
