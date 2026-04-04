@@ -4,6 +4,7 @@ import { useBrand } from '../../context/BrandContext';
 import { OFFICES, US_STATES, ELECTION_YEARS, CANDIDATE_TYPES } from '../../data/brandData';
 import StageContainer from '../StageContainer';
 import USMapSVG from '../USMapSVG';
+import { Building2, Home, Landmark, Star, Crown, ClipboardList, Users, Gavel } from 'lucide-react';
 
 /* ── Design tokens ── */
 const accent = '#8B1A2B';
@@ -12,16 +13,16 @@ const bg = '#FAFAFA';
 const cardBorder = '#E5E7EB';
 const ease = [0.4, 0, 0.2, 1];
 
-/* ── Emoji map for offices ── */
-const OFFICE_EMOJIS = {
-  'city-council': '\u{1F3DB}\uFE0F',
-  'county': '\u{1F3D8}\uFE0F',
-  'state-house': '\u{1F3DB}\uFE0F',
-  'state-senate': '\u2B50',
-  'us-congress': '\u{1F1FA}\u{1F1F8}',
-  'us-senate': '\u{1F985}',
-  'governor': '\u{1F451}',
-  'other': '\u{1F4CB}',
+/* ── Icon map for offices ── */
+const OFFICE_ICONS = {
+  'city-council': <Building2 size={26} />,
+  'county':       <Home size={26} />,
+  'state-house':  <Landmark size={26} />,
+  'state-senate': <Star size={26} />,
+  'us-congress':  <Users size={26} />,
+  'us-senate':    <Gavel size={26} />,
+  'governor':     <Crown size={26} />,
+  'other':        <ClipboardList size={26} />,
 };
 
 /* ── Inline styles (CSS-in-JS) ── */
@@ -309,7 +310,7 @@ export default function Stage1_CandidateBasics() {
         >
           {OFFICES.map((office, i) => {
             const selected = candidate.office === office.id;
-            const emoji = OFFICE_EMOJIS[office.id] || '\u{1F3DB}\uFE0F';
+            const icon = OFFICE_ICONS[office.id] || <Building2 size={26} />;
             return (
               <motion.button
                 key={office.id}
@@ -335,16 +336,15 @@ export default function Stage1_CandidateBasics() {
               >
                 <span
                   style={{
-                    fontSize: '1.75rem',
                     display: 'block',
                     marginBottom: '0.4rem',
+                    color: selected ? '#fff' : accent,
                     transition: 'transform 0.3s ease',
                   }}
-                  className="office-emoji"
                   onMouseEnter={(e) => { e.currentTarget.style.animation = 'emojiBounce 0.5s ease'; }}
                   onAnimationEnd={(e) => { e.currentTarget.style.animation = 'none'; }}
                 >
-                  {emoji}
+                  {icon}
                 </span>
                 <span
                   style={{
