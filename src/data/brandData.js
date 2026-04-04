@@ -72,7 +72,7 @@ export const BRAND_CORES = {
     emotionalFeel: 'Powerful, Commanding, Unshakable',
     philosophy: 'The Commander pathway is built for candidates who lead from the front. This is not a brand about charm — it\'s about conviction, decisiveness, and the kind of authority people instinctively trust in uncertain times.',
     colors: { primary: '#1C2E5B', secondary: '#C93545', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333' },
-    fonts: { heading: 'Oswald', body: 'Montserrat' },
+    fonts: { heading: 'Oswald', body: 'Source Sans 3' },
     subDirections: [
       { id: 'iron-commander', name: 'Iron Commander', desc: 'Maximum authority. Heavy typography, dark palettes, dominant presence.', visual: 'Oswald Black headlines, deep navy backgrounds, minimal white space, bold red accents.', bestFor: 'Military veterans, law enforcement backgrounds, high-crime districts' },
       { id: 'tactical-leader', name: 'Tactical Leader', desc: 'Disciplined precision. Military-inspired structure without being aggressive.', visual: 'Montserrat Bold headlines, structured grid layouts, rank-inspired design elements.', bestFor: 'Officers, strategists, defense/intelligence backgrounds' },

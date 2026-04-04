@@ -164,10 +164,10 @@ export default function Stage9_FinalReview() {
   const [approved, setApproved] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const headingFont = brandCore?.fonts?.heading || 'Georgia';
-  const bodyFont = brandCore?.fonts?.body || 'system-ui';
-  const headingMeta = FONT_LIBRARY[brandCore?.fonts?.heading];
-  const bodyMeta = FONT_LIBRARY[brandCore?.fonts?.body];
+  const headingFont = state.customFonts?.heading || brandCore?.fonts?.heading || 'Georgia';
+  const bodyFont = state.customFonts?.body || brandCore?.fonts?.body || 'system-ui';
+  const headingMeta = FONT_LIBRARY[headingFont];
+  const bodyMeta = FONT_LIBRARY[bodyFont];
 
   /* Collateral items — now a simple array of selected IDs */
   const selectedMaterialIds = useMemo(() => {
@@ -292,13 +292,13 @@ export default function Stage9_FinalReview() {
           </SummaryCard>
 
           {/* Fonts */}
-          {brandCore?.fonts && (
+          {headingFont && (
             <SummaryCard title="Fonts">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-gray-400 mb-1">Heading</p>
                   <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: headingFont }}>
-                    {brandCore.fonts.heading}
+                    {headingFont}
                   </p>
                   {headingMeta && (
                     <p className="text-xs text-gray-400 mt-0.5">{headingMeta.category}</p>
@@ -307,7 +307,7 @@ export default function Stage9_FinalReview() {
                 <div>
                   <p className="text-xs text-gray-400 mb-1">Body</p>
                   <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: bodyFont }}>
-                    {brandCore.fonts.body}
+                    {bodyFont}
                   </p>
                   {bodyMeta && (
                     <p className="text-xs text-gray-400 mt-0.5">{bodyMeta.category}</p>
