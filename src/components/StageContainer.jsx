@@ -61,13 +61,13 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
   }, [nextStage]);
 
   return (
-    <div className="relative" style={{ paddingTop: '72px' }}>
+    <div style={{ position: 'relative', paddingTop: '72px' }}>
       {/* Decorative dot grid background */}
       <div className="absolute inset-0 dot-grid pointer-events-none" aria-hidden="true" />
 
       {/* Decorative SVG abstract lines */}
       <svg
-        className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none"
+        style={{ position: 'absolute', top: 0, right: 0, width: 384, height: 384, opacity: 0.03, pointerEvents: 'none' }}
         viewBox="0 0 400 400"
         fill="none"
         aria-hidden="true"
@@ -80,7 +80,7 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
       </svg>
 
       {/* Rounded container */}
-      <div className="max-w-6xl mx-auto px-2 sm:px-4 py-6 md:py-12 relative z-10">
+      <div style={{ maxWidth: 1152, margin: '0 auto', padding: '24px 8px', position: 'relative', zIndex: 10 }}>
 
         {/* ── Sticky nav bar ── */}
         {(!isFirst || (!isLast && !hideNavigation)) && (
