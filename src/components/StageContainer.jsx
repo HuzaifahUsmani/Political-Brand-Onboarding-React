@@ -104,7 +104,7 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
       </svg>
 
       {/* Rounded 40px container */}
-      <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 py-12 md:py-16 relative z-10">
         <div
           className="bg-white/70 backdrop-blur-sm px-8 md:px-12 py-10 md:py-14"
           style={{ borderRadius: '40px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
