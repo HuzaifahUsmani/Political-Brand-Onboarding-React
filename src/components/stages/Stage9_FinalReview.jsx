@@ -45,12 +45,19 @@ function ThankYouPage({ collateralSelected }) {
     return () => clearTimeout(timer);
   }, []);
 
+  const deliverables = [
+    { num: '01', title: 'Logo delivery', desc: 'Final files in all required formats', badge: '2 working days', badgeStyle: { background: '#2a2a2a', color: '#e5e7eb' } },
+    { num: '02', title: 'Brand kit', desc: 'Complete guidelines based on your selections', badge: '3 working days', badgeStyle: { background: '#2a2a2a', color: '#e5e7eb' } },
+    { num: '03', title: 'Website content', desc: 'Drafting begins from your chosen direction', badge: 'In progress', badgeStyle: { background: '#166534', color: '#bbf7d0' } },
+    ...(collateralSelected ? [{ num: '04', title: 'Collateral materials', desc: 'Print-ready assets across all touchpoints', badge: '2 weeks', badgeStyle: { background: '#2a2a2a', color: '#e5e7eb' } }] : []),
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col items-center justify-center px-6 py-20 bg-gray-50 relative overflow-hidden"
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', background: '#181818', position: 'relative', overflow: 'hidden' }}
     >
       {showConfetti && (
         <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -76,78 +83,73 @@ function ThankYouPage({ collateralSelected }) {
         }
       `}</style>
 
-      <div className="max-w-xl w-full text-center">
+      <div style={{ maxWidth: 600, width: '100%', textAlign: 'center' }}>
+        {/* Green checkmark */}
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+          style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}
+        >
+          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbf7d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+        </motion.div>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-5xl md:text-6xl font-bold text-gray-900 mb-6"
+          style={{ fontSize: 'clamp(2rem, 6vw, 2.75rem)', fontWeight: 700, color: '#ffffff', marginBottom: 16, lineHeight: 1.15 }}
         >
-          Thank You!
+          Your submission is confirmed
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="text-lg text-gray-600 mb-3 leading-relaxed"
+          style={{ fontSize: '1.05rem', color: '#9ca3af', marginBottom: 40, lineHeight: 1.7, maxWidth: 480, margin: '0 auto 40px' }}
         >
-          Your detailed brand kit will be delivered to you within 3 working days based on your selections.
+          Thank you. We've received your selections and our team is already getting started. You'll receive deliverables according to the schedule below.
         </motion.p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
-          className="text-lg text-gray-600 mb-12 leading-relaxed"
-        >
-          Website content will be started based on your choices.
-        </motion.p>
-
-        {/* What you'll receive */}
+        {/* Delivery schedule */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55 }}
-          className="rounded-lg border border-gray-200 bg-white text-left p-6 space-y-4"
+          transition={{ delay: 0.5 }}
+          style={{ borderRadius: 12, border: '1px solid #2a2a2a', background: '#1f1f1f', textAlign: 'left', overflow: 'hidden' }}
         >
-          <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">
-            What you will receive
-          </h3>
-
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Logo delivery</p>
-              <p className="text-sm text-gray-500">Within 2 working days</p>
-            </div>
+          <div style={{ padding: '16px 24px', borderBottom: '1px solid #2a2a2a' }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#6b7280', margin: 0 }}>
+              Delivery Schedule
+            </p>
           </div>
 
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Brand kit</p>
-              <p className="text-sm text-gray-500">Within 3 working days</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Website content</p>
-              <p className="text-sm text-gray-500">Started based on your choices</p>
-            </div>
-          </div>
-
-          {collateralSelected && (
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 w-2 h-2 rounded-full bg-[#8B1A2B] shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-gray-800">Collateral materials</p>
-                <p className="text-sm text-gray-500">2 weeks, print-ready</p>
+          {deliverables.map((item, i) => (
+            <div
+              key={item.num}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 16,
+                padding: '20px 24px',
+                borderBottom: i < deliverables.length - 1 ? '1px solid #2a2a2a' : 'none',
+              }}
+            >
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: '#2c3a5c', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#93c5fd' }}>{item.num}</span>
               </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: 0, fontWeight: 600, color: '#f3f4f6', fontSize: '0.95rem' }}>{item.title}</p>
+                <p style={{ margin: '2px 0 0', color: '#6b7280', fontSize: '0.85rem' }}>{item.desc}</p>
+              </div>
+              <span style={{ ...item.badgeStyle, padding: '4px 12px', borderRadius: 20, fontSize: '0.8rem', fontWeight: 500, whiteSpace: 'nowrap' }}>
+                {item.badge}
+              </span>
             </div>
-          )}
+          ))}
         </motion.div>
       </div>
     </motion.div>

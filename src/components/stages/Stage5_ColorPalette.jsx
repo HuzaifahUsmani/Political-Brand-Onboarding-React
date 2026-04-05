@@ -759,46 +759,6 @@ export default function Stage5_ColorPalette() {
           })}
         </div>
 
-        {/* 3. Bold color palette banner */}
-        <AnimatePresence mode="wait">
-          {showPreview && (
-            <motion.div
-              ref={bannerRef}
-              key={`banner-${activeTab}-${selectedPreset}`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 16 }}
-              transition={{ duration: 0.35 }}
-              style={{
-                position: 'relative',
-                overflow: 'hidden',
-                borderRadius: 20,
-                padding: '36px 40px',
-                background: activeColors.primary,
-                marginBottom: 20,
-              }}
-            >
-              <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)', pointerEvents: 'none' }} />
-              <div style={{ position: 'relative' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#D4A843', margin: '0 0 12px' }}>
-                  Your Color Palette
-                </p>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 0.9, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
-                  {activePaletteName}
-                </h2>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, marginTop: 22 }}>
-                  {COLOR_ROLES.map(({ key, label }) => (
-                    <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: activeColors[key], border: '2px solid rgba(255,255,255,0.3)', boxShadow: '0 2px 6px rgba(0,0,0,0.25)' }} />
-                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.75)', textTransform: 'capitalize', letterSpacing: '0.04em' }}>{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* 4. Website preview — full width below */}
         <AnimatePresence mode="wait">
           {showPreview && (
@@ -809,43 +769,6 @@ export default function Stage5_ColorPalette() {
               exit={{ opacity: 0, y: 8 }}
               transition={{ duration: 0.35 }}
             >
-              {/* Bold palette identity banner */}
-              <div style={{
-                position: 'relative',
-                overflow: 'hidden',
-                borderRadius: 16,
-                padding: '32px 36px',
-                marginBottom: 16,
-                background: `linear-gradient(135deg, ${activeColors.primary} 0%, ${activeColors.text || activeColors.primary} 100%)`,
-              }}>
-                <div style={{
-                  position: 'absolute', inset: 0, opacity: 0.04,
-                  backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)`,
-                  pointerEvents: 'none',
-                }} />
-                <div style={{ position: 'relative' }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)', margin: '0 0 10px' }}>
-                    Your Color Palette
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(2.2rem, 8vw, 4rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, lineHeight: 0.95, textTransform: 'uppercase' }}>
-                    {activePaletteName}
-                  </h2>
-                  <div style={{ display: 'flex', gap: 12, marginTop: 20, flexWrap: 'wrap' }}>
-                    {COLOR_ROLES.map(({ key, label }) => (
-                      <div key={key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-                        <div style={{
-                          width: 40, height: 40, borderRadius: '50%',
-                          backgroundColor: activeColors[key],
-                          border: '2px solid rgba(255,255,255,0.3)',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
-                        }} />
-                        <span style={{ fontSize: 8, fontWeight: 600, color: 'rgba(255,255,255,0.65)', textTransform: 'capitalize', letterSpacing: '0.04em' }}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
               <div style={{
                 padding: 20,
                 background: '#FFFFFF',

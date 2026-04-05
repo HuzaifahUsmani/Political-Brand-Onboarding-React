@@ -409,7 +409,7 @@ export default function Stage6_FontSelection() {
 
   const handleSelectPreset = useCallback((preset) => {
     dispatch({ type: 'SET_CUSTOM_FONTS', payload: { heading: preset.heading, body: preset.body } });
-    setTimeout(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 80);
   }, [dispatch]);
 
   const candidateName = state.candidate?.fullName || 'John Smith';
