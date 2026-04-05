@@ -96,7 +96,7 @@ function PaletteCard({ name, colors, isActive, onClick, badge, description, inde
                 {badge}
               </span>
             )}
-            <h3 style={{ fontSize: fullWidth ? 17 : 14, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1 }}>
+            <h3 style={{ fontSize: fullWidth ? 17 : 13, fontWeight: 700, color: '#1C2E5B', margin: 0, flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {name}
             </h3>
           </div>
