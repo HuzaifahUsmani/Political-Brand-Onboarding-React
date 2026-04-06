@@ -23,7 +23,7 @@ export const OFFICES = [
   { id: 'other', label: 'Other', icon: 'plus' },
 ];
 
-export const ELECTION_YEARS = ['2025', '2026', '2027', '2028'];
+export const ELECTION_YEARS = ['2026', '2027', '2028', '2029'];
 
 export const CANDIDATE_TYPES = [
   { id: 'first-time', label: 'First-Time Candidate', desc: 'Running for office for the first time' },
