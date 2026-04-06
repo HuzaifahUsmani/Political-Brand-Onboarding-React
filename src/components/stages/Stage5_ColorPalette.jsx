@@ -321,7 +321,7 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
               </div>
             </div>
 
-            {/* ===== FOOTER (Primary) ===== */}
+            {/* ===== FOOTER (Primary dark background — use textOnDark) ===== */}
             <div style={{
               backgroundColor: priColor,
               padding: '10px 24px',
@@ -330,17 +330,17 @@ function CampaignWebsiteMockup({ colors, candidateName, candidateOffice, candida
               justifyContent: 'space-between',
             }}>
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, color: '#FFFFFF', margin: 0, marginBottom: 4, opacity: 0.9 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: colors.textOnDark || '#FFFFFF', margin: 0, marginBottom: 4, opacity: 0.9 }}>
                   {name} for {office}
                 </p>
-                <p style={{ fontSize: 9, color: '#FFFFFF', opacity: 0.5, margin: 0, lineHeight: 1.4 }}>
+                <p style={{ fontSize: 9, color: colors.textOnDark || '#FFFFFF', opacity: 0.5, margin: 0, lineHeight: 1.4 }}>
                   Paid for by {name} for {office}<br />
                   {usState} Campaign Committee
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 12 }}>
                 {['About', 'Issues', 'Donate', 'Contact', 'Privacy'].map((link) => (
-                  <span key={link} style={{ fontSize: 9, color: '#FFFFFF', opacity: 0.6, fontWeight: 500 }}>{link}</span>
+                  <span key={link} style={{ fontSize: 9, color: colors.textOnDark || '#FFFFFF', opacity: 0.6, fontWeight: 500 }}>{link}</span>
                 ))}
               </div>
             </div>

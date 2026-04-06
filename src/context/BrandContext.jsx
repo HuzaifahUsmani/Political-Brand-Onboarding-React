@@ -27,7 +27,7 @@ const initialState = {
   brandCore: null,
   subDirection: null,
   colorMode: null,
-  customColors: { primary: null, secondary: null, accent: null, background: null, text: null, additional: null },
+  customColors: { primary: null, secondary: null, accent: null, background: null, text: null, additional: null, textOnDark: null, accentOnDark: null },
   websiteCopy: {
     hero: '',
     about: '',
@@ -110,19 +110,26 @@ export function BrandProvider({ children }) {
   const getActiveColors = useCallback(() => {
     if (state.colorMode === 'custom' && state.customColors.primary) {
       return {
-        primary: state.customColors.primary,
-        secondary: state.customColors.secondary,
-        accent: state.customColors.accent,
-        background: state.customColors.background || '#F5F5F5',
-        text: state.customColors.text || '#333333',
-        additional: state.customColors.additional || state.customColors.accent,
+        primary:      state.customColors.primary,
+        secondary:    state.customColors.secondary,
+        accent:       state.customColors.accent,
+        background:   state.customColors.background  || '#F5F5F5',
+        text:         state.customColors.text         || '#333333',
+        additional:   state.customColors.additional   || state.customColors.accent,
+        textOnDark:   state.customColors.textOnDark   || '#FFFFFF',
+        accentOnDark: state.customColors.accentOnDark || state.customColors.accent || '#FFFFFF',
       };
     }
     if (state.brandCore && BRAND_CORES[state.brandCore]) {
       const c = BRAND_CORES[state.brandCore].colors;
-      return { ...c, additional: c.additional || c.accent };
+      return {
+        ...c,
+        additional:   c.additional   || c.accent,
+        textOnDark:   c.textOnDark   || '#FFFFFF',
+        accentOnDark: c.accentOnDark || c.accent || '#FFFFFF',
+      };
     }
-    return { primary: '#1C2E5B', secondary: '#B22234', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', additional: '#FFFFFF' };
+    return { primary: '#1C2E5B', secondary: '#B22234', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', additional: '#FFFFFF', textOnDark: '#FFFFFF', accentOnDark: '#FFFFFF' };
   }, [state.colorMode, state.customColors, state.brandCore]);
 
   return (

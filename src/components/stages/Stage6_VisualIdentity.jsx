@@ -187,6 +187,7 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
       </div>
 
       <div className="relative z-10 px-4 sm:px-8 md:px-16 py-8 sm:py-12 md:py-24 lg:py-32 max-w-5xl">
+        {/* eyebrow — uses accentOnDark per text rules; never secondary on dark background */}
         <motion.p
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -194,12 +195,13 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
           className="text-sm md:text-base font-bold uppercase tracking-[0.25em] mb-6"
           style={{
             fontFamily: `'${bodyFont}', sans-serif`,
-            color: activeColors.secondary,
+            color: activeColors.accentOnDark || '#FFFFFF',
           }}
         >
           {coreData.descriptor}
         </motion.p>
 
+        {/* primary heading — textOnDark at full opacity */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -208,12 +210,13 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
           style={{
             fontFamily: `'${headingFont}', sans-serif`,
             fontWeight: headingMeta?.weights?.[headingMeta.weights.length - 1] || 900,
-            color: activeColors.accent || '#FFFFFF',
+            color: activeColors.textOnDark || '#FFFFFF',
           }}
         >
           {coreData.name}
         </motion.h1>
 
+        {/* decorative rule — secondary is a safe decorative element (not text) */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -222,6 +225,7 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
           style={{ backgroundColor: activeColors.secondary }}
         />
 
+        {/* tagline — textOnDark at 0.80 opacity for muted hierarchy */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -229,12 +233,13 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
           className="text-xl md:text-2xl lg:text-3xl font-light max-w-2xl leading-relaxed"
           style={{
             fontFamily: `'${bodyFont}', sans-serif`,
-            color: hexToRgba(activeColors.accent || '#FFFFFF', 0.8),
+            color: hexToRgba(activeColors.textOnDark || '#FFFFFF', 0.8),
           }}
         >
           {coreData.tagline}
         </motion.p>
 
+        {/* body text — textOnDark at 0.50 opacity for disabled/secondary hierarchy */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -242,7 +247,7 @@ function HeroBrandReveal({ coreData, activeColors, candidateName, headingFont, b
           className="mt-8 text-sm leading-relaxed max-w-xl"
           style={{
             fontFamily: `'${bodyFont}', sans-serif`,
-            color: hexToRgba(activeColors.accent || '#FFFFFF', 0.5),
+            color: hexToRgba(activeColors.textOnDark || '#FFFFFF', 0.5),
           }}
         >
           {coreData.positioning}
@@ -500,7 +505,10 @@ function VoiceToneEditorial({ voiceTone, coreColors, headingFont, bodyFont }) {
               style={{
                 fontFamily: `'${headingFont}', sans-serif`,
                 fontWeight: heaviestWeight,
-                color: textOnColor(i === 0 ? coreColors.primary : i === 1 ? coreColors.secondary : '#111111'),
+                /* card 0 = primary dark bg: textOnDark; card 1 = secondary bg: textOnColor; card 2 = #111: white */
+                color: i === 0
+                  ? (coreColors.textOnDark || '#FFFFFF')
+                  : textOnColor(i === 1 ? coreColors.secondary : '#111111'),
               }}
             >
               {ex}
@@ -533,7 +541,12 @@ function VoiceToneEditorial({ voiceTone, coreColors, headingFont, bodyFont }) {
                 style={{
                   fontFamily: `'${headingFont}', sans-serif`,
                   backgroundColor: i === 0 ? coreColors.primary : i === 1 ? coreColors.secondary : hexToRgba(coreColors.primary, 0.08),
-                  color: i <= 1 ? (textOnColor(i === 0 ? coreColors.primary : coreColors.secondary)) : coreColors.primary,
+                  /* i=0 on primary dark: textOnDark; i=1 on secondary: textOnColor; i>=2 on light: primary */
+                  color: i === 0
+                    ? (coreColors.textOnDark || '#FFFFFF')
+                    : i === 1
+                      ? textOnColor(coreColors.secondary)
+                      : coreColors.primary,
                   fontWeight: heaviestWeight,
                 }}
               >
@@ -619,29 +632,31 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
               <div className="absolute top-2.5 right-0 w-12 h-1" style={{ backgroundColor: colors.secondary, opacity: 0.5 }} />
 
               <div className="relative z-10 text-center px-6">
+                {/* eyebrow on dark: use accentOnDark, never secondary */}
                 <p
                   className="text-xs md:text-sm font-semibold uppercase tracking-[0.3em] mb-2"
                   style={{
                     fontFamily: `'${bodyFont}', sans-serif`,
-                    color: colors.secondary,
+                    color: colors.accentOnDark || '#FFFFFF',
                   }}
                 >
                   Elect
                 </p>
+                {/* heading on dark: use textOnDark at full opacity */}
                 <h4
                   className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
                   style={{
                     fontFamily: `'${headingFont}', sans-serif`,
                     fontWeight: heaviestWeight,
-                    color: colors.accent || '#FFFFFF',
+                    color: colors.textOnDark || '#FFFFFF',
                   }}
                 >
                   {lastName}
                 </h4>
                 <div className="flex items-center gap-3 mt-3 justify-center">
-                  <div className="h-px w-10" style={{ backgroundColor: hexToRgba(colors.accent || '#FFFFFF', 0.3) }} />
+                  <div className="h-px w-10" style={{ backgroundColor: hexToRgba(colors.textOnDark || '#FFFFFF', 0.3) }} />
                   <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.secondary }} />
-                  <div className="h-px w-10" style={{ backgroundColor: hexToRgba(colors.accent || '#FFFFFF', 0.3) }} />
+                  <div className="h-px w-10" style={{ backgroundColor: hexToRgba(colors.textOnDark || '#FFFFFF', 0.3) }} />
                 </div>
               </div>
             </div>
@@ -657,23 +672,25 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
               <div className="absolute inset-0 border-4 rounded-lg" style={{ borderColor: colors.secondary }} />
               <div className="relative z-10 flex items-center justify-between w-full px-6 md:px-8">
                 <div>
+                  {/* heading on dark primary: use textOnDark */}
                   <p
                     className="text-2xl md:text-3xl lg:text-4xl tracking-tight leading-none"
                     style={{
                       fontFamily: `'${headingFont}', sans-serif`,
                       fontWeight: heaviestWeight,
-                      color: colors.accent || '#FFFFFF',
+                      color: colors.textOnDark || '#FFFFFF',
                     }}
                   >
                     {lastName}
                   </p>
                 </div>
                 <div className="text-right">
+                  {/* label/eyebrow on dark: use accentOnDark, never secondary */}
                   <p
                     className="text-xs md:text-sm font-bold uppercase tracking-wider"
                     style={{
                       fontFamily: `'${bodyFont}', sans-serif`,
-                      color: colors.secondary,
+                      color: colors.accentOnDark || '#FFFFFF',
                     }}
                   >
                     {secondHeadline}
@@ -762,20 +779,23 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                   It is time to bring real leadership back to our community.
                 </p>
               </div>
+              {/* social post footer bar — primary dark background */}
               <div
                 className="px-5 md:px-8 py-3 md:py-4 flex items-center justify-between shrink-0"
                 style={{ backgroundColor: colors.primary }}
               >
+                {/* name label on dark: textOnDark at full opacity */}
                 <span
                   className="text-sm font-bold"
                   style={{
                     fontFamily: `'${headingFont}', sans-serif`,
-                    color: colors.accent || '#FFFFFF',
+                    color: colors.textOnDark || '#FFFFFF',
                     fontWeight: heaviestWeight,
                   }}
                 >
                   {candidateName || 'Candidate Name'}
                 </span>
+                {/* CTA button: secondary bg is fine as a button surface here */}
                 <span
                   className="text-xs px-4 py-1.5 rounded-full font-bold"
                   style={{
@@ -806,17 +826,19 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                 }}
               />
               <div className="relative z-10 p-6">
+                {/* heading on dark primary: textOnDark at full opacity */}
                 <p
                   className="text-2xl md:text-3xl leading-tight mb-4"
                   style={{
                     fontFamily: `'${headingFont}', sans-serif`,
                     fontWeight: heaviestWeight,
-                    color: colors.accent || '#FFFFFF',
+                    color: colors.textOnDark || '#FFFFFF',
                   }}
                 >
                   {secondHeadline}
                 </p>
                 <div className="flex items-center gap-3 mb-4">
+                  {/* avatar badge: secondary is used as a surface here, not as text on primary */}
                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
                     style={{
                       backgroundColor: colors.secondary,
@@ -827,10 +849,12 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                     {(firstName[0] || 'J').toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-xs font-bold" style={{ color: colors.accent || '#FFFFFF', fontFamily: `'${bodyFont}', sans-serif` }}>
+                    {/* name on dark: textOnDark at full opacity */}
+                    <p className="text-xs font-bold" style={{ color: colors.textOnDark || '#FFFFFF', fontFamily: `'${bodyFont}', sans-serif` }}>
                       {candidateName || 'Candidate'}
                     </p>
-                    <p className="text-[10px] opacity-60" style={{ color: colors.accent || '#FFFFFF' }}>
+                    {/* muted label: textOnDark at 0.60 opacity */}
+                    <p className="text-[10px] opacity-60" style={{ color: colors.textOnDark || '#FFFFFF' }}>
                       Official Campaign
                     </p>
                   </div>
@@ -913,11 +937,12 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
                 <p className="text-xs text-gray-500 mb-3" style={{ fontFamily: `'${bodyFont}', sans-serif` }}>
                   Hear the plan. Ask questions. Get involved.
                 </p>
+                {/* RSVP button on primary dark bg: textOnDark for the label */}
                 <div
                   className="inline-block px-4 py-2 rounded-lg text-xs font-bold"
                   style={{
                     backgroundColor: colors.primary,
-                    color: colors.accent || '#FFFFFF',
+                    color: colors.textOnDark || '#FFFFFF',
                     fontFamily: `'${headingFont}', sans-serif`,
                   }}
                 >
