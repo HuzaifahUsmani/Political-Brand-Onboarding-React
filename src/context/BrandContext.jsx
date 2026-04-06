@@ -39,6 +39,8 @@ const initialState = {
     contact: '',
   },
   customFonts: { heading: null, body: null },
+  hasExistingLogo: null,
+  existingLogoUrl: null,
   logoType: null,
   collateralPriorities: [],
 };
@@ -68,6 +70,8 @@ function reducer(state, action) {
       return { ...state, websiteCopy: { ...state.websiteCopy, ...action.payload } };
     case 'SET_CUSTOM_FONTS':
       return { ...state, customFonts: { ...state.customFonts, ...action.payload } };
+    case 'SET_LOGO_STATUS':
+      return { ...state, ...action.payload };
     case 'SET_LOGO_TYPE':
       return { ...state, logoType: action.payload };
     case 'SET_COLLATERAL_PRIORITIES':

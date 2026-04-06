@@ -6,6 +6,7 @@ export const STAGES = [
   'Color Palette',
   'Font Selection',
   'Visual Identity',
+  'Logo',
   'Logo Style',
   'Collateral Priority',
   'Final Review'
