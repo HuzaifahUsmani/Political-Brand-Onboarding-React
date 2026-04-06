@@ -963,7 +963,7 @@ function CampaignMockups({ colors, candidateName, headingFont, bodyFont, voiceTo
 /*  MAIN EXPORT                                                       */
 /* ------------------------------------------------------------------ */
 export default function Stage6_VisualIdentity() {
-  const { state } = useBrand();
+  const { state, getActiveColors } = useBrand();
   const coreData = state.brandCore ? BRAND_CORES[state.brandCore] : null;
 
   const defaultFonts = coreData?.fonts;
@@ -984,18 +984,7 @@ export default function Stage6_VisualIdentity() {
 
   useGoogleFonts(allFontsToLoad);
 
-  const activeColors = useMemo(() => {
-    if (state.colorMode === 'custom' && state.customColors.primary) {
-      return {
-        primary: state.customColors.primary,
-        secondary: state.customColors.secondary || '#B22234',
-        accent: state.customColors.accent || '#FFFFFF',
-        background: '#F5F5F5',
-        text: '#333333',
-      };
-    }
-    return coreData?.colors || { primary: '#1C2E5B', secondary: '#B22234', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333' };
-  }, [state.colorMode, state.customColors, coreData]);
+  const activeColors = getActiveColors();
 
   const candidateName = state.candidate?.fullName || 'John Smith';
 
