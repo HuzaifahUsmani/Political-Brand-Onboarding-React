@@ -7,7 +7,6 @@ export const STAGES = [
   'Font Selection',
   'Visual Identity',
   'Logo',
-  'Logo Style',
   // 'Collateral Priority', // hidden for now — re-enable when ready
   'Final Review'
 ];

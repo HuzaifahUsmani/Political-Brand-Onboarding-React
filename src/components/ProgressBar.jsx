@@ -13,8 +13,6 @@ const STAGE_NAMES = [
   'Font Selection',
   'Visual Identity',
   'Logo',
-  'Logo Style',
-  'Collateral',
   'Review',
 ];
 
