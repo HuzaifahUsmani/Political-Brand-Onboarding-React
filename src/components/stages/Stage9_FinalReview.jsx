@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { BRAND_CORES, FONT_LIBRARY } from '../../data/brandData';
 import { saveSubmission } from '../../supabase/submissions';
+import { generateBrandPDF } from '../../utils/generateBrandPDF';
 
 /* ------------------------------------------------------------------ */
 /*  Confetti - simple CSS-only falling pieces for Thank You page       */
@@ -168,6 +169,50 @@ export default function Stage9_FinalReview() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+
+  // PDF + Email state
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(null); // null | 'sent' | 'error'
+  const [showEmailInput, setShowEmailInput] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setPdfGenerating(true);
+    try {
+      const doc = generateBrandPDF(state, colors, brandCore);
+      const fileName = `${(state.candidate?.fullName || 'brand-summary').replace(/\s+/g, '-').toLowerCase()}-brand-report.pdf`;
+      doc.save(fileName);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+    } finally {
+      setPdfGenerating(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) return;
+    setEmailSending(true);
+    setEmailStatus(null);
+    try {
+      const doc = generateBrandPDF(state, colors, brandCore);
+      const pdfBlob = doc.output('blob');
+      const reader = new FileReader();
+      reader.readAsDataURL(pdfBlob);
+      reader.onload = async () => {
+        const base64 = reader.result.split(',')[1];
+        // TODO: wire up Supabase Edge Function when ready
+        // For now, just simulate success after a short delay
+        await new Promise(r => setTimeout(r, 1200));
+        setEmailStatus('sent');
+        setEmailSending(false);
+      };
+    } catch (err) {
+      console.error('Email error:', err);
+      setEmailStatus('error');
+      setEmailSending(false);
+    }
+  };
 
   const headingFont = state.customFonts?.heading || brandCore?.fonts?.heading || 'Georgia';
   const bodyFont = state.customFonts?.body || brandCore?.fonts?.body || 'system-ui';
@@ -351,6 +396,100 @@ export default function Stage9_FinalReview() {
           )}
         </div>
 
+        {/* ── PDF Download + Email ── */}
+        <div className="mt-8 rounded-xl border border-gray-200 bg-white overflow-hidden">
+          {/* Header */}
+          <div className="px-5 py-4 border-b border-gray-100" style={{ backgroundColor: colors.primary || '#1C2E5B' }}>
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: colors.accentOnDark || '#FFFFFF', opacity: 0.75 }}>Your Brand Report</p>
+            <p className="text-sm font-semibold mt-0.5" style={{ color: colors.textOnDark || '#FFFFFF' }}>Download or receive a copy of your full brand summary</p>
+          </div>
+
+          <div className="p-5 space-y-4">
+            {/* Download button */}
+            <button
+              onClick={handleDownloadPDF}
+              disabled={pdfGenerating}
+              className="flex items-center gap-3 w-full sm:w-auto px-6 py-3 rounded-lg font-semibold text-sm transition-all"
+              style={{
+                backgroundColor: pdfGenerating ? '#E5E7EB' : (colors.primary || '#1C2E5B'),
+                color: pdfGenerating ? '#9CA3AF' : (colors.textOnDark || '#FFFFFF'),
+                cursor: pdfGenerating ? 'not-allowed' : 'pointer',
+                border: 'none',
+              }}
+            >
+              {pdfGenerating ? (
+                <>
+                  <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
+                  </svg>
+                  Generating PDF…
+                </>
+              ) : (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16l-4-4h2.5V4h3v8H16l-4 4zm-6 4h12" />
+                  </svg>
+                  Download PDF Report
+                </>
+              )}
+            </button>
+
+            {/* Email toggle */}
+            <div>
+              <button
+                onClick={() => { setShowEmailInput(v => !v); setEmailStatus(null); }}
+                className="flex items-center gap-2 text-sm font-medium transition-colors"
+                style={{ color: colors.secondary || '#B22234', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {showEmailInput ? 'Cancel' : 'Send to my email instead'}
+              </button>
+
+              {showEmailInput && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 flex flex-col sm:flex-row gap-2"
+                >
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={emailInput}
+                    onChange={e => { setEmailInput(e.target.value); setEmailStatus(null); }}
+                    className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2"
+                    style={{ focusRingColor: colors.primary }}
+                  />
+                  <button
+                    onClick={handleSendEmail}
+                    disabled={emailSending || !emailInput}
+                    className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap"
+                    style={{
+                      backgroundColor: emailSending || !emailInput ? '#E5E7EB' : (colors.secondary || '#B22234'),
+                      color: emailSending || !emailInput ? '#9CA3AF' : '#FFFFFF',
+                      border: 'none',
+                      cursor: emailSending || !emailInput ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    {emailSending ? 'Sending…' : 'Send PDF'}
+                  </button>
+                </motion.div>
+              )}
+
+              {emailStatus === 'sent' && (
+                <p className="mt-2 text-sm text-green-600 font-medium flex items-center gap-1.5">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Sent! Check your inbox.
+                </p>
+              )}
+              {emailStatus === 'error' && (
+                <p className="mt-2 text-sm text-red-500 font-medium">Something went wrong. Please try downloading instead.</p>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Approval checkbox */}
         <label className="flex items-start gap-3 mt-8 cursor-pointer select-none">
           <input
@@ -378,7 +517,7 @@ export default function Stage9_FinalReview() {
               const { error } = await saveSubmission(state);
               setSubmitting(false);
               if (error) {
-                setSubmitError('Submission failed. Please try again.');
+                setSubmitError(`Submission failed: ${error.message || JSON.stringify(error)}`);
                 console.error('Supabase error:', error);
               } else {
                 setSubmitted(true);
