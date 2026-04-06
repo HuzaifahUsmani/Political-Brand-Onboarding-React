@@ -49,16 +49,18 @@ function ConfettiBurst({ onDone }) {
   );
 }
 
-export default function StageContainer({ children, title, subtitle, stageNumber, hideNavigation = false }) {
+export default function StageContainer({ children, title, subtitle, stageNumber, hideNavigation = false, canContinue = true, onContinue }) {
   const { prevStage, nextStage, state } = useBrand();
   const isFirst = state.currentStage === 0;
   const isLast = state.currentStage === 9;
   const [showConfetti, setShowConfetti] = useState(false);
 
   const handleContinue = useCallback(() => {
+    if (!canContinue) return;
     if (!isMobile) setShowConfetti(true);
-    nextStage();
-  }, [nextStage]);
+    if (onContinue) onContinue();
+    else nextStage();
+  }, [nextStage, onContinue, canContinue]);
 
   return (
     <div style={{ position: 'relative', paddingTop: '72px' }}>
@@ -130,21 +132,23 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
             {!isLast && !hideNavigation && (
               <button
                 onClick={handleContinue}
-                className="flex items-center gap-2 font-bold transition-all hover:opacity-90 active:scale-95"
+                disabled={!canContinue}
+                className="flex items-center gap-2 font-bold transition-all active:scale-95"
                 style={{
                   padding: '12px 28px',
                   fontSize: '0.95rem',
                   color: '#FFFFFF',
-                  backgroundColor: '#8B1A2B',
+                  backgroundColor: canContinue ? '#8B1A2B' : '#C0C0C0',
                   borderRadius: 12,
-                  boxShadow: '0 2px 10px rgba(139,26,43,0.35)',
+                  boxShadow: canContinue ? '0 2px 10px rgba(139,26,43,0.35)' : 'none',
                   border: 'none',
-                  cursor: 'pointer',
+                  cursor: canContinue ? 'pointer' : 'not-allowed',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
+                  opacity: canContinue ? 1 : 0.6,
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6E1522')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#8B1A2B')}
+                onMouseEnter={(e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#6E1522'; }}
+                onMouseLeave={(e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#8B1A2B'; }}
               >
                 Continue
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">

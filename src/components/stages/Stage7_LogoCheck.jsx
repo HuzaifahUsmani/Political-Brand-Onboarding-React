@@ -252,6 +252,8 @@ export default function Stage7_LogoCheck() {
       title="Your Logo"
       subtitle="Let us know whether you're bringing an existing logo or need us to create one."
       stageNumber={8}
+      canContinue={canContinue}
+      onContinue={handleContinue}
     >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
