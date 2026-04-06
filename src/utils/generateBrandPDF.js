@@ -127,123 +127,130 @@ export function generateBrandPDF(state, colors, brandCoreData) {
   const subDir = brandCoreData?.subDirections?.find(s => s.id === state.subDirection) || null;
 
   /* ════════════════════════════════════════════════════════════════
-     COVER PAGE
+     COVER PAGE  — neutral white layout, brand colors as accents
   ════════════════════════════════════════════════════════════════ */
 
-  // Full-bleed primary background
-  fc(doc, primary);
+  // White background
+  fc(doc, '#FFFFFF');
   doc.rect(0, 0, W, H, 'F');
 
-  // Secondary stripe at very top
-  fc(doc, secondary);
-  doc.rect(0, 0, W, 4, 'F');
+  // Thick primary colour band at very top (header bar)
+  fc(doc, primary);
+  doc.rect(0, 0, W, 22, 'F');
 
-  // "OPERATION 1776" — top right
+  // Thin secondary stripe below the header band
+  fc(doc, secondary);
+  doc.rect(0, 22, W, 3, 'F');
+
+  // "OPERATION 1776" in header — top right
   tc(doc, textOnDark);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
-  doc.text('OPERATION 1776', W - MR, MT + 6, { align: 'right' });
+  doc.text('OPERATION 1776', W - MR, 14, { align: 'right' });
 
-  // Decorative large circle — top left, partially off-page
-  const { r: sr, g: sg, b: sb } = rgb(secondary);
-  doc.setFillColor(sr, sg, sb);
-  doc.setGState(new doc.GState({ opacity: 0.15 }));
-  doc.circle(-20, 60, 70, 'F');
+  // Light grey mid-section background panel
+  fc(doc, '#F7F8FA');
+  doc.rect(0, 25, W, H * 0.45, 'F');
+
+  // Subtle decorative circle — bottom right, very light primary tint
+  const { r: pr2, g: pg2, b: pb2 } = rgb(primary);
+  doc.setFillColor(pr2, pg2, pb2);
+  doc.setGState(new doc.GState({ opacity: 0.06 }));
+  doc.circle(W + 20, H - 30, 90, 'F');
   doc.setGState(new doc.GState({ opacity: 1 }));
 
-  // Decorative small circle — bottom right
-  doc.setFillColor(sr, sg, sb);
-  doc.setGState(new doc.GState({ opacity: 0.1 }));
-  doc.circle(W + 10, H - 50, 55, 'F');
-  doc.setGState(new doc.GState({ opacity: 1 }));
+  // Left accent bar
+  fc(doc, primary);
+  doc.rect(0, 25, 5, H * 0.45, 'F');
 
   // "BRAND DISCOVERY REPORT" label
-  tc(doc, accentOnDark);
+  tc(doc, primary);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
-  doc.text('BRAND DISCOVERY REPORT', ML, H * 0.4);
+  doc.text('BRAND DISCOVERY REPORT', ML + 8, H * 0.35);
 
   // Thin accent line below label
   dc(doc, secondary);
   doc.setLineWidth(1);
-  doc.line(ML, H * 0.4 + 3, ML + 55, H * 0.4 + 3);
+  doc.line(ML + 8, H * 0.35 + 3, ML + 65, H * 0.35 + 3);
 
-  // Candidate name — very large
+  // Candidate name — very large, dark navy text
   const fullName = (candidate.fullName || 'CANDIDATE NAME').toUpperCase();
-  tc(doc, textOnDark);
+  tc(doc, '#1C2E5B');
   doc.setFont('helvetica', 'bold');
   const nameFontSize = fullName.length > 22 ? 28 : fullName.length > 16 ? 34 : 40;
   doc.setFontSize(nameFontSize);
-  const nameLines = doc.splitTextToSize(fullName, CW);
+  const nameLines = doc.splitTextToSize(fullName, CW - 8);
   nameLines.forEach((line, i) => {
-    doc.text(line, ML, H * 0.4 + 16 + i * (nameFontSize * 0.45));
+    doc.text(line, ML + 8, H * 0.35 + 16 + i * (nameFontSize * 0.45));
   });
-  const nameBlockEnd = H * 0.4 + 16 + nameLines.length * (nameFontSize * 0.45);
+  const nameBlockEnd = H * 0.35 + 16 + nameLines.length * (nameFontSize * 0.45);
 
-  // Office · State · Year
-  tc(doc, accentOnDark);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(13);
+  // Office · State · Year — secondary colour
+  tc(doc, secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
   const officeStr = [candidate.office, candidate.state, candidate.electionYear]
     .filter(Boolean).join('  ·  ');
-  doc.text(officeStr, ML, nameBlockEnd + 6);
+  doc.text(officeStr, ML + 8, nameBlockEnd + 7);
 
-  // Party affiliation
+  // Party affiliation — dark grey
   if (candidate.partyAffiliation) {
-    tc(doc, textOnDark);
+    tc(doc, '#444444');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.setGState(new doc.GState({ opacity: 0.7 }));
-    doc.text(candidate.partyAffiliation, ML, nameBlockEnd + 14);
-    doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.text(candidate.partyAffiliation, ML + 8, nameBlockEnd + 15);
   }
 
   // Horizontal rule divider
-  dc(doc, secondary);
-  doc.setLineWidth(0.5);
-  doc.line(ML, nameBlockEnd + 20, W - MR, nameBlockEnd + 20);
+  dc(doc, '#D1D5DB');
+  doc.setLineWidth(0.4);
+  doc.line(ML + 8, nameBlockEnd + 21, W - MR, nameBlockEnd + 21);
 
-  // Brand archetype (if set)
+  // Brand archetype block — on white section below grey panel
+  const archetypeY = 25 + H * 0.45 + 16;
   if (brandCoreData) {
-    tc(doc, accentOnDark);
+    tc(doc, '#888888');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7.5);
-    doc.text('BRAND ARCHETYPE', ML, nameBlockEnd + 29);
+    doc.text('BRAND ARCHETYPE', ML, archetypeY);
 
-    tc(doc, textOnDark);
+    tc(doc, primary);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
-    doc.text(brandCoreData.name, ML, nameBlockEnd + 39);
+    doc.text(brandCoreData.name, ML, archetypeY + 10);
 
-    tc(doc, accentOnDark);
+    tc(doc, '#555555');
     doc.setFont('helvetica', 'italic');
     doc.setFontSize(10);
-    doc.text(brandCoreData.descriptor || '', ML, nameBlockEnd + 47);
+    doc.text(brandCoreData.descriptor || '', ML, archetypeY + 18);
   }
 
-  // Color swatch strip at bottom
-  const swatchY = H - 36;
+  // Color swatch strip near bottom — labelled palette preview
+  const swatchY = H - 42;
+  tc(doc, '#888888');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7);
+  doc.text('BRAND COLOUR PALETTE', ML, swatchY - 4);
+
   const swatchColors = [primary, secondary, accent, bgColor, textColor, additional];
   const swatchW = CW / swatchColors.length;
   swatchColors.forEach((hex, i) => {
     fc(doc, hex);
-    doc.rect(ML + i * swatchW, swatchY, swatchW - 0.5, 14, 'F');
-    // hex label
+    doc.roundedRect(ML + i * swatchW, swatchY, swatchW - 1, 14, 1, 1, 'F');
     const labelColor = isLight(hex) ? '#333333' : '#FFFFFF';
     tc(doc, labelColor);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(5.5);
-    doc.text(hex.toUpperCase(), ML + i * swatchW + swatchW / 2, swatchY + 9, { align: 'center' });
+    doc.setFontSize(5);
+    doc.text(hex.toUpperCase(), ML + i * swatchW + (swatchW - 1) / 2, swatchY + 9, { align: 'center' });
   });
 
-  // Date at very bottom
-  tc(doc, textOnDark);
+  // Date at very bottom — dark grey
+  tc(doc, '#999999');
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6.5);
-  doc.setGState(new doc.GState({ opacity: 0.55 }));
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  doc.text(`Prepared ${dateStr}  ·  Confidential`, ML, H - 8);
-  doc.setGState(new doc.GState({ opacity: 1 }));
+  doc.text(`Prepared ${dateStr}  ·  Confidential`, ML, H - 10);
 
   /* ════════════════════════════════════════════════════════════════
      PAGE 2 — CANDIDATE PROFILE
