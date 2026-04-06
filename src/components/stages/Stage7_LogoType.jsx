@@ -65,6 +65,7 @@ const LOGO_TYPES = [
     name: 'Symbol + Text',
     description: 'An iconic symbol paired with the candidate name. Versatile and modern, great for yard signs and digital.',
     image: '/logos/symbol-text.webp',
+    cropTop: true,
   },
   {
     id: 'monogram',
@@ -439,7 +440,7 @@ export default function Stage7_LogoType() {
                 key={logoType.id}
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 + index * 0.12, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.15, ease: [0.4, 0, 0.2, 1] }}
                 onClick={() => handleSelect(logoType.id)}
                 whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0,0,0,0.12)' }}
                 whileTap={{ scale: 0.99 }}
@@ -509,8 +510,9 @@ export default function Stage7_LogoType() {
                     onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     style={{
                       width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
+                      height: logoType.cropTop ? '130%' : '100%',
+                      objectFit: logoType.cropTop ? 'cover' : 'contain',
+                      objectPosition: logoType.cropTop ? 'center bottom' : 'center center',
                       transition: 'opacity 0.3s ease',
                     }}
                   />
