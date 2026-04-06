@@ -12,7 +12,8 @@ const STAGE_NAMES = [
   'Color Palette',
   'Font Selection',
   'Visual Identity',
-  'Logo Type',
+  'Logo',
+  'Logo Style',
   'Collateral',
   'Review',
 ];

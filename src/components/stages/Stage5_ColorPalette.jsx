@@ -16,6 +16,7 @@ const COLOR_ROLES = [
 /* ── WCAG 2.1 AA Contrast Helpers ── */
 
 function hexToRgb(hex) {
+  if (!hex || typeof hex !== 'string' || hex.length < 7) return { r: 128, g: 128, b: 128 };
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
@@ -596,29 +597,31 @@ export default function Stage5_ColorPalette() {
   }, []);
 
   // Restore preset selection from state
+  const subPalettes = BRAND_CORES[state.brandCore]?.subPalettes || [];
+
   useState(() => {
     if (state.colorMode === 'custom' && state.customColors.primary) {
-      const match = PRESET_PALETTES.find(p => p.colors.primary === state.customColors.primary && p.colors.secondary === state.customColors.secondary);
+      const match = subPalettes.find(p => p.colors.primary === state.customColors.primary && p.colors.secondary === state.customColors.secondary);
       if (match) setSelectedPreset(match.id);
     }
   });
 
   const activeColors = useMemo(() => {
     if (activeTab === 'custom' && selectedPreset) {
-      const preset = PRESET_PALETTES.find(p => p.id === selectedPreset);
+      const preset = subPalettes.find(p => p.id === selectedPreset);
       return preset?.colors || { primary: '#1C2E5B', secondary: '#B22234', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', additional: '#4A5568' };
     }
     if (coreData) {
       return { ...coreData.colors, additional: coreData.colors.additional || coreData.colors.accent };
     }
     return { primary: '#1C2E5B', secondary: '#C93545', accent: '#FFFFFF', background: '#F5F5F5', text: '#333333', additional: '#4A5568' };
-  }, [activeTab, selectedPreset, coreData]);
+  }, [activeTab, selectedPreset, coreData, subPalettes]);
 
   const activePaletteName = useMemo(() => {
     if (activeTab === 'theme') return `${coreData?.name || 'Theme'} Palette`;
-    const preset = PRESET_PALETTES.find(p => p.id === selectedPreset);
+    const preset = subPalettes.find(p => p.id === selectedPreset);
     return preset?.name || 'Custom Palette';
-  }, [activeTab, selectedPreset, coreData]);
+  }, [activeTab, selectedPreset, coreData, subPalettes]);
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
