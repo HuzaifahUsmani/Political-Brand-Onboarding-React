@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBrand } from '../../context/BrandContext';
 import { OFFICES, US_STATES, ELECTION_YEARS, CANDIDATE_TYPES } from '../../data/brandData';
 import StageContainer from '../StageContainer';
-import { sanitizeName, sanitizeDistrict } from '../../utils/sanitize';
+import { sanitizeName, sanitizeDistrict, sanitizeShortText } from '../../utils/sanitize';
 import USMapSVG from '../USMapSVG';
 import { Building2, Home, Landmark, Star, Crown, ClipboardList, Users, Gavel } from 'lucide-react';
 
@@ -509,7 +509,7 @@ export default function Stage1_CandidateBasics() {
                 type="text"
                 autoFocus
                 value={candidate.officeCustom || ''}
-                onChange={(e) => update({ officeCustom: e.target.value.slice(0, 80) })}
+                onChange={(e) => update({ officeCustom: sanitizeShortText(e.target.value) })}
                 placeholder="Enter office name (e.g. School Board, Water District...)"
                 style={{
                   width: '100%',

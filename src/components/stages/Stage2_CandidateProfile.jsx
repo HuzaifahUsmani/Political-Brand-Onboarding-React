@@ -219,7 +219,7 @@ export default function Stage2_CandidateProfile() {
               <input
                 type="text"
                 value={profile.backgroundOther || ''}
-                onChange={(e) => update({ backgroundOther: e.target.value })}
+                onChange={(e) => update({ backgroundOther: sanitizeFreeText(e.target.value) })}
                 placeholder="Describe your professional background…"
                 autoFocus
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none"
@@ -340,7 +340,7 @@ export default function Stage2_CandidateProfile() {
               <input
                 type="text"
                 value={profile.policyOther || ''}
-                onChange={(e) => update({ policyOther: e.target.value })}
+                onChange={(e) => update({ policyOther: sanitizeFreeText(e.target.value) })}
                 placeholder="Describe your policy priority…"
                 autoFocus
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none"
