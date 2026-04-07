@@ -527,7 +527,7 @@ export default function Stage7_LogoType() {
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            objectPosition: 'center 55%',
+                            objectPosition: 'center 45%',
                             transition: 'opacity 0.3s ease',
                           }}
                         />
