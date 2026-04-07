@@ -506,15 +506,12 @@ export default function Stage7_LogoType() {
                         </motion.div>
                       )}
 
-                      {/* Logo reference image */}
+                      {/* Logo reference image — webps have a title header in the top ~20%.
+                          cover + objectPosition 65% crops that header out and shows logos. */}
                       <div style={{
                         background: '#FAFAFA',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
                         height: 180,
                         overflow: 'hidden',
-                        padding: '12px 8%',
                         borderBottom: `1px solid ${isSelected ? 'rgba(139,26,43,0.12)' : '#F0F0F0'}`,
                       }}>
                         <img
@@ -524,14 +521,13 @@ export default function Stage7_LogoType() {
                           decoding="async"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement.innerHTML = '<span style="color:#9CA3AF;font-size:13px">Preview unavailable</span>';
+                            e.currentTarget.parentElement.innerHTML = '<span style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;justify-content:center;height:100%">Preview unavailable</span>';
                           }}
                           style={{
-                            maxWidth: '100%',
-                            maxHeight: '100%',
-                            width: 'auto',
-                            height: 'auto',
-                            objectFit: 'contain',
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'center 65%',
                             transition: 'opacity 0.3s ease',
                           }}
                         />
