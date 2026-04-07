@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ── Accurate US state paths (Albers USA projection, 960x600) ── */
@@ -119,6 +119,21 @@ export default function USMapSVG({ onSelect, selectedState }) {
   const [hoveredState, setHoveredState] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const svgRef = useRef(null);
+  // textScale compensates for SVG shrinking on small screens:
+  // viewBox is 960px wide, so labels need to be scaled up proportionally
+  const [textScale, setTextScale] = useState(1);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const update = () => {
+      const w = svg.getBoundingClientRect().width;
+      if (w > 0) setTextScale(960 / w);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(svg);
+    return () => ro.disconnect();
+  }, []);
 
   const handleMouseMove = useCallback((e) => {
     if (svgRef.current) {
@@ -197,7 +212,8 @@ export default function USMapSVG({ onSelect, selectedState }) {
         {/* State abbreviation labels */}
         {STATES.map((st) => {
           const isSelected = st.id === selectedAbbr;
-          const fontSize = st.small ? 8 : st.id === 'TX' || st.id === 'CA' || st.id === 'MT' || st.id === 'AK' ? 12 : 10;
+          const baseSize = st.small ? 8 : st.id === 'TX' || st.id === 'CA' || st.id === 'MT' || st.id === 'AK' ? 12 : 10;
+          const fontSize = Math.round(baseSize * textScale);
 
           if (st.small && st.lx !== undefined) {
             /* Leader line for small states */
@@ -218,7 +234,7 @@ export default function USMapSVG({ onSelect, selectedState }) {
                   y={st.ly + 4}
                   textAnchor="start"
                   fill={isSelected ? selectedFill : navy}
-                  fontSize="10"
+                  fontSize={Math.round(10 * textScale)}
                   fontWeight="bold"
                   fontFamily="'Plus Jakarta Sans', 'Onest', sans-serif"
                   style={{ pointerEvents: 'none', userSelect: 'none' }}

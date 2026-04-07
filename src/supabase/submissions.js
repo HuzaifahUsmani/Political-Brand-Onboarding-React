@@ -59,19 +59,19 @@ export async function saveSubmission(state) {
       : sanitizeShortText(String(profile.endorsements || '')) || null,
 
     // Brand selections
-    brand_core:        safeEnum(state.brandCore, VALID_BRAND_CORES),
-    sub_direction:     sanitizeShortText(state.subDirection),
-    has_existing_logo: state.hasExistingLogo ?? null,
-    existing_logo_url: state.existingLogoUrl  || null,
-    logo_type:         state.hasExistingLogo ? null : safeEnum(state.logoType, VALID_LOGO_TYPES),
+    brand_core:         safeEnum(state.brandCore, VALID_BRAND_CORES),
+    sub_direction:      sanitizeShortText(state.subDirection),
+    logo_type:          state.hasExistingLogo ? null : safeEnum(state.logoType, VALID_LOGO_TYPES),
+    existing_logo_url:  state.existingLogoUrl || null,
 
-    // Colors — renamed to match UI labels
-    color_primary:      safeHex(customColors.primary),
-    color_secondary:    safeHex(customColors.secondary),
-    color_tertiary:     safeHex(customColors.accent),
-    color_additional_1: safeHex(customColors.background),
-    color_additional_2: safeHex(customColors.text),
-    color_additional_3: safeHex(customColors.additional),
+    // Colors — column names must match the schema exactly
+    color_mode:       state.colorMode || null,
+    color_primary:    safeHex(customColors.primary),
+    color_secondary:  safeHex(customColors.secondary),
+    color_accent:     safeHex(customColors.accent),
+    color_background: safeHex(customColors.background),
+    color_text:       safeHex(customColors.text),
+    color_highlight:  safeHex(customColors.additional),
 
     // Fonts
     font_heading: safeFont(customFonts.heading),

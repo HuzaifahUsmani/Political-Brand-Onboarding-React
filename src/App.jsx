@@ -31,7 +31,7 @@ function AppContent() {
 
   if (isMobile) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#F9FAFB' }}>
+      <div className="min-h-screen" style={{ backgroundColor: '#F9FAFB', paddingBottom: 8 }}>
         <ProgressBar />
         <StageComponent key={state.currentStage} />
       </div>
@@ -43,6 +43,7 @@ function AppContent() {
       className="min-h-screen"
       style={{
         backgroundColor: '#F9FAFB',
+        paddingBottom: 8,
       }}
     >
       <ProgressBar />

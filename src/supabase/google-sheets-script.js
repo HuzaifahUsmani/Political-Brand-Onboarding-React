@@ -17,12 +17,13 @@ const SUPABASE_URL = 'https://nwgiydfpclhvhjxvljpz.supabase.co';
 const SUPABASE_SERVICE_KEY = 'YOUR_SERVICE_ROLE_KEY_HERE'; // ← replace this
 
 // Columns to show in the sheet (in order)
-// Matches the brand_submissions table columns exactly
+// Must match brand_submissions table column names exactly
 const COLUMNS = [
   'id',
   'created_at',
   'candidate_name',
   'candidate_office',
+  'candidate_office_custom',
   'candidate_state',
   'candidate_district',
   'election_year',
@@ -30,7 +31,9 @@ const COLUMNS = [
   'race_focus',
   'candidate_type',
   'backgrounds',
+  'background_other',
   'policy_priorities',
+  'policy_other',
   'defining_story',
   'family_status',
   'endorsements',
@@ -40,6 +43,9 @@ const COLUMNS = [
   'color_primary',
   'color_secondary',
   'color_accent',
+  'color_background',
+  'color_text',
+  'color_highlight',
   'font_heading',
   'font_body',
   'logo_type',

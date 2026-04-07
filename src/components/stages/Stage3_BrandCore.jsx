@@ -51,7 +51,8 @@ export default function Stage3_BrandCore() {
     dispatch({ type: 'SET_BRAND_CORE', payload: newId });
     if (newId) {
       setTimeout(() => {
-        previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        previewRef.current?.scrollIntoView({ behavior: isMobile ? 'auto' : 'smooth', block: 'nearest' });
       }, 80);
     }
   };

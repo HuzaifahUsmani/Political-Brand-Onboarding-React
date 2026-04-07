@@ -508,13 +508,13 @@ export default function Stage7_LogoType() {
 
                       {/* Logo reference image */}
                       <div style={{
-                        background: '#FFFFFF',
+                        background: '#FAFAFA',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         height: 180,
                         overflow: 'hidden',
-                        padding: '0 7%',
+                        padding: '12px 8%',
                         borderBottom: `1px solid ${isSelected ? 'rgba(139,26,43,0.12)' : '#F0F0F0'}`,
                       }}>
                         <img
@@ -522,12 +522,16 @@ export default function Stage7_LogoType() {
                           alt={`${logoType.name} logo examples`}
                           loading="eager"
                           decoding="async"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement.innerHTML = '<span style="color:#9CA3AF;font-size:13px">Preview unavailable</span>';
+                          }}
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            objectPosition: logoType.id === 'symbol-text' ? 'center 85%' : 'center center',
+                            maxWidth: '100%',
+                            maxHeight: '100%',
+                            width: 'auto',
+                            height: 'auto',
+                            objectFit: 'contain',
                             transition: 'opacity 0.3s ease',
                           }}
                         />

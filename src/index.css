@@ -25,6 +25,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     margin: 0;
@@ -32,6 +34,21 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+  /* Disable smooth scroll on mobile — prevents jank on low-end devices */
+  @media (max-width: 767px) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  /* Remove tap highlight flash on iOS/Android */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Prevent 300ms tap delay on all interactive elements */
+  button, a, [role="button"], input, select, textarea {
+    touch-action: manipulation;
   }
 }
 

@@ -96,7 +96,12 @@ export default function ProgressBar() {
                 key={i}
                 onClick={() => isAccessible && goToStage(i)}
                 title={displayNames[i] || stage}
-                style={{ flex: 1, outline: 'none', background: 'none', border: 'none', padding: 0, cursor: isAccessible ? 'pointer' : 'default', position: 'relative' }}
+                style={{
+                  flex: 1, outline: 'none', background: 'none', border: 'none',
+                  padding: '4px 0', cursor: isAccessible ? 'pointer' : 'default',
+                  position: 'relative', touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
                 className="group"
               >
                 <div
@@ -108,17 +113,19 @@ export default function ProgressBar() {
                     opacity: isCompleted && !isCurrent ? 0.7 : 1,
                   }}
                 />
-                <div
-                  className="absolute opacity-0 group-hover:opacity-100 pointer-events-none"
-                  style={{
-                    top: -32, left: '50%', transform: 'translateX(-50%)',
-                    padding: '2px 8px', backgroundColor: '#1f2937', color: '#ffffff',
-                    fontSize: 10, fontWeight: 500, borderRadius: 4, whiteSpace: 'nowrap',
-                    transition: 'opacity 0.15s',
-                  }}
-                >
-                  {displayNames[i]}
-                </div>
+                {!isMobile && (
+                  <div
+                    className="absolute opacity-0 group-hover:opacity-100 pointer-events-none"
+                    style={{
+                      top: -32, left: '50%', transform: 'translateX(-50%)',
+                      padding: '2px 8px', backgroundColor: '#1f2937', color: '#ffffff',
+                      fontSize: 10, fontWeight: 500, borderRadius: 4, whiteSpace: 'nowrap',
+                      transition: 'opacity 0.15s',
+                    }}
+                  >
+                    {displayNames[i]}
+                  </div>
+                )}
               </button>
             );
           })}

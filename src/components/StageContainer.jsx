@@ -98,8 +98,8 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
               marginBottom: 16,
               padding: '10px 8px',
               borderRadius: 16,
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(10px)',
+              background: isMobile ? '#ffffff' : 'rgba(255,255,255,0.85)',
+              backdropFilter: isMobile ? 'none' : 'blur(10px)',
               boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
             }}
           >
@@ -117,9 +117,11 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
                   boxShadow: '0 2px 8px rgba(55,65,81,0.25)',
                   border: 'none',
                   cursor: 'pointer',
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1F2937')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#374151')}
+                onMouseEnter={isMobile ? undefined : (e) => (e.currentTarget.style.backgroundColor = '#1F2937')}
+                onMouseLeave={isMobile ? undefined : (e) => (e.currentTarget.style.backgroundColor = '#374151')}
               >
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -146,9 +148,11 @@ export default function StageContainer({ children, title, subtitle, stageNumber,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   opacity: canContinue ? 1 : 0.6,
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
-                onMouseEnter={(e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#6E1522'; }}
-                onMouseLeave={(e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#8B1A2B'; }}
+                onMouseEnter={isMobile ? undefined : (e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#6E1522'; }}
+                onMouseLeave={isMobile ? undefined : (e) => { if (canContinue) e.currentTarget.style.backgroundColor = '#8B1A2B'; }}
               >
                 Continue
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
