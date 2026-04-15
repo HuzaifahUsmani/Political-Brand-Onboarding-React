@@ -220,7 +220,7 @@ export default function Stage2_CandidateProfile() {
                 type="text"
                 value={profile.backgroundOther || ''}
                 onChange={(e) => update({ backgroundOther: sanitizeFreeText(e.target.value) })}
-                placeholder="Describe your professional background…"
+                placeholder="e.g. Veterinarian, nonprofit director, small-business owner"
                 autoFocus
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none"
                 style={{ fontSize: '0.95rem' }}
@@ -341,7 +341,7 @@ export default function Stage2_CandidateProfile() {
                 type="text"
                 value={profile.policyOther || ''}
                 onChange={(e) => update({ policyOther: sanitizeFreeText(e.target.value) })}
-                placeholder="Describe your policy priority…"
+                placeholder="e.g. Mental health reform, housing affordability, water rights"
                 autoFocus
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none"
                 style={{ fontSize: '0.95rem' }}
@@ -372,7 +372,7 @@ export default function Stage2_CandidateProfile() {
           onChange={(e) => {
             update({ definingStory: sanitizeFreeText(e.target.value) });
           }}
-          placeholder="Share the moment, experience, or conviction that led to your candidacy..."
+          placeholder="e.g. After watching my own district's schools cut veterans programs, I knew I had to run..."
           rows={5}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 resize-none transition-all duration-200 focus:outline-none"
           style={{
@@ -477,7 +477,7 @@ export default function Stage2_CandidateProfile() {
                 addEndorsement(endorsementInput);
               }
             }}
-            placeholder="Type and press Enter"
+            placeholder="e.g. Sheriff Jones — then press Enter"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none"
             style={{ fontSize: '0.95rem' }}
             onFocus={(e) => {

@@ -404,7 +404,7 @@ export default function Stage1_CandidateBasics() {
           type="text"
           value={candidate.fullName}
           onChange={(e) => update({ fullName: sanitizeName(e.target.value) })}
-          placeholder="Enter your full legal name"
+          placeholder="e.g. David Morse"
           spellCheck={false}
           whileFocus={{ boxShadow: `0 0 0 3px ${accent}30` }}
           style={{
@@ -651,7 +651,7 @@ export default function Stage1_CandidateBasics() {
               if (!e.target.value) update({ state: '' });
             }}
             onBlur={() => setTimeout(() => setShowStates(false), 200)}
-            placeholder="Start typing your state..."
+            placeholder="e.g. Florida"
             style={{
               width: '100%',
               padding: '0.65rem 1rem',
