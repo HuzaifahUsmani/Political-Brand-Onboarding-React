@@ -178,12 +178,12 @@ export default function Stage7_LogoType() {
   // canContinue logic:
   // - must choose yes or no first
   // - if yes: need uploaded URL or uploadLater checked
-  // - if no: need a logoType selected
+  // - if no: need a logoType selected AND notes filled in
   const canContinue =
     hasExisting === true
       ? (!!existingUrl || uploadLater)
       : hasExisting === false
-        ? !!selected
+        ? !!selected && logoNotes.trim().length > 0
         : false;
 
   const handleChoice = (value) => {
@@ -595,7 +595,7 @@ export default function Stage7_LogoType() {
                     marginBottom: 8,
                   }}
                 >
-                  Any notes on what you'd like? <span style={{ fontWeight: 400, opacity: 0.7 }}>(optional)</span>
+                  Any notes on what you'd like? <span style={{ color: accent, fontWeight: 700 }}>*</span>
                 </label>
                 <textarea
                   id="logo-notes"
