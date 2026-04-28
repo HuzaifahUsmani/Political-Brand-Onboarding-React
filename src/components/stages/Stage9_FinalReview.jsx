@@ -174,15 +174,20 @@ export default function Stage9_FinalReview() {
   const [pdfGenerating, setPdfGenerating] = useState(false);
   const pdfCaptureRef = useRef(null);
 
+  const [pdfError, setPdfError] = useState(null);
+
   const handleDownloadPDF = async () => {
     setPdfGenerating(true);
+    setPdfError(null);
     try {
       // Give the off-screen Visual Identity tree a tick to mount/lay out.
-      await new Promise((r) => setTimeout(r, 150));
+      await new Promise((r) => setTimeout(r, 300));
+      if (!pdfCaptureRef.current) throw new Error('Visual Identity preview not ready yet — try again.');
       const fileName = `${(state.candidate?.fullName || 'brand-summary').replace(/\s+/g, '-').toLowerCase()}-brand-report.pdf`;
       await generateBrandPDF(pdfCaptureRef.current, fileName);
     } catch (err) {
       console.error('PDF generation error:', err);
+      setPdfError(err?.message || 'Failed to generate PDF.');
     } finally {
       setPdfGenerating(false);
     }
@@ -223,19 +228,25 @@ export default function Stage9_FinalReview() {
       className="min-h-screen bg-gray-50"
     >
       {/* Off-screen Visual Identity render — used as the source for the PDF
-          so the exported file matches Stage 7 exactly. */}
+          so the exported file matches Stage 7 exactly. Wrapped in a fixed
+          0×0 overflow:hidden container so it cannot contribute to page scroll. */}
       <div
         aria-hidden="true"
         style={{
-          position: 'absolute',
-          left: '-100000px',
+          position: 'fixed',
           top: 0,
-          width: 1100,
+          left: 0,
+          width: 0,
+          height: 0,
+          overflow: 'hidden',
           pointerEvents: 'none',
+          zIndex: -1,
         }}
       >
-        <div ref={pdfCaptureRef}>
-          <Stage6_VisualIdentity />
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 1100 }}>
+          <div ref={pdfCaptureRef}>
+            <Stage6_VisualIdentity />
+          </div>
         </div>
       </div>
 
@@ -421,6 +432,9 @@ export default function Stage9_FinalReview() {
                 </>
               )}
             </button>
+            {pdfError && (
+              <p className="mt-3 text-sm text-red-600 font-medium">{pdfError}</p>
+            )}
           </div>
         </div>
 
