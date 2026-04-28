@@ -180,8 +180,9 @@ export default function Stage9_FinalReview() {
     setPdfGenerating(true);
     setPdfError(null);
     try {
-      // Give the off-screen Visual Identity tree a tick to mount/lay out.
-      await new Promise((r) => setTimeout(r, 300));
+      // Give the off-screen Visual Identity tree time to mount, run
+      // framer-motion staggers, and load Google Fonts.
+      await new Promise((r) => setTimeout(r, 1500));
       if (!pdfCaptureRef.current) throw new Error('Visual Identity preview not ready yet — try again.');
       const fileName = `${(state.candidate?.fullName || 'brand-summary').replace(/\s+/g, '-').toLowerCase()}-brand-report.pdf`;
       await generateBrandPDF(pdfCaptureRef.current, fileName);

@@ -65,6 +65,70 @@ export async function generateBrandPDF(node, fileName = 'brand-report.pdf') {
     return value.replace(/(oklch|oklab|lab|lch)\([^)]*\)|color\([^)]*\)/gi, (m) => toRgb(m));
   };
 
+  // Force all elements to a settled, fully-visible state. Framer-motion
+  // does not animate elements that are off-screen, so without this the
+  // capture would render `initial={opacity:0}` everywhere.
+  const flattenAnimations = (clonedRoot, sourceRoot) => {
+    if (!clonedRoot || !sourceRoot) return;
+    const clonedAll = [clonedRoot, ...clonedRoot.querySelectorAll('*')];
+    const sourceAll = [sourceRoot, ...sourceRoot.querySelectorAll('*')];
+    const len = Math.min(clonedAll.length, sourceAll.length);
+    for (let i = 0; i < len; i += 1) {
+      const c = clonedAll[i];
+      const s = sourceAll[i];
+      try {
+        c.style.opacity = '1';
+        c.style.transform = 'none';
+        c.style.visibility = 'visible';
+        c.style.filter = 'none';
+        c.style.animation = 'none';
+        c.style.transition = 'none';
+      } catch { /* ignore */ }
+
+      // Replace text gradients (-webkit-text-fill-color: transparent +
+      // background-clip: text) with the element's gradient start color
+      // so the text renders solid in the PDF.
+      try {
+        const cs = window.getComputedStyle(s);
+        const fillColor = cs.webkitTextFillColor || cs.getPropertyValue('-webkit-text-fill-color');
+        const bgClip = cs.webkitBackgroundClip || cs.getPropertyValue('background-clip') || cs.getPropertyValue('-webkit-background-clip');
+        if (fillColor === 'rgba(0, 0, 0, 0)' || (typeof bgClip === 'string' && bgClip.includes('text'))) {
+          // Pull a solid color out of the gradient if present.
+          const bgImage = cs.backgroundImage || '';
+          const match = bgImage.match(/(rgba?\([^)]*\)|#[0-9a-fA-F]{3,8}|oklch\([^)]*\)|oklab\([^)]*\))/);
+          const solid = match ? toRgb(match[1]) : (toRgb(cs.color) || '#1C2E5B');
+          c.style.webkitTextFillColor = solid;
+          c.style.color = solid;
+          c.style.backgroundImage = 'none';
+          c.style.webkitBackgroundClip = 'border-box';
+          c.style.backgroundClip = 'border-box';
+        }
+      } catch { /* ignore */ }
+    }
+  };
+
+  // Strip StageContainer's decorative chrome (top dot-grid, absolute SVGs,
+  // sticky nav bar, paddingTop spacer) from the clone so the PDF starts
+  // cleanly at the title.
+  const hideStageChrome = (clonedRoot) => {
+    if (!clonedRoot) return;
+    clonedRoot.querySelectorAll('.no-print, .dot-grid').forEach((el) => {
+      try { el.style.display = 'none'; } catch { /* ignore */ }
+    });
+    // Top-level decorative SVGs that are absolutely positioned at top:0.
+    clonedRoot.querySelectorAll('svg').forEach((el) => {
+      const cs = window.getComputedStyle(el);
+      if (cs.position === 'absolute' && parseFloat(cs.opacity) <= 0.05) {
+        try { el.style.display = 'none'; } catch { /* ignore */ }
+      }
+    });
+    // Drop the 72px paddingTop StageContainer adds.
+    const stageWrapper = clonedRoot.querySelector('[style*="padding-top: 72px"], [style*="paddingTop: 72px"]');
+    if (stageWrapper) {
+      try { stageWrapper.style.paddingTop = '0'; } catch { /* ignore */ }
+    }
+  };
+
   const freezeColors = (clonedRoot, sourceRoot) => {
     if (!clonedRoot || !sourceRoot) return;
     const clonedAll = [clonedRoot, ...clonedRoot.querySelectorAll('*')];
@@ -107,6 +171,8 @@ export async function generateBrandPDF(node, fileName = 'brand-report.pdf') {
         el.classList && (el.classList.contains('no-print') || el.dataset?.noPrint === 'true'),
       onclone: (clonedDoc, clonedNode) => {
         freezeColors(clonedNode, node);
+        flattenAnimations(clonedNode, node);
+        hideStageChrome(clonedNode);
       },
     });
   } catch (err) {
