@@ -71,6 +71,12 @@ const FORM_ID_TO_OPTION_NAME = {
     'pac':       'PAC',
     'nonprofit': 'Nonprofit',
   },
+  // Brand Core: form ids case-match ClickUp option names except for
+  // 'nonpartisan' (CU labels it 'Non-Partisan' with a hyphen). Without
+  // this map, `nonpartisan` selections silently drop in resolveOption.
+  'Brand Core': {
+    'nonpartisan': 'Non-Partisan',
+  },
 };
 
 const empty = (v) =>
