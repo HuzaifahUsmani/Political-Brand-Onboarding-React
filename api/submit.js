@@ -455,6 +455,29 @@ async function findActiveClientByClientId(clientId) {
   return null;
 }
 
+// Find the Worker-W3 stub task in the form list for this client.
+// W3 pre-creates one task per form list at status 'to do' with Client ID +
+// Linked Client set. We patch that stub instead of creating a duplicate.
+async function findStubByClientId(listId, clientId) {
+  if (!clientId) return null;
+  const target = String(clientId).trim().toLowerCase();
+  for (let page = 0; page < 50; page++) {
+    const result = await clickupFetch(
+      `/list/${listId}/task?include_closed=true&subtasks=false&page=${page}`,
+    );
+    for (const t of result.tasks || []) {
+      if (t.parent) continue;
+      const cf = (t.custom_fields || []).find(
+        (f) => f.name === 'Client ID' &&
+               String(f.value || '').trim().toLowerCase() === target,
+      );
+      if (cf) return t;
+    }
+    if (result.last_page || !(result.tasks || []).length) break;
+  }
+  return null;
+}
+
 // Active Clients "Subject Type" dropdown orderindex map.
 // Matches the option order on the workspace-shared Subject Type field
 // (UUID 32b92b09-...): Candidate=0, Party=1, Nonprofit=2, PAC=3.
@@ -478,21 +501,36 @@ async function syncClickUp({ state, payload, clientId, submittedAt, supabaseRowI
   // customFields is built + persisted to the Supabase row by the caller, so
   // the Worker reconciler can heal anything dropped by the write loop below.
 
-  // Step 1: create the task WITHOUT inline custom_fields. ClickUp's inline
-  // custom_fields array rejects the ENTIRE task creation if any single value
-  // is invalid (bad phone, URL, dropdown option) — see docs/clickup-custom-fields.md §1.
-  // When that happens no task is created, no 'submitted' webhook fires, and the
-  // Worker F0 automation never flips the AC "Form 2 — Political Branding" subtask.
-  // Forms 1 & 3 use this two-step pattern for exactly this reason.
-  const newTask = await clickupFetch(`/list/${PRIMARY_LIST_ID}/task`, {
-    method: 'POST',
-    body: JSON.stringify({
-      name: taskName,
-      description,
-      status: 'to do',
-      tags: [`subject:${payload.subject_type}`],
-    }),
-  });
+  // Prefer the W3-created stub if it exists — patch it instead of creating
+  // a duplicate. Falls back to create-new for paths where W3 didn't run.
+  const stub = clientId ? await findStubByClientId(PRIMARY_LIST_ID, clientId).catch(() => null) : null;
+  let newTask;
+  if (stub) {
+    newTask = stub;
+    await clickupFetch(`/task/${newTask.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name: taskName, description }),
+    }).catch((e) => console.error('[political-brand] stub rename failed:', e.message));
+    await clickupFetch(`/task/${newTask.id}/tag/subject:${payload.subject_type}`, {
+      method: 'POST',
+    }).catch((e) => console.error('[political-brand] stub tag failed:', e.message));
+  } else {
+    // Step 1: create the task WITHOUT inline custom_fields. ClickUp's inline
+    // custom_fields array rejects the ENTIRE task creation if any single value
+    // is invalid (bad phone, URL, dropdown option) — see docs/clickup-custom-fields.md §1.
+    // When that happens no task is created, no 'submitted' webhook fires, and the
+    // Worker F0 automation never flips the AC "Form 2 — Political Branding" subtask.
+    // Forms 1 & 3 use this two-step pattern for exactly this reason.
+    newTask = await clickupFetch(`/list/${PRIMARY_LIST_ID}/task`, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: taskName,
+        description,
+        status: 'to do',
+        tags: [`subject:${payload.subject_type}`],
+      }),
+    });
+  }
 
   // Step 2: write each custom field individually. Failures are logged but
   // never thrown — one bad value shouldn't lose the rest of the submission.
