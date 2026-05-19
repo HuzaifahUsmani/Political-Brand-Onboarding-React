@@ -209,19 +209,21 @@ function flattenState(state, payload) {
   : isNonprofit ? profile.nonprofitCoalitions
   : null;
 
-  // Geographic fields — PAC and Nonprofit each have state/states/cityCounty.
+  // Geographic fields — Party, PAC, and Nonprofit each have state/states/cityCounty.
   // Workspace-shared field "States Covered" is text; "City / County" is short_text.
   const statesValue =
-    isPac       ? (Array.isArray(pac.states) && pac.states.length ? pac.states.join(', ') : pac.state || null)
+    isParty     ? (Array.isArray(party.states) && party.states.length ? party.states.join(', ') : party.state || null)
+  : isPac       ? (Array.isArray(pac.states) && pac.states.length ? pac.states.join(', ') : pac.state || null)
   : isNonprofit ? (Array.isArray(nonprofit.states) && nonprofit.states.length ? nonprofit.states.join(', ') : nonprofit.state || null)
+  : null;
+  const cityCountyValue =
+    isParty     ? party.cityCounty
+  : isPac       ? pac.cityCounty
+  : isNonprofit ? nonprofit.cityCounty
   : null;
   // PAC has its own "PAC States Covered" short_text field; use that for pac too.
   const pacStatesValue =
     isPac ? (Array.isArray(pac.states) && pac.states.length ? pac.states.join(', ') : pac.state || null)
-  : null;
-  const cityCountyValue =
-    isPac       ? pac.cityCounty
-  : isNonprofit ? nonprofit.cityCounty
   : null;
 
   // Lead Spokesperson (workspace-shared short_text — used by party / pac / nonprofit).
@@ -238,7 +240,9 @@ function flattenState(state, payload) {
     // Candidate
     'Race Focus':              isCandidate ? candidate.raceFocus : null,
     'Candidate Type':          isCandidate ? candidate.candidateType : null,
-    'Party Affiliation (brand)': isCandidate ? candidate.partyAffiliation : null,
+    // Party Affiliation applies to candidate AND party flows — form stores both
+    // under candidate.partyAffiliation (party flow lacks a dedicated state key).
+    'Party Affiliation (brand)': (isCandidate || isParty) ? candidate.partyAffiliation : null,
 
     // Party
     'Party Acronym (brand)':   isParty ? party.acronym : null,
@@ -255,10 +259,12 @@ function flattenState(state, payload) {
     'PAC Affiliated Committees': isPac ? profile.pacAffiliatedCandidates : null,
 
     // Nonprofit basics
-    'Legal organization name':    isNonprofit ? nonprofit.legalName : null,
+    // "Legal organization name" is workspace-shared — Party uses it for the party's full name.
+    'Legal organization name':    isParty ? party.name : isNonprofit ? nonprofit.legalName : null,
     'Nonprofit Type':             isNonprofit ? nonprofit.nonprofitType : null,
     'Nonprofit Scope':            isNonprofit ? nonprofit.scope : null,
-    'Founded Year':               isNonprofit ? nonprofit.foundedYear : null,
+    // "Founded Year" is workspace-shared — Party also has a foundedYear input.
+    'Founded Year':               isParty ? party.foundedYear : isNonprofit ? nonprofit.foundedYear : null,
     'Nonprofit Mission':          isNonprofit ? nonprofit.mission : null,
     'Nonprofit Membership-Based?':isNonprofit ? nonprofit.membershipBased : null,
     'Lobbying Activity':          isNonprofit ? nonprofit.lobbyingActivity : null,
@@ -312,10 +318,18 @@ function flattenState(state, payload) {
   return out;
 }
 
+// Fallback "Other" text field for label fields whose options aren't seeded
+// in ClickUp yet. Preserves submission data instead of silently dropping it.
+const LABELS_FALLBACK_OTHER = {
+  'Platform Pillars':      'Platform Pillar Other',
+  'Target Voter Segments': 'Target Segment Other',
+};
+
 export function buildCustomFields(state, payload, optionsMap = {}) {
   const flat = flattenState(state, payload);
   const out = [];
   const unresolved = [];
+  const labelFallbacks = {}; // {otherFieldName: csv}
 
   for (const [name, raw] of Object.entries(flat)) {
     if (empty(raw)) continue;
@@ -339,7 +353,23 @@ export function buildCustomFields(state, payload, optionsMap = {}) {
       value = idx;
     } else if (type === 'labels') {
       const ids = resolveLabels(raw, optionsMap[fid]);
-      if (!ids.length) continue;
+      if (!ids.length) {
+        // Label options not seeded in ClickUp — fall back to writing raw
+        // values into the corresponding "...Other" text field as CSV.
+        const otherName = LABELS_FALLBACK_OTHER[name];
+        if (otherName) {
+          const csv = (Array.isArray(raw) ? raw : [raw])
+            .filter((x) => !empty(x))
+            .map((x) => String(x).trim())
+            .join(', ');
+          if (csv) {
+            const prior = labelFallbacks[otherName];
+            labelFallbacks[otherName] = prior ? `${prior}, ${csv}` : csv;
+          }
+        }
+        unresolved.push({ fieldName: name, fieldId: fid, value: JSON.stringify(raw) });
+        continue;
+      }
       value = ids;
     } else if (type === 'number' || type === 'currency') {
       const n = Number(raw);
@@ -359,5 +389,16 @@ export function buildCustomFields(state, payload, optionsMap = {}) {
     }
     out.push({ id: fid, value });
   }
+
+  // Apply label fallbacks — only write to an "Other" field if it wasn't
+  // already set from the form's explicit Other input, and don't overwrite.
+  const alreadyWritten = new Set(out.map((f) => f.id));
+  for (const [otherName, csv] of Object.entries(labelFallbacks)) {
+    const fid = FIELD_IDS[otherName];
+    if (!fid || alreadyWritten.has(fid)) continue;
+    if (FIELD_TYPES[otherName] !== 'text' && FIELD_TYPES[otherName] !== 'short_text') continue;
+    out.push({ id: fid, value: csv });
+  }
+
   return { fields: out, unresolved };
 }
