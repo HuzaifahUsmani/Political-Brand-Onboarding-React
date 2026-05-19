@@ -79,6 +79,52 @@ const FORM_ID_TO_OPTION_NAME = {
   },
 };
 
+/** Labels fields where the form sends slug IDs (e.g. 'border') and the
+ *  ClickUp option names are user-friendly labels (e.g. 'Border &
+ *  Immigration'). Source of truth: src/data/brandData.js. Without these
+ *  translations, resolveLabels matches nothing and the field stays empty.
+ *  Keyed by ClickUp field name. */
+const LABELS_SLUG_TO_NAME = {
+  'Platform Pillars': {
+    // Party + PAC issue focus share this field
+    'border':           'Border & Immigration',
+    'economy':          'Economy & Jobs',
+    'tax':              'Lower Taxes',
+    '2a':               '2nd Amendment',
+    'pro-life':         'Pro-Life',
+    'religious-liberty':'Religious Liberty',
+    'parental-rights':  'Parental Rights',
+    'election':         'Election Integrity',
+    'law-order':        'Law & Order',
+    'energy':           'Energy Independence',
+    'education':        'Education Reform',
+    'healthcare':       'Healthcare',
+    'veterans':         'Veterans',
+    'limited-gov':      'Limited Government',
+    'free-speech':      'Free Speech',
+    'accountability':   'Government Accountability',
+    'agriculture':      'Agriculture & Rural',
+    'infrastructure':   'Infrastructure',
+    'other':            'Other',
+  },
+  'Target Voter Segments': {
+    // Party segments; PAC donors and Nonprofit audiences also write here.
+    'working-class':    'Working Class',
+    'suburban':         'Suburban Families',
+    'rural':            'Rural Voters',
+    'evangelical':      'Evangelical / Faith Communities',
+    'small-business':   'Small Business Owners',
+    'veterans':         'Veterans & Military Families',
+    'youth':            'Youth (Under 35)',
+    'minority':         'Minority Communities',
+    'parents':          'Parents of School-Age Children',
+    'libertarian':      'Libertarian-Leaning',
+    'independent':      'Independent / Swing Voters',
+    'first-time':       'First-Time Voters',
+    'other':            'Other',
+  },
+};
+
 const empty = (v) =>
   v === undefined || v === null ||
   (typeof v === 'string' && v.trim() === '') ||
@@ -352,7 +398,14 @@ export function buildCustomFields(state, payload, optionsMap = {}) {
       }
       value = idx;
     } else if (type === 'labels') {
-      const ids = resolveLabels(raw, optionsMap[fid]);
+      // Translate form slugs → ClickUp option names where applicable so
+      // resolveLabels can match by name (slugs themselves don't appear in
+      // option lists). Untranslated values pass through unchanged.
+      const slugMap = LABELS_SLUG_TO_NAME[name];
+      const translated = slugMap
+        ? (Array.isArray(raw) ? raw : [raw]).map((v) => slugMap[String(v).trim().toLowerCase()] ?? v)
+        : raw;
+      const ids = resolveLabels(translated, optionsMap[fid]);
       if (!ids.length) {
         // Label options not seeded in ClickUp — fall back to writing raw
         // values into the corresponding "...Other" text field as CSV.
