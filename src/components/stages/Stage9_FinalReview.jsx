@@ -381,27 +381,6 @@ export default function Stage9_FinalReview() {
               <p className="text-sm font-semibold text-gray-800">{state.logoType}</p>
             </SummaryCard>
           )}
-
-          {/* Collateral Materials */}
-          {hasCollateral && (
-            <SummaryCard title="Campaign Materials">
-              <div className="space-y-2 mb-4">
-                {selectedMaterialIds.map((id) => {
-                  const name = id.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-                  return (
-                    <div key={id} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
-                      <span className="text-sm text-gray-700">{name}</span>
-                      <span className="text-sm font-medium text-gray-600">$350</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex items-center justify-between pt-3 border-t-2 border-gray-800">
-                <span className="text-sm font-bold text-gray-900">Total</span>
-                <span className="text-base font-bold text-gray-900">${(selectedMaterialIds.length * 350).toLocaleString()}</span>
-              </div>
-            </SummaryCard>
-          )}
         </div>
 
         {/* ── PDF Download ── */}
